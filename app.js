@@ -15,17 +15,6 @@ mongoose.connection.once('open', function callback() {
 	console.log(moment().format(dateFormat) + ' - De database werkt. Wat een geluk');
 });
 
-/* SEED A USER
-var user = new User({ username: 'bob', email: 'bob@example.com', password: 'secret' });
-user.save(function(err) {
-	if(err) {
-		console.log(err);
-	} else {
-		console.log('user: ' + user.username + " saved.");
-	}
-});
-*/
-
 passport.serializeUser(function(user, done) {
 	done(null, user.id);
 });
@@ -80,3 +69,13 @@ var routes = require(__dirname + '/handlers/routes')(app);
 app.listen(3000, function() {
 	console.log('\n\nPOEN POEN POEN\n\n' + moment().format(dateFormat) + ' - Geld moet rollen');
 });
+
+/* SEED A USER 
+var user = new User({ username: 'admin', email: 'admin@example.com', password: 'secret' });
+user.save(function(err) {
+	if(err) {
+		console.log(err);
+	} else {
+		console.log(moment().format(dateFormat) + ' - New user seeded: ' + user.username + ".");
+	}
+}); */
