@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Poen - Geld moet rollen</title>
+
+	<link rel="stylesheet" href="/styles/main.css">
+</head>
+<body class="login">
+	
+	<header>
+		<h1>Poen</h1>
+	</header>
+	
+	<% if (message) { %>
+		<p class="alert"><%= message %></p>
+	<% } %>
+
+	<form action="/login" method="post">
+		<em>Login</em>
+		<input type="text" name="username" placeholder="Username" autofocus><br />
+		<input type="password" name="password" placeholder="Password"><br />
+		<button type="submit">Go</button>
+	</form>
+
+</body>
+</html>

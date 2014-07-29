@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="poenApp" ng-controller="poenGlobal">
+<head>
+	<meta charset="UTF-8">
+	<title>{{currentTitle}}</title>
+
+	<link rel="stylesheet" href="/styles/main.css">
+
+	<script src="/scripts/angular.min.js"></script>
+	<script src="/scripts/angular-route.min.js"></script>
+
+	<script src="/scripts/poen-app.js"></script>
+	<script src="/scripts/poen-controllers.js"></script>
+</head>
+<body>
+		
+	<header>
+
+		<h1>{{websiteTitle}}</h1>
+
+		<ul>
+			<li ng-repeat="option in options">
+				<a ng-class="{active: option.slug==currentSlug}" href="{{option.url}}">{{option.name}}</a>
+			</li>
+			<li><a href="/logout">Logout</a></li>
+		</ul>
+		
+	</header>
+
+	<main ng-view></main>
+
+</body>
+</html>

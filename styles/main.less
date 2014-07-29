@@ -1,0 +1,117 @@
+@back: #fff;
+@text: #111;
+@link: #00f;
+@line: #ddd;
+
+
+.clearfix() {
+	&:before, &:after {
+		content: " ";
+		display: table;
+	}
+
+	&:after {
+		clear: both;
+	}
+}
+
+body {
+	background-color: @back;
+	color: @text;
+	font-family: sans-serif;
+
+	a {
+		color: @link;
+		text-decoration: none;
+
+		&:hover { 
+			text-decoration: underline;
+		}
+	}
+
+	input[type="text"], input[type="password"] {
+		border: 1px solid darken(@line, 20%);
+		padding: .5em .8em;
+		margin: 0 0 .2em;
+		box-sizing: border-box;
+		font-family: sans-serif;
+
+		&:focus {
+			border-color: @text;
+		}
+	}
+
+	button {
+		padding: .3em .5em;
+	}
+
+	.alert {
+		color: #fff;
+		background-color: #f00;
+		text-align: center;
+		padding: .5em .8em;
+	}
+
+	header {
+		.clearfix;
+		padding-bottom: 7px;
+		margin-bottom: 15px;
+		border-bottom: 1px solid @line;
+
+		h1 {
+			float: left;
+			line-height: 0;
+		}
+
+		ul {
+			float: right;
+			list-style-type: none;
+			margin: 12px 0 0;
+
+
+			li {
+				display: inline-block;
+				margin-left: 1em;
+
+				.active {
+					color: @text;
+					text-decoration: underline;
+				}
+			}
+		}
+	}
+
+	main {
+
+		h2 {
+			font-weight: normal;
+			font-style: italic;
+		}
+	}
+}
+
+.login {
+
+	form {
+		width: 200px;
+		height: 200px;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		margin: -100px 0 0 -100px;
+
+		em {
+			display: block;
+			color: lighten(@text, 30%);
+			margin-bottom: .2em;
+		}
+
+		input {
+			width: 100%;
+		}
+
+		button {
+			float: right;
+		}
+	}
+}
