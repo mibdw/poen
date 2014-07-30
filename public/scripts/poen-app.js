@@ -9,7 +9,12 @@ app.controller('poenGlobal', ['$scope', '$rootScope',
 			{ name: "Maand", slug: "month", url: "/" },
 			{ name: "Categoriën", slug: "categories", url: "/#/categories" },
 			{ name: "Profiel", slug: "profile", url: "/#/profile" }
-		]
+		];
+
+		moment.lang('nl');
+		$rootScope.currentDate = moment().format("ddd MM-DD-YYYY HH:mm:ss");
+		$rootScope.currentMonth = moment().format("MMMM");
+		$rootScope.currentYear = moment().format("YYYY");
 	}
 ]);
 

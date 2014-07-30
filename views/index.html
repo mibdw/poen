@@ -4,15 +4,15 @@
 	<meta charset="UTF-8">
 	<title>{{currentTitle}}</title>
 
-	<link rel="stylesheet" href="/styles/main.css">
+	<link rel="stylesheet" href="/styles/main.css" />
+	<link rel="shortcut icon" href="/images/dagobert.ico" />
 
 </head>
 <body>
-		
+	
 	<header>
-
-		<h1>{{websiteTitle}}</h1>
-
+		<a href="/" class="brand"><img src="/images/dagobert.png" alt="{{websiteTitle}}"></a>
+		
 		<ul>
 			<li ng-repeat="option in options">
 				<a ng-class="{active: option.slug==currentSlug}" href="{{option.url}}">{{option.name}}</a>
@@ -22,17 +22,18 @@
 		
 	</header>
 
-	<main ng-view></main>
+	<div class="main" ng-view ng-class="currentSlug"></div>
 
 </body>
 
-<script src="/scripts/angular.min.js"></script>
-<script src="/scripts/angular-route.min.js"></script>
-
-<script src="/scripts/moment.min.js"></script>
 <script src="/scripts/jquery-1.11.1.min.js"></script>
 <script src="/scripts/jquery-ui.custom.min.js"></script>
+<script src="/scripts/moment-with-langs.min.js"></script>
 <script src="/scripts/fullcalendar.min.js"></script>
+<script src="/scripts/fullcalendar-nl.js"></script>
+
+<script src="/scripts/angular.min.js"></script>
+<script src="/scripts/angular-route.min.js"></script>
 
 <script src="/scripts/poen-app.js"></script>
 <script src="/scripts/poen-controllers.js"></script>

@@ -4,6 +4,7 @@
 @text: #111;
 @link: #00f;
 @line: #ddd;
+@mark: #ffffe0;
 
 // MIXINS
 
@@ -34,6 +35,10 @@ body {
 		}
 	}
 
+	h2 {
+		margin: 4px 0 10px;
+	}
+
 	input[type="text"], input[type="password"] {
 		border: 1px solid darken(@line, 20%);
 		padding: .5em .8em;
@@ -57,6 +62,90 @@ body {
 		padding: .5em .8em;
 	}
 
+// CALENDAR
+
+	.calendar {
+
+		table {
+			border-collapse: collapse;
+			border-spacing: 0;
+
+			&.fc-header {
+
+				.fc-header-left {
+
+					h2 {
+						text-transform: Capitalize;
+					}					
+				}
+
+				.fc-header-right {
+					text-align: right;
+
+					.fc-button {
+						color: @link;
+						cursor: pointer;
+						margin-left: .8em;
+
+						&:hover { text-decoration: underline; }
+						&.fc-button-today { margin-right: 2em; }
+						&.fc-button-prev:after { content: "\00AB  Vorige"; }
+						&.fc-button-next:after { content: "Volgende \00BB"; }
+
+					}
+				}
+			}
+
+			&.fc-border-separate {
+				
+				th, td {
+					border: 1px solid @line;
+					vertical-align: top;
+
+					&.fc-day {
+
+						.fc-day-number {
+							float: right; 
+							font-size: .7em;
+							font-style: italic;
+							color: lighten(@text, 60%);
+							margin: 0 .3em;
+						}
+
+						.fc-day-content { clear: both; }
+
+						&.fc-other-month .fc-day-number { color: lighten(@text, 80%); }
+						&.fc-state-highlight { background-color: @mark; }
+					}
+				}
+			}
+		}
+
+		.fc-content {
+
+			.fc-event {
+				font-size: .8em;
+
+				.fc-event-inner {
+					margin: 0 .3em;
+
+					.fc-event-title {
+						display: block;
+						white-space: nowrap;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						cursor: pointer;
+
+						&:hover {
+							color: @link;
+							text-decoration: underline;
+						}
+					}
+				}
+			}
+		}			
+	}
+
 // HEADER
 
 	header {
@@ -66,8 +155,13 @@ body {
 		border-bottom: 1px solid @line;
 
 		h1 {
+			margin: 0;
 			float: left;
 			line-height: 0;
+
+			img {
+				display: inline;
+			}
 		}
 
 		ul {
@@ -90,12 +184,80 @@ body {
 
 // MAIN
 
-	main {
+	.main {
 
-		h2 {
-			font-weight: normal;
-			font-style: italic;
-			text-align: center;
+// MONTH
+
+		.calendar {
+			float: left;
+			width: 70%;
+		}
+		
+		.sidebar {
+			float: left;
+			width: 30%;
+			box-sizing: border-box;
+			padding: 0 0 0 35px;
+
+			header {
+				border: 0;
+				padding: 0;
+				margin: 2px 0 0;
+				.clearfix;
+
+				h2 {
+					float: left;
+				}
+
+				.new-item {
+					float: right;
+					color: @link;
+					cursor: pointer;
+					line-height: 32px;
+					margin-top: 4px;
+
+					&:hover { text-decoration: underline; }
+				}
+			}
+
+			.balance {
+				width: 100%;
+
+				tbody {
+
+					.balance-item-title {
+						
+						span {
+							display: block;
+							white-space: nowrap;
+							overflow: hidden;
+							text-overflow: ellipsis;
+						}
+
+					}
+
+					.balance-item-amount {
+						text-align: right;
+					}
+
+					tr:first-child td { padding-top: .3em; }
+					tr:last-child td { padding-bottom: .5em; }
+				}
+
+				tfoot {
+
+					tr {
+
+						td {
+							text-align: right;
+							font-weight: bold;
+							border-top: 1px solid @line;
+							font-size: 1.3em;
+							padding-top: .5em;
+						}
+					}
+				}
+			}
 		}
 	}
 }
