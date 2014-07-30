@@ -1,11 +1,24 @@
 var ctrl = angular.module('poenControllers', []);
 
-ctrl.controller('poenMonth', ['$scope', '$rootScope',
-	function ($scope, $rootScope) {
+ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams',
+	function ($scope, $rootScope, $routeParams) {
 		$rootScope.currentSlug = "month";
-		$rootScope.currentTitle = $rootScope.websiteTitle + " - Geld moet rollen";
+
+		var displayDate = moment();
+
+		if ($routeParams.displayYear && $routeParams.displayMonth) {
+
+			var processDate = $routeParams.displayYear + "-" + $routeParams.displayMonth;
+			displayDate = moment(processDate, "YYYY-MM");
+		}
+
+		$scope.nextMonth = moment(displayDate).add('months', 1).format('YYYY/MM');
+		$scope.prevMonth = moment(displayDate).subtract('months', 1).format('YYYY/MM');
+
+		$rootScope.currentTitle = $rootScope.websiteTitle + " - " + moment(displayDate).format('MMMM YYYY');
 
 		$('.calendar').fullCalendar({
+			header: { left: 'title', center: '', right: '' },
 			events: [
 				{
 					title: 'All Day Event',
@@ -42,9 +55,7 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope',
 			]
 		});
 
-		var day = moment("Dec 1, 1995");
-
-		$('.calendar').fullCalendar('gotoDate', day); 
+		$('.calendar').fullCalendar('gotoDate', displayDate);
 	}
 ]);
 

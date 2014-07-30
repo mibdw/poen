@@ -10,15 +10,12 @@
 </head>
 <body class="login">
 	
-	<header>
-		<a href="/" class="brand"><img src="/images/dagobert.png" alt="Poen"></a>
-	</header>
-	
 	<% if (message) { %>
 		<p class="alert"><%= message %></p>
 	<% } %>
 
 	<form action="/login" method="post">
+		<a href="/" class="brand"><img src="/images/dagobert.png" alt="Poen"></a>
 		<input type="text" name="username" placeholder="Username" autofocus><br />
 		<input type="password" name="password" placeholder="Password"><br />
 		<button type="submit">Go</button>

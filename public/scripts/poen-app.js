@@ -13,7 +13,7 @@ app.controller('poenGlobal', ['$scope', '$rootScope',
 
 		moment.lang('nl');
 		$rootScope.currentDate = moment().format("ddd MM-DD-YYYY HH:mm:ss");
-		$rootScope.currentMonth = moment().format("MMMM");
+		$rootScope.currentMonth = moment().format("M");
 		$rootScope.currentYear = moment().format("YYYY");
 	}
 ]);
@@ -32,6 +32,10 @@ app.config(['$routeProvider', function ($routeProvider) {
 		when('/categories', {
 			templateUrl: 'partials/categories',
 			controller: 'poenCategories'
+		}).
+		when('/:displayYear/:displayMonth', {
+			templateUrl: 'partials/month',
+			controller: 'poenMonth'
 		}).
 		otherwise({
 			redirectTo: '/'

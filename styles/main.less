@@ -4,7 +4,7 @@
 @text: #111;
 @link: #00f;
 @line: #ddd;
-@mark: #ffffe0;
+@mark: #ff0;
 
 // MIXINS
 
@@ -108,13 +108,12 @@ body {
 							float: right; 
 							font-size: .7em;
 							font-style: italic;
-							color: lighten(@text, 60%);
 							margin: 0 .3em;
 						}
 
 						.fc-day-content { clear: both; }
 
-						&.fc-other-month .fc-day-number { color: lighten(@text, 80%); }
+						&.fc-other-month .fc-day-number { color: lighten(@text, 75%); }
 						&.fc-state-highlight { background-color: @mark; }
 					}
 				}
@@ -185,12 +184,33 @@ body {
 // MAIN
 
 	.main {
+		.clearfix;
+		margin-bottom: 100px;
 
 // MONTH
 
 		.calendar {
 			float: left;
 			width: 70%;
+		}
+
+		.calendar-controls {
+			position: absolute;
+			top: 0;
+			right: 0;
+			margin: 72px 30% 0;
+			padding: 0;
+			list-style-type: none;
+			line-height: 32px;
+
+			li {
+				display: inline;
+				margin-left: .5em;
+
+				&:first-child {
+					margin-right: 1em;
+				}
+			}
 		}
 		
 		.sidebar {
@@ -273,6 +293,11 @@ body {
 		top: 50%;
 		left: 50%;
 		margin: -100px 0 0 -100px;
+		text-align: center;
+
+		.brand {
+			margin: 0 0 3px;
+		}
 
 		input {
 			width: 100%;
