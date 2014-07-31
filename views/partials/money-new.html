@@ -1,0 +1,34 @@
+<header>
+
+	<h2>{{currentSidebar.title}}</h2>
+	<span class="sidebar-option" ng-click="sidebarClose()">Sluiten</span>
+
+</header>
+
+<form ng-submit="saveMoney()" class="money-form">
+	
+	<input type="text" ng-model="newMoney.title" placeholder="Naam">
+	<input type="number" step="0.05" ng-model="newMoney.amount" placeholder="Bedrag">
+	<input type="text" ng-model="newMoney.date"  placeholder="Datum">
+	
+	<textarea rows="8" ng-model="newMoney.note"  placeholder="Notitie"></textarea>
+
+	<select ng-model="newMoney.category">
+		<option value="1">Rekening</option>
+		<option value="2">Voedsel</option>
+		<option value="3">Vermaak</option>
+		<option value="4">Telefonie</option>
+		<option value="5">Huishouden</option>
+	</select>
+
+	<select ng-model="newMoney.recursion">
+		<option value="1">Eenmalig</option>
+		<option value="2">Dagelijks</option>
+		<option value="3">Wekelijks</option>
+		<option value="4">Maandelijks</option>
+		<option value="5">Jaarlijks</option>
+	</select>
+
+	<button type="submit">Save</button>
+	<button type="reset">Clear</button>
+</form>

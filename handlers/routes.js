@@ -6,6 +6,8 @@ module.exports = function (app, res, req) {
 		res.render('index.html');
 	});
 
+	// AUTHENTICATION
+
 	app.get('/login', function(req, res){
 		res.render('login.html', { user: req.user, message: req.session.messages });
 	});
@@ -31,9 +33,23 @@ module.exports = function (app, res, req) {
 		res.redirect('/');
 	});
 
+	// LAYOUT
+
 	app.get('/partials/:partial', function(req, res) {
 		res.render("partials/" + req.params.partial + ".html");
 	});
+
+	// MONEY
+	
+	var money = require(__dirname + '/money');
+	app.get('/money/:year/:month', ensureAuthenticated, money.moneyList);
+	app.get('/money/detail', ensureAuthenticated, money.moneyDetail);
+
+	app.post('/money/new', ensureAuthenticated, money.moneyNew);
+	app.post('/money/edit', ensureAuthenticated, money.moneyEdit);
+	app.post('/money/delete', ensureAuthenticated, money.moneyDelete);
+
+
 }
 
 function ensureAuthenticated(req, res, next) {

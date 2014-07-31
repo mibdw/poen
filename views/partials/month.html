@@ -1,68 +1,7 @@
 <ul class="calendar-controls">
-	<li><a href="/">Vandaag</a></li>
+	<li ng-hide="checkMonth==nextMonth"><a href="/">Vandaag</a></li>
 	<li><a href="/#/{{prevMonth}}">&laquo; Vorige</a></li>
 	<li><a href="/#/{{nextMonth}}">Volgende &raquo;</a></li>
 </ul>
-
-<div class="calendar">
-	
-</div>
-
-<div class="sidebar">
-
-	<header>
-
-		<h2>Balans</h2>
-		<span class="new-item">Toevoegen</span>
-
-		<table class="balance">
-			<tbody>
-				<tr class="balance-item">
-					<td class="balance-item-direction">&minus;</td>
-					<td class="balance-item-title"><span>Balance item title</span></td>
-					<td class="balance-item-amount">88,00</td>
-				</tr>
-				<tr class="balance-item">
-					<td class="balance-item-direction">&plus;</td>
-					<td class="balance-item-title"><span>Balance item title</span></td>
-					<td class="balance-item-amount">123,45</td>
-				</tr>
-				<tr class="balance-item">
-					<td class="balance-item-direction">&minus;</td>
-					<td class="balance-item-title"><span>Balance item title</span></td>
-					<td class="balance-item-amount">123,45</td>
-				</tr>
-				<tr class="balance-item">
-					<td class="balance-item-direction">&minus;</td>
-					<td class="balance-item-title"><span>Balance item title</span></td>
-					<td class="balance-item-amount">12,95</td>
-				</tr>
-				<tr class="balance-item">
-					<td class="balance-item-direction">&plus;</td>
-					<td class="balance-item-title"><span>Balance item title</span></td>
-					<td class="balance-item-amount">45,88</td>
-				</tr>
-				<tr class="balance-item">
-					<td class="balance-item-direction">&minus;</td>
-					<td class="balance-item-title"><span>Balance item title</span></td>
-					<td class="balance-item-amount">13,12</td>
-				</tr>
-				<tr class="balance-item">
-					<td class="balance-item-direction">&minus;</td>
-					<td class="balance-item-title"><span>Balance item title</span></td>
-					<td class="balance-item-amount">5,00</td>
-				</tr>
-			</tbody>
-			<tfoot>
-				<tr>
-					<td colspan="99">&plus; 999,99</td>
-				</tr>
-			</tfoot>				
-		</table>
-
-	</header>
-
-	
-
-
-</div>
+<div class="calendar"></div>
+<div class="sidebar" ng-include="currentSidebar.url"></div>

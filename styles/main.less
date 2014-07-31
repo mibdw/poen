@@ -39,12 +39,13 @@ body {
 		margin: 4px 0 10px;
 	}
 
-	input[type="text"], input[type="password"] {
-		border: 1px solid darken(@line, 20%);
+	input[type="text"], input[type="password"], input[type="number"], input[type="date"], textarea, select {
+		border: 1px solid @line;
 		padding: .5em .8em;
-		margin: 0 0 .2em;
+		margin: 0 0 .4em;
 		box-sizing: border-box;
 		font-family: sans-serif;
+		font-size: 1em;
 
 		&:focus {
 			border-color: @text;
@@ -75,7 +76,7 @@ body {
 				.fc-header-left {
 
 					h2 {
-						text-transform: Capitalize;
+						text-transform: capitalize;
 					}					
 				}
 
@@ -115,6 +116,9 @@ body {
 
 						&.fc-other-month .fc-day-number { color: lighten(@text, 75%); }
 						&.fc-state-highlight { background-color: @mark; }
+						&.active { background-color: #0ff; }
+
+						&:hover { cursor: pointer; }
 					}
 				}
 			}
@@ -140,6 +144,10 @@ body {
 							text-decoration: underline;
 						}
 					}
+				}
+
+				&.active {
+					text-decoration: underline;
 				}
 			}
 		}			
@@ -229,7 +237,7 @@ body {
 					float: left;
 				}
 
-				.new-item {
+				.sidebar-option {
 					float: right;
 					color: @link;
 					cursor: pointer;
@@ -245,7 +253,7 @@ body {
 
 				tbody {
 
-					.balance-item-title {
+					.balance-money-title {
 						
 						span {
 							display: block;
@@ -256,7 +264,7 @@ body {
 
 					}
 
-					.balance-item-amount {
+					.balance-money-amount {
 						text-align: right;
 					}
 
@@ -276,6 +284,17 @@ body {
 							padding-top: .5em;
 						}
 					}
+				}
+			}
+
+			.money-form {
+
+				input, textarea, select {
+					width: 100%;
+				}
+
+				button {
+					float: right;
 				}
 			}
 		}
