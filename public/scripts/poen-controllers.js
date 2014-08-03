@@ -1,10 +1,10 @@
 var ctrl = angular.module('poenControllers', []);
 
-ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams',
-	function ($scope, $rootScope, $routeParams) {
+ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http',
+function ($scope, $rootScope, $routeParams, $http) {
 		$rootScope.currentSlug = "month";
 
-		// WHAT MONTH TO DISPLAY?
+// WHAT MONTH TO DISPLAY?
 
 		var displayDate = moment();
 		$scope.checkMonth = moment().add('months', 1).format('YYYY/MM');
@@ -15,16 +15,16 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams',
 			displayDate = moment(processDate, "YYYY-MM");
 		}
 
-		// CALENDAR MONTH NAVIGATION
+// CALENDAR MONTH NAVIGATION
 
 		$scope.nextMonth = moment(displayDate).add('months', 1).format('YYYY/MM');
 		$scope.prevMonth = moment(displayDate).subtract('months', 1).format('YYYY/MM');
 
-		// CALENDAR PAGE TITLE
+// CALENDAR PAGE TITLE
 
 		$rootScope.currentTitle = $rootScope.websiteTitle + " - " + moment(displayDate).format('MMMM YYYY');
 
-		// SIDEBAR INCLUDES
+// SIDEBAR INCLUDES
 
 		$rootScope.sidebars = [
 			{ title: 'Balans', url: '/partials/money-list' },
@@ -36,12 +36,14 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams',
 			$rootScope.currentSidebar = $rootScope.sidebars[0];
 		}
 
-		// SIDEBAR CONTROLS
+// SIDEBAR CONTROLS
 
 		$scope.sidebarClose = function () { 
 			$rootScope.currentSidebar = $rootScope.sidebars[0]; 
 			$('.fc-day, .fc-event').removeClass('active');
 		};
+
+// NEW MONEY OBJECT
 
 		$scope.sidebarNew = function (date) { 
 			$rootScope.currentSidebar = $rootScope.sidebars[1]; 
@@ -53,23 +55,78 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams',
 			}
 		};
 
+// SAVE NEW MONEY OBJECT
+
+		$scope.saveMoney = function () {
+
+			if (!$rootScope.newMoney.title) {
+
+				alert('Titel invullen alstublieft');
+				$('.money-title').focus();
+
+			} else if (!$rootScope.newMoney.amount) {
+
+				alert('Bedrag invullen alstublieft');
+				$('.money-amount').focus();
+
+			} else if (!$rootScope.newMoney.date) {
+
+				alert('Datum invullen alstublieft');
+				$('.money-date').focus();
+
+			} else if (!$rootScope.newMoney.category) {
+
+				alert('Categorie invullen alstublieft');
+				$('.money-category').focus();
+
+			} else if (!$rootScope.newMoney.recursion) {
+
+				alert('Frequentie invullen alstublieft');
+				$('.money-recursion').focus();
+
+			} else if (!$rootScope.newMoney.balance) {
+
+				alert('Inkomst/uitgave invullen alstublieft');
+				$('.money-balance').focus();
+
+			} else {
+
+				$http.post('/money/new', $rootScope.newMoney).success( function (data) {
+					window.location.reload()			
+				});
+			}
+		};
+
+// EDIT MONEY OBJECT
+
 		$scope.sidebarEdit = function (id) { 
 			$rootScope.currentSidebar = $rootScope.sidebars[2]; 
 			$rootScope.editID = id;
 			$('.fc-day').removeClass('active');
 		};
 
-		$scope.saveMoney = function () {
-			alert("yo!");
-		};
+// CONVERT ENTERED AMOUNT INTO VALID MONEY AMOUNT
 
 		$scope.newMoneyAmount = function (amount) {
 			$rootScope.newMoney.amount = accounting.formatMoney(amount, '', '2', '', '.');
 		};
 
-		// CALENDAR RENDERING
+// LOAD MONEY OBJECTS
 
-		var moneyList = [
+		var moneyCriteria = {
+			'month': $routeParams.displayMonth,
+			'year': $routeParams.displayYear
+		}
+
+		$scope.moneyList = [{}]
+
+		$http.post('/money/' + $routeParams.displayYear + '/' + $routeParams.displayMonth, moneyCriteria).success( function (data) {
+			$scope.moneyList = data;
+		});
+
+// CALENDAR RENDERING
+
+		/* var moneyList = [
 				{
 					id: 1,
 					title: 'All Day Event',
@@ -78,7 +135,7 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams',
 				{
 					id: 2,
 					title: 'Long Event',
-					start: '2014-08-07'
+					date: '2014-08-07'
 				},
 				{
 					id: 3,
@@ -92,7 +149,7 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams',
 				},
 				{
 					id: 5,
-					title: 'Meeting with an enormous title for a name',
+					title: 'Meeting with an enormous  title for a name',
 					start: '2014-06-12'
 				},
 				{
@@ -110,11 +167,11 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams',
 					title: 'Click for Google',
 					start: '2014-07-28'
 				}
-			];
+			]; */
 
 		$('.calendar').fullCalendar({
 			header: { left: 'title', center: '', right: '' },
-			events: moneyList,
+			events: $scope.moneyList,
 			dayClick: function(date, jsEvent, view) { 
 
 				var sidebar = document.getElementsByClassName('sidebar');

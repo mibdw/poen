@@ -6,13 +6,13 @@
 </header>
 <form ng-submit="saveMoney()" class="money-form">
 	
-	<input type="text" ng-model="newMoney.title" placeholder="Naam">
+	<input type="text" ng-model="newMoney.title" placeholder="Naam" class="money-title">
 	<input type="text" ng-model="newMoney.amount" placeholder="Bedrag" class="money-amount">
-	<input type="text" ng-model="newMoney.date"  placeholder="Datum">
+	<input type="text" ng-model="newMoney.date"  placeholder="Datum" class="money-date">
 	
 	<textarea rows="8" ng-model="newMoney.note"  placeholder="Notitie"></textarea>
 
-	<select ng-model="newMoney.category">
+	<select ng-model="newMoney.category" class="money-category">
 		<option value="bill">Rekening</option>
 		<option value="food">Voedsel</option>
 		<option value="entertainment">Vermaak</option>
@@ -20,7 +20,7 @@
 		<option value="household">Huishouden</option>
 	</select>
 
-	<select ng-model="newMoney.recursion">
+	<select ng-model="newMoney.recursion" class="money-recursion">
 		<option value="once">Eenmalig</option>
 		<option value="daily">Dagelijks</option>
 		<option value="weekly">Wekelijks</option>
@@ -28,7 +28,7 @@
 		<option value="yearly">Jaarlijks</option>
 	</select>
 
-	<label><input type="radio" value="expense" ng-model="newMoney.balance"> Uitgave</label>
+	<label><input type="radio" value="expense" ng-model="newMoney.balance" class="money-balance"> Uitgave</label>
 	<label><input type="radio" value="income" ng-model="newMoney.balance"> Inkomen</label> 
 
 	<button type="submit">Save</button>

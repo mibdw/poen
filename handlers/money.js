@@ -4,6 +4,16 @@ var Money = require(__dirname + '/../models/money.js');
 
 exports.moneyList = function(req, res, next) {
 
+	console.log(req.body);
+
+	Money.find({})
+	.where('date').in(req.body.month)
+	.populate('user ', 'username')
+	.exec(function (err, articleList) {
+		if (err) return handleError(err);
+
+		return res.send(articleList);
+	});
 };
 
 exports.moneyDetail = function(req, res, next) {
@@ -12,6 +22,7 @@ exports.moneyDetail = function(req, res, next) {
 
 exports.moneyNew = function(req, res, next) {
 
+	console.log(req.body);
 	var money = new Money({
 		'title': req.body.title,
 		'amount': req.body.amount,

@@ -43,7 +43,7 @@ module.exports = function (app, res, req) {
 	// MONEY
 	
 	var money = require(__dirname + '/money');
-	app.get('/money/:year/:month', ensureAuthenticated, money.moneyList);
+	app.post('/money/:year/:month', ensureAuthenticated, money.moneyList);
 	app.get('/money/detail', ensureAuthenticated, money.moneyDetail);
 
 	app.post('/money/new', ensureAuthenticated, money.moneyNew);
