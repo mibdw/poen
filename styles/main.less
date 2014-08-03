@@ -4,7 +4,9 @@
 @text: #111;
 @link: #00f;
 @line: #ddd;
-@mark: #ff0;
+@today: #ff0;
+@hover: lightcyan;
+@active: cyan;
 
 // MIXINS
 
@@ -115,10 +117,22 @@ body {
 						.fc-day-content { clear: both; }
 
 						&.fc-other-month .fc-day-number { color: lighten(@text, 75%); }
-						&.fc-state-highlight { background-color: @mark; }
-						&.active { background-color: #0ff; }
+						&.fc-state-highlight { 
+							background-color: @today;
 
-						&:hover { cursor: pointer; }
+							&:hover { background-color: @today; }
+						}
+						
+						&.active { 
+							background-color: @active;
+
+							&:hover { background-color: @active; } 
+						}
+
+						&:hover { 
+							background-color: @hover;
+							cursor: pointer; 
+						}
 					}
 				}
 			}
@@ -289,7 +303,17 @@ body {
 
 			.money-form {
 
-				input, textarea, select {
+				label { 
+					display: block;
+					line-height: 1.6em;
+
+					&:hover, &:focus {
+						color: @link;
+						text-decoration: underline;
+					} 
+				}
+
+				input[type="text"], input[type="number"], textarea, select {
 					width: 100%;
 				}
 

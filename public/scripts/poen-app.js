@@ -16,7 +16,7 @@ app.controller('poenGlobal', ['$scope', '$rootScope',
 		$rootScope.currentMonth = moment().format("M");
 		$rootScope.currentYear = moment().format("YYYY");
 		
-		$rootScope.newMoney = {};
+		$rootScope.newMoney = { balance: 'expense' };
 		$rootScope.editMoney = {};
 	}
 ]);

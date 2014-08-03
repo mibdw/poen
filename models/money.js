@@ -6,12 +6,10 @@ var moneySchema = new Schema({
 	amount: Number,
 	note: String,
 	user: { type: String, ref: 'User' },
-	startDate: Date,
-	endDate: Date,
+	date: Date,
 	category: { type: String, ref: 'Category' },
 	recursion: String,
-	ownage: { type: String, ref: 'User' },
-	income: { type: Boolean, default: false }
+	balance: String
 });
 
 var User = require(__dirname + '/user');

@@ -45,12 +45,12 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams',
 
 		$scope.sidebarNew = function (date) { 
 			$rootScope.currentSidebar = $rootScope.sidebars[1]; 
+			
 			if (date) {
 				$rootScope.newMoney.date = date.format("DD-MM-YYYY");
 			} else {
 				highlightSelectedDate($rootScope.newMoney.date);
 			}
-			
 		};
 
 		$scope.sidebarEdit = function (id) { 
@@ -63,11 +63,13 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams',
 			alert("yo!");
 		};
 
+		$scope.newMoneyAmount = function (amount) {
+			$rootScope.newMoney.amount = accounting.formatMoney(amount, '', '2', '', '.');
+		};
+
 		// CALENDAR RENDERING
 
-		$('.calendar').fullCalendar({
-			header: { left: 'title', center: '', right: '' },
-			events: [
+		var moneyList = [
 				{
 					id: 1,
 					title: 'All Day Event',
@@ -108,7 +110,11 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams',
 					title: 'Click for Google',
 					start: '2014-07-28'
 				}
-			],
+			];
+
+		$('.calendar').fullCalendar({
+			header: { left: 'title', center: '', right: '' },
+			events: moneyList,
 			dayClick: function(date, jsEvent, view) { 
 
 				var sidebar = document.getElementsByClassName('sidebar');
@@ -139,6 +145,16 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams',
 		if ($rootScope.newMoney.date && $rootScope.currentSidebar.title == $rootScope.sidebars[1].title) { 
 			highlightSelectedDate($rootScope.newMoney.date); 
 		}
+
+		$(document).on('focusout', '.money-amount', function () {
+		
+			var sidebar = document.getElementsByClassName('sidebar');
+			var scope = angular.element(sidebar).scope();
+			var rootScope = scope.$root;
+			var amount = $(this).val();
+
+			scope.$apply (function() { scope.newMoneyAmount(amount); });
+		})
 	}
 ]);
 
@@ -159,4 +175,4 @@ ctrl.controller('poenCategories', ['$scope', '$rootScope',
 function highlightSelectedDate(date) {
 	var selectedDate = moment(date, 'DD-MM-YYYY').format('YYYY-MM-DD');
 	$('td[data-date="' + selectedDate + '"]').addClass('active');
-}
+};
