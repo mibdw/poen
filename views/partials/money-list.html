@@ -7,7 +7,7 @@
 
 <table class="balance">
 	<tbody>
-		<tr class="balance-money" ng-repeat="money in moneyList" id="{{money._id}}">
+		<tr class="balance-money" ng-repeat="money in moneyList" id="{{money._id}}" ng-click="sidebarEdit(money._id)">
 			<td class="balance-money-title"><span>{{money.title}}</span></td>
 			<td class="balance-money-amount">
 				<span ng-if="money.balance=='expense'">&minus;</span>

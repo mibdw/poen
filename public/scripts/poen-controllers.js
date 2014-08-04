@@ -103,6 +103,12 @@ function ($scope, $rootScope, $routeParams, $http) {
 			$rootScope.currentSidebar = $rootScope.sidebars[2]; 
 			$rootScope.editID = id;
 			$('.fc-day').removeClass('active');
+
+			var moneyID = { 'moneyID': id };
+
+			$http.post('/money/detail', moneyID).success( function (moneyDetail) {
+				$rootScope.editMoney = moneyDetail;
+			});
 		};
 
 // CONVERT ENTERED AMOUNT INTO VALID MONEY AMOUNT
@@ -171,7 +177,7 @@ function ($scope, $rootScope, $routeParams, $http) {
 					var sidebar = document.getElementsByClassName('sidebar');
 					var scope = angular.element(sidebar).scope();
 
-					scope.$apply (function() { scope.sidebarEdit(calEvent.id); });
+					scope.$apply (function() { scope.sidebarEdit(calEvent._id); });
 
 					$('.fc-event').removeClass('active');
 					$(this).addClass('active');			

@@ -20,6 +20,14 @@ exports.moneyList = function(req, res, next) {
 
 exports.moneyDetail = function(req, res, next) {
 
+	console.log(req.body);
+	Money.findById(req.body.moneyID).populate('user', 'username').exec(function (err, money) {
+		if (err) return console.log(err);
+	
+		console.log(money);
+		res.send(money);
+	});
+
 };
 
 exports.moneyNew = function(req, res, next) {
