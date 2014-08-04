@@ -5,43 +5,24 @@
 
 </header>
 
-<!-- <table class="balance">
+<table class="balance">
 	<tbody>
-		<tr class="balance-money">
-			<td class="balance-money-title"><span>Balance item title</span></td>
-			<td class="balance-money-amount">&minus; 88,00</td>
-		</tr>
-		<tr class="balance-money">
-			<td class="balance-money-title"><span>Balance item title</span></td>
-			<td class="balance-money-amount">&plus; 123,45</td>
-		</tr>
-		<tr class="balance-money">
-			<td class="balance-money-title"><span>Balance item title</span></td>
-			<td class="balance-money-amount">&minus; 123,45</td>
-		</tr>
-		<tr class="balance-money">
-			<td class="balance-money-title"><span>Balance item title</span></td>
-			<td class="balance-money-amount">&minus; 12,95</td>
-		</tr>
-		<tr class="balance-money">
-			<td class="balance-money-title"><span>Balance item title</span></td>
-			<td class="balance-money-amount">&plus; 45,88</td>
-		</tr>
-		<tr class="balance-money">
-			<td class="balance-money-title"><span>Balance item title</span></td>
-			<td class="balance-money-amount">&minus; 13,12</td>
-		</tr>
-		<tr class="balance-money">
-			<td class="balance-money-title"><span>Balance item title</span></td>
-			<td class="balance-money-amount">&minus; 5,00</td>
+		<tr class="balance-money" ng-repeat="money in moneyList" id="{{money._id}}">
+			<td class="balance-money-title"><span>{{money.title}}</span></td>
+			<td class="balance-money-amount">
+				<span ng-if="money.balance=='expense'">&minus;</span>
+				<span ng-if="money.balance=='income'">&plus;</span>
+				{{money.amount}}
+			</td>
 		</tr>
 	</tbody>
 	<tfoot>
 		<tr>
-			<td colspan="99">&plus; 999,99</td>
+			<td colspan="99">
+				<span ng-if="moneyTotal < 0">&minus;</span>
+				<span ng-if="moneyTotal > 0">&plus;</span>
+				{{moneyTotalDisplay}}
+			</td>
 		</tr>
-	</tfoot>				
+	</tfoot>
 </table>
--->
-
-{{moneyList}}

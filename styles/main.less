@@ -158,6 +158,8 @@ body {
 							text-decoration: underline;
 						}
 					}
+
+					.fc-event-time { display: none; }
 				}
 
 				&.active {
@@ -266,6 +268,16 @@ body {
 				width: 100%;
 
 				tbody {
+
+					.balance-money {
+
+						&:hover td, &.active td {
+							color: @link;
+							text-decoration: underline;
+							cursor: pointer;
+
+						}
+					}
 
 					.balance-money-title {
 						

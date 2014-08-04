@@ -49,7 +49,7 @@ function ($scope, $rootScope, $routeParams, $http) {
 			$rootScope.currentSidebar = $rootScope.sidebars[1]; 
 			
 			if (date) {
-				$rootScope.newMoney.date = date.format("DD-MM-YYYY");
+				$rootScope.newMoney.date = date.format("YYYY-MM-DD");
 			} else {
 				highlightSelectedDate($rootScope.newMoney.date);
 			}
@@ -114,94 +114,86 @@ function ($scope, $rootScope, $routeParams, $http) {
 // LOAD MONEY OBJECTS
 
 		var moneyCriteria = {
-			'month': $routeParams.displayMonth,
-			'year': $routeParams.displayYear
+			'month': moment(displayDate).format('MM'),
+			'year': moment(displayDate).format('YYYY')
 		}
 
-		$scope.moneyList = [{}]
+		$http.post('/money/' + $routeParams.displayYear + '/' + $routeParams.displayMonth, moneyCriteria).success( function (moneyData) {
 
-		$http.post('/money/' + $routeParams.displayYear + '/' + $routeParams.displayMonth, moneyCriteria).success( function (data) {
-			$scope.moneyList = data;
-		});
+			$scope.moneyList = [];
+
+			for (i in moneyData) {
+
+				if (moment(displayDate).format('M') == moment(moneyData[i].date).format('M')) {
+					$scope.moneyList.push(moneyData[i]);	
+				}				
+			}
+
+// CALCULATE MONEY TOTAL
+
+			$scope.moneyTotal = 0;
+
+			for (i in $scope.moneyList) {
+				if ($scope.moneyList[i].balance == 'income') {
+					$scope.moneyTotal = $scope.moneyTotal + $scope.moneyList[i].amount;
+				} else if ($scope.moneyList[i].balance == 'expense') {
+					$scope.moneyTotal = $scope.moneyTotal - $scope.moneyList[i].amount;
+				}
+			}
+
+			if ($scope.moneyTotal < 0) {
+				$scope.moneyTotalDisplay = $scope.moneyTotal.toString().substring(1);
+			} else if ($scope.moneyTotal > 0) {
+				$scope.moneyTotalDisplay = $scope.moneyTotal;
+			} else if ($scope.moneyTotal == 0) {
+				$scope.moneyTotalDisplay == '';
+			}
 
 // CALENDAR RENDERING
 
-		/* var moneyList = [
-				{
-					id: 1,
-					title: 'All Day Event',
-					start: '2014-07-01'
+			$('.calendar').fullCalendar({
+				header: { left: 'title', center: '', right: '' },
+				events: moneyData,
+				dayClick: function(date, jsEvent, view) { 
+
+					var sidebar = document.getElementsByClassName('sidebar');
+					var scope = angular.element(sidebar).scope();
+					var rootScope = scope.$root;
+
+					scope.$apply (function() { scope.sidebarNew(date); });
+
+					$('.fc-day, .fc-event').removeClass('active');
+					$(this).addClass('active');
+
 				},
-				{
-					id: 2,
-					title: 'Long Event',
-					date: '2014-08-07'
+				eventClick: function(calEvent, jsEvent, view) { 
+
+					var sidebar = document.getElementsByClassName('sidebar');
+					var scope = angular.element(sidebar).scope();
+
+					scope.$apply (function() { scope.sidebarEdit(calEvent.id); });
+
+					$('.fc-event').removeClass('active');
+					$(this).addClass('active');			
 				},
-				{
-					id: 3,
-					title: 'Repeating Event',
-					start: '2014-07-09'
+				eventMouseover: function(calEvent, jsEvent, view) { 
+					$('tr.balance-money#'+ calEvent._id).addClass('active');
 				},
-				{
-					id: 4,
-					title: 'Repeating Event',
-					start: '2014-07-16'
-				},
-				{
-					id: 5,
-					title: 'Meeting with an enormous  title for a name',
-					start: '2014-06-12'
-				},
-				{
-					id: 6,
-					title: 'Lunch',
-					start: '2014-07-12'
-				},
-				{
-					id: 7,
-					title: 'Birthday Party',
-					start: '2014-07-13'
-				},
-				{
-					id: 8,
-					title: 'Click for Google',
-					start: '2014-07-28'
+				eventMouseout: function(calEvent, jsEvent, view) { 
+					$('tr.balance-money#'+ calEvent._id).removeClass('active');
 				}
-			]; */
+			});
 
-		$('.calendar').fullCalendar({
-			header: { left: 'title', center: '', right: '' },
-			events: $scope.moneyList,
-			dayClick: function(date, jsEvent, view) { 
-
-				var sidebar = document.getElementsByClassName('sidebar');
-				var scope = angular.element(sidebar).scope();
-				var rootScope = scope.$root;
-
-				scope.$apply (function() { scope.sidebarNew(date); });
-
-				$('.fc-day, .fc-event').removeClass('active');
-				$(this).addClass('active');
-
-			},
-			eventClick: function(calEvent, jsEvent, view) { 
-
-				var sidebar = document.getElementsByClassName('sidebar');
-				var scope = angular.element(sidebar).scope();
-
-				scope.$apply (function() { scope.sidebarEdit(calEvent.id); });
-
-				$('.fc-event').removeClass('active');
-				$(this).addClass('active');			
-			},
-			eventMouseover: function(calEvent, jsEvent, view) { calEvent.id }
+			$('.calendar').fullCalendar('gotoDate', displayDate);
 		});
 
-		$('.calendar').fullCalendar('gotoDate', displayDate);
+// HIGHLIGHT DATE IF NEW MONEY SIDEBAR IS ACTIVE
 
 		if ($rootScope.newMoney.date && $rootScope.currentSidebar.title == $rootScope.sidebars[1].title) { 
 			highlightSelectedDate($rootScope.newMoney.date); 
 		}
+
+// CONVERT AMOUNT TO ACCOUNTING
 
 		$(document).on('focusout', '.money-amount', function () {
 		
@@ -211,7 +203,7 @@ function ($scope, $rootScope, $routeParams, $http) {
 			var amount = $(this).val();
 
 			scope.$apply (function() { scope.newMoneyAmount(amount); });
-		})
+		});
 	}
 ]);
 

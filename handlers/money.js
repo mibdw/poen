@@ -4,15 +4,17 @@ var Money = require(__dirname + '/../models/money.js');
 
 exports.moneyList = function(req, res, next) {
 
-	console.log(req.body);
+	var displayMonth = req.body.year + "-" + req.body.month;
+	var prevMonth = moment(displayMonth, "YYYY-MM").subtract('months', 3);
+	var nextMonth = moment(displayMonth, "YYYY-MM").add('months', 2);
 
 	Money.find({})
-	.where('date').in(req.body.month)
+	.where('date').gt(prevMonth).lt(nextMonth)
 	.populate('user ', 'username')
-	.exec(function (err, articleList) {
-		if (err) return handleError(err);
+	.exec(function (err, moneyList) {
+		if (err) console.log(err);
 
-		return res.send(articleList);
+		return res.send(moneyList);
 	});
 };
 
@@ -22,7 +24,6 @@ exports.moneyDetail = function(req, res, next) {
 
 exports.moneyNew = function(req, res, next) {
 
-	console.log(req.body);
 	var money = new Money({
 		'title': req.body.title,
 		'amount': req.body.amount,
@@ -35,7 +36,7 @@ exports.moneyNew = function(req, res, next) {
 	}); 
 
 	money.save(function (err) {
-		if (err) return handleError(err);
+		if (err) return console.log(err);
  		res.send('success');
 	});
 };
