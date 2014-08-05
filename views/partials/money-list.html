@@ -20,7 +20,7 @@
 	</tbody>
 	<tfoot>
 		<tr>
-			<td colspan="99">
+			<td colspan="99" ng-class="{positive: moneyTotal > 0}">
 				<span ng-if="moneyTotal < 0">&minus;</span>
 				<span ng-if="moneyTotal > 0">&plus;</span>
 				{{moneyTotalDisplay}}

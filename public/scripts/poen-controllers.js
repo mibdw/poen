@@ -91,6 +91,7 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http',
 
 			} else {
 
+				$rootScope.newMoney.amount = accounting.unformat($rootScope.newMoney.amount, ",");
 				$http.post('/money/new', $rootScope.newMoney).success( function (data) {
 					window.location.reload()			
 				});
@@ -108,10 +109,67 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http',
 
 			$http.post('/money/detail', moneyID).success( function (moneyDetail) {
 				$rootScope.editMoney = moneyDetail;
-				$rootScope.editMoney.amount = accounting.formatMoney($rootScope.editMoney.amount, '', '2', '', '.');
+				$rootScope.editMoney.amount = accounting.formatMoney($rootScope.editMoney.amount, '', '2', '', ',');
 				$rootScope.editMoney.date = moment($rootScope.editMoney.date).format("YYYY-MM-DD");
 			});
 
+		};
+
+// UPDATE MONEY OBJECT
+
+		$scope.updateMoney = function () {
+
+			if (!$rootScope.editMoney.title) {
+
+				alert('Titel invullen alstublieft');
+				$('.money-title').focus();
+
+			} else if (!$rootScope.editMoney.amount) {
+
+				alert('Bedrag invullen alstublieft');
+				$('.money-amount').focus();
+
+			} else if (!$rootScope.editMoney.date) {
+
+				alert('Datum invullen alstublieft');
+				$('.money-date').focus();
+
+			} else if (!$rootScope.editMoney.category) {
+
+				alert('Categorie invullen alstublieft');
+				$('.money-category').focus();
+
+			} else if (!$rootScope.editMoney.recursion) {
+
+				alert('Frequentie invullen alstublieft');
+				$('.money-recursion').focus();
+
+			} else if (!$rootScope.editMoney.balance) {
+
+				alert('Inkomst/uitgave invullen alstublieft');
+				$('.money-balance').focus();
+
+			} else {
+
+				if (!$rootScope.editMoney.note) {
+					$rootScope.editMoney.note = "";
+				}
+
+				$rootScope.editMoney.amount = accounting.unformat($rootScope.editMoney.amount, ",");
+				$http.post('/money/edit', $rootScope.editMoney).success( function (data) {
+					window.location.reload()			
+				});
+			}
+		};
+
+		$scope.deleteMoney = function () {
+
+			if (confirm("Weet je het zeker?") == true) {
+				
+				$http.post('/money/delete', $rootScope.editMoney).success( function (data) {
+					window.location.reload()			
+				});
+			} 
 		};
 
 // LOAD MONEY OBJECTS
@@ -128,7 +186,7 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http',
 			for (i in moneyData) {
 
 				if (moment(displayDate).format('M') == moment(moneyData[i].date).format('M')) {
-					moneyData[i].displayAmount = accounting.formatMoney(moneyData[i].amount, '', '2', '', '.');
+					moneyData[i].displayAmount = accounting.formatMoney(moneyData[i].amount, '', '2', '', ',');
 					$scope.moneyList.push(moneyData[i]);	
 				}				
 			}
@@ -151,7 +209,7 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http',
 				$scope.moneyTotalDisplay = $scope.moneyTotal;
 			}
 
-			$scope.moneyTotalDisplay = accounting.formatMoney($scope.moneyTotalDisplay, '', '2', '', '.');
+			$scope.moneyTotalDisplay = accounting.formatMoney($scope.moneyTotalDisplay, '', '2', '', ',');
 
 // CALENDAR RENDERING
 
@@ -187,6 +245,7 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http',
 					$('tr.balance-money#'+ calEvent._id).removeClass('active');
 				},
 				eventRender: function(event, element) {
+					$(element).addClass(event._id);
 					$(element).find('.fc-event-title').prepend('<span class="user-icon"><span>' + event.user.username.substring(0,1) + '</span></span>');
 					$(element).find('.fc-event-title').prepend('<span class="category-icon ' + event.category.slug + '" title="' + event.category.name +'"></span>');
 				}
@@ -236,6 +295,11 @@ function highlightSelectedDate(date) {
 
 $(document).on('focusout', '.money-amount', function () {
 
-	var newAmount = accounting.formatMoney($(this).val(), '', '2', '', '.');
+	var newAmount = accounting.formatMoney($(this).val(), '', '2', '', ',');
 	$(this).val(newAmount);
 });
+
+// HIGHLIGHT MONEY ACCROSS SECTION ON HOVER
+
+$(document).on('mouseenter', '.balance-money', function () { $('.' + $(this).attr('id')).addClass("hover"); });
+$(document).on('mouseleave', '.balance-money', function () { $('.' + $(this).attr('id')).removeClass("hover"); });

@@ -52,9 +52,30 @@ exports.moneyNew = function(req, res, next) {
 
 exports.moneyEdit = function(req, res, next) {
 
+	Money.findByIdAndUpdate(req.body._id, { $set: { 
+	
+		'title': req.body.title,
+		'amount': req.body.amount,
+		'note': req.body.note,
+		'date': req.body.date,
+		'category': req.body.category,
+		'recursion': req.body.recursion,
+		'balance': req.body.balance 
+
+	}}, function (err) {
+		if (err) return console.log(err);
+
+		res.send('success');
+	});
+
 };
 
 exports.moneyDelete = function(req, res, next) {
 
+	Money.findByIdAndRemove(req.body._id, function (err) {
+		if (err) return console.log(err);
+
+		res.send('success');
+	});
 };
 
