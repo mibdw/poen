@@ -4,7 +4,6 @@
 	<span class="sidebar-option" ng-click="sidebarClose()">Sluiten</span>
 
 </header>
-
 <form ng-submit="updateMoney()" class="money-form">
 	
 	<input type="text" ng-model="editMoney.title" placeholder="Naam" class="money-title">
@@ -14,7 +13,7 @@
 	<textarea rows="8" ng-model="editMoney.note"  placeholder="Notitie" class="money-note"></textarea>
 
 	<select ng-model="editMoney.category" class="money-category">
-		<option ng-repeat="category in categoryList" value="{{category._id}}">{{category.name}}</option>
+		<option ng-repeat="category in categoryList" value="{{category._id}}" class="{{category.slug}}">{{category.name}}</option>
 	</select>
 
 	<select ng-model="editMoney.recursion" class="money-recursion">
@@ -28,8 +27,9 @@
 	<label><input type="radio" value="expense" ng-model="editMoney.balance" class="money-balance"> Uitgave</label>
 	<label><input type="radio" value="income" ng-model="editMoney.balance"> Inkomen</label> 
 
-	<button type="submit">Save</button>
-	<button type="reset">Clear</button>
+	<hr>
+
+	<button type="submit">Bewaren</button>
 
 	<span ng-click="deleteMoney()" class="money-delete">Verwijderen</span>
 </form>
