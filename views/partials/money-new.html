@@ -13,19 +13,14 @@
 	<textarea rows="8" ng-model="newMoney.note"  placeholder="Notitie" class="money-note"></textarea>
 
 	<select ng-model="newMoney.category" class="money-category">
-		<option ng-repeat="category in categoryList" value="{{category._id}}" class="{{category.slug}}">{{category.name}}</option>
+		<option ng-repeat="category in categoryList" value="{{category._id}}">{{category.name}}</option>
 	</select>
 
-	<select ng-model="newMoney.recursion" class="money-recursion">
-		<option value="once">Eenmalig</option>
-		<option value="daily">Dagelijks</option>
-		<option value="weekly">Wekelijks</option>
-		<option value="monthly">Maandelijks</option>
-		<option value="yearly">Jaarlijks</option>
-	</select>
+	<label for="once"><input type="radio" value="once" ng-model="newMoney.recursion" id="once"> Eenmalig</label>
+	<label for="monthly"><input type="radio" value="monthly" ng-model="newMoney.recursion" id="monthly"> Maandelijks</label><br />
 
-	<label><input type="radio" value="expense" ng-model="newMoney.balance" class="money-balance"> Uitgave</label>
-	<label><input type="radio" value="income" ng-model="newMoney.balance"> Inkomen</label> 
+	<label for="expense"><input type="radio" value="expense" ng-model="newMoney.balance" id="expense"> Uitgave</label>
+	<label for="income"><input type="radio" value="income" ng-model="newMoney.balance" id="income"> Inkomen</label> 
 
 	<hr>
 

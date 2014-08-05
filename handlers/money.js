@@ -11,14 +11,12 @@ exports.moneyList = function(req, res, next) {
 	Money.find({})
 	.where('date').gt(prevMonth).lt(nextMonth)
 	.populate('user', 'username')
-	.populate('category', 'name slug')
+	.populate('category', 'name slug color')
 	.exec(function (err, moneyList) {
 		if (err) console.log(err);
 
 		return res.send(moneyList);
 	});
-
-
 };
 
 exports.moneyDetail = function(req, res, next) {

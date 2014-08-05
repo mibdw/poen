@@ -30,14 +30,6 @@
 	border-radius: .45em;
 	position: relative;
 	top: .1em;
-
-	&.huishouden { background-color: hotpink; }
-	&.voedsel { background-color: mediumseagreen; }
-	&.vakantie { background-color: salmon; }
-	&.klussen { background-color: darkorange; }
-	&.rekening { background-color: red; }
-	&.entertainment { background-color: indigo; }
-	&.werk { background-color: blue; }
 }
 
 .user-icon {
@@ -378,7 +370,7 @@ body {
 			.money-form {
 
 				label { 
-					display: block;
+					display: inline-block;
 					line-height: 1.6em;
 
 					&:hover, &:focus {
@@ -394,24 +386,6 @@ body {
 				button {
 					float: right;
 					margin-left: .3em;
-				}
-
-				.money-category {
-
-					option:before {
-						content: "\25CF\00A0";
-						font-size: 1.4em;
-						line-height: .5em;
-						color: transparent;
-					}
-
-					option.huishouden:before { color: hotpink; }
-					option.voedsel:before { color: mediumseagreen; }
-					option.vakantie:before { color: salmon; }
-					option.klussen:before { color: darkorange; }
-					option.rekening:before { color: red; }
-					option.entertainment:before { color: indigo; }
-					option.werk:before { color: blue; }
 				}
 
 				.money-delete {

@@ -8,7 +8,7 @@
 <table class="balance">
 	<tbody>
 		<tr class="balance-money" ng-repeat="money in moneyList | orderBy: 'date'" id="{{money._id}}" ng-click="sidebarEdit(money._id)">
-			<td class="balance-money-category"><span class="category-icon {{money.category.slug}}" title="{{money.category.name}}"></span></td>
+			<td class="balance-money-category"><span class="category-icon" title="{{money.category.name}}" style="background-color: {{money.category.color}};"></span></td>
 			<td class="balance-money-user"><span class="user-icon" title="{{money.user.username}}"><span>{{money.user.username.substring(0,1)}}</span></span></td>
 			<td class="balance-money-title"><span>{{money.title}}</span></td>
 			<td class="balance-money-amount">

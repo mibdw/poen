@@ -91,7 +91,7 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http',
 
 			} else {
 
-				$rootScope.newMoney.amount = accounting.unformat($rootScope.newMoney.amount, ",");
+				$rootScope.newMoney.amount = accounting.unformat($rootScope.newMoney.amount);
 				$http.post('/money/new', $rootScope.newMoney).success( function (data) {
 					window.location.reload()			
 				});
@@ -155,7 +155,7 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http',
 					$rootScope.editMoney.note = "";
 				}
 
-				$rootScope.editMoney.amount = accounting.unformat($rootScope.editMoney.amount, ",");
+				$rootScope.editMoney.amount = accounting.unformat($rootScope.editMoney.amount);
 				$http.post('/money/edit', $rootScope.editMoney).success( function (data) {
 					window.location.reload()			
 				});
@@ -209,7 +209,8 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http',
 				$scope.moneyTotalDisplay = $scope.moneyTotal;
 			}
 
-			$scope.moneyTotalDisplay = accounting.formatMoney($scope.moneyTotalDisplay, '', '2', '', ',');
+			$scope.moneyTotalDisplay = accounting.formatMoney($scope.moneyTotalDisplay, '', '2', '', ','); 
+
 
 // CALENDAR RENDERING
 
@@ -247,7 +248,7 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http',
 				eventRender: function(event, element) {
 					$(element).addClass(event._id);
 					$(element).find('.fc-event-title').prepend('<span class="user-icon"><span>' + event.user.username.substring(0,1) + '</span></span>');
-					$(element).find('.fc-event-title').prepend('<span class="category-icon ' + event.category.slug + '" title="' + event.category.name +'"></span>');
+					$(element).find('.fc-event-title').prepend('<span class="category-icon ' + event.category.slug + '" title="' + event.category.name +'" style="background-color: ' + event.category.color + ';"></span>');
 				}
 			});
 
@@ -274,14 +275,36 @@ ctrl.controller('poenCategories', ['$scope', '$rootScope', '$http',
 		$rootScope.currentSlug = "categories";
 		$rootScope.currentTitle = $rootScope.websiteTitle + " - Categories";
 
+// GET ALL CATEGORIES
+
 		$http.get('/category/list').success( function (categoryData) {
 			$rootScope.categoryList = categoryData;
 		});
 
+// SAVE NEW CATEGORY
+
 		$scope.saveCategory = function () {
-			$http.post('/category/new', $scope.newCategory).success( function (data) {
-				window.location.reload();
-			});
+		
+			if (!$scope.newCategory.name) {
+
+				alert('Naam invullen alstublieft');
+
+			} else if (!$scope.newCategory.color) {
+
+				alert('Kleur invullen alstublieft');
+
+			} else {
+
+				$http.post('/category/new', $scope.newCategory).success( function (data) {
+					if (data = 'error') {
+						alert('Sorry, die kleur is al bezet');
+					} else {
+						window.location.reload();	
+					}
+					
+				});
+
+			}
 		};
 	}
 ]);

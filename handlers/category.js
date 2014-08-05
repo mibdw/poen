@@ -20,11 +20,12 @@ exports.categoryNew = function(req, res, next) {
 	var slug = slugify(req.body.name);
 	var category = new Category({
 		'name': req.body.name,
+		'color': req.body.color,
 		'slug': slug
 	}); 
 
 	category.save(function (err) {
-		if (err) return console.log(err);
+		if (err) return res.send('error');
  		res.send('success');
 	});
 };
