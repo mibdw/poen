@@ -8,11 +8,13 @@
 <table class="balance">
 	<tbody>
 		<tr class="balance-money" ng-repeat="money in moneyList" id="{{money._id}}" ng-click="sidebarEdit(money._id)">
+			<td class="balance-money-category"><span class="category-icon {{money.category.slug}}" title="{{money.category.name}}"></span></td>
+			<td class="balance-money-user"><span class="user-icon" title="{{money.user.username}}"><span>{{money.user.username.substring(0,1)}}</span></span></td>
 			<td class="balance-money-title"><span>{{money.title}}</span></td>
 			<td class="balance-money-amount">
 				<span ng-if="money.balance=='expense'">&minus;</span>
 				<span ng-if="money.balance=='income'">&plus;</span>
-				{{money.amount}}
+				{{money.displayAmount}}
 			</td>
 		</tr>
 	</tbody>

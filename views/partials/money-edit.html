@@ -7,26 +7,22 @@
 
 <form ng-submit="updateMoney()" class="money-form">
 	
-	<input type="text" ng-model="editMoney.title" placeholder="Naam">
-	<input type="number" step="0.05" ng-model="editMoney.amount" placeholder="Bedrag">
-	<input type="text" ng-model="editMoney.date"  placeholder="Datum">
+	<input type="text" ng-model="editMoney.title" placeholder="Naam" class="money-title">
+	<input type="text" ng-model="editMoney.amount" placeholder="Bedrag" class="money-amount">
+	<input type="text" ng-model="editMoney.date"  placeholder="Datum" class="money-title">
 	
-	<textarea rows="8" ng-model="editMoney.note"  placeholder="Notitie"></textarea>
+	<textarea rows="8" ng-model="editMoney.note"  placeholder="Notitie" class="money-note"></textarea>
 
-	<select ng-model="editMoney.category">
-		<option value="1">Rekening</option>
-		<option value="2">Voedsel</option>
-		<option value="3">Vermaak</option>
-		<option value="4">Telefonie</option>
-		<option value="5">Huishouden</option>
+	<select ng-model="editMoney.category" class="money-category">
+		<option ng-repeat="category in categoryList" value="{{category._id}}">{{category.name}}</option>
 	</select>
 
-	<select ng-model="editMoney.recursion">
-		<option value="1">Eenmalig</option>
-		<option value="2">Dagelijks</option>
-		<option value="3">Wekelijks</option>
-		<option value="4">Maandelijks</option>
-		<option value="5">Jaarlijks</option>
+	<select ng-model="editMoney.recursion" class="money-recursion">
+		<option value="once">Eenmalig</option>
+		<option value="daily">Dagelijks</option>
+		<option value="weekly">Wekelijks</option>
+		<option value="monthly">Maandelijks</option>
+		<option value="yearly">Jaarlijks</option>
 	</select>
 
 	<label><input type="radio" value="expense" ng-model="editMoney.balance" class="money-balance"> Uitgave</label>

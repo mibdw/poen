@@ -1,10 +1,10 @@
 // VARIABLES
 
-@back: #fff;
+@back: white;
 @text: #111;
-@link: #00f;
+@link: blue;
 @line: #ddd;
-@today: #ff0;
+@today: yellow;
 @hover: lightcyan;
 @active: cyan;
 
@@ -18,6 +18,45 @@
 
 	&:after {
 		clear: both;
+	}
+}
+
+// CATEGORIES
+
+.category-icon {
+	display: inline-block;
+	width: .9em;
+	height: .9em;
+	border-radius: .45em;
+	position: relative;
+	top: .1em;
+
+	&.huishouden { background-color: hotpink; }
+	&.voedsel { background-color: mediumseagreen; }
+	&.vakantie { background-color: salmon; }
+	&.klussen { background-color: darkorange; }
+	&.rekening { background-color: red; }
+	&.entertainment { background-color: indigo; }
+	&.werk { background-color: blue; }
+}
+
+.user-icon {
+	display: inline-block;
+	width: .9em;
+	height: .9em;
+	border-radius: .45em;
+	background-color: darkgray;
+	color: @back;
+	text-align: center;
+	position: relative;
+	top: .15em;
+	text-transform: uppercase;
+
+	span {
+		font-size: .6em;
+		position: relative;
+		top: -.5em;
+		font-weight: bold;
 	}
 }
 
@@ -157,6 +196,8 @@ body {
 							color: @link;
 							text-decoration: underline;
 						}
+
+						.category-icon, .user-icon { margin-right: 3px;	}
 					}
 
 					.fc-event-time { display: none; }
@@ -238,7 +279,7 @@ body {
 		}
 		
 		.sidebar {
-			float: left;
+			float: right;
 			width: 30%;
 			box-sizing: border-box;
 			padding: 0 0 0 35px;
@@ -332,6 +373,25 @@ body {
 				button {
 					float: right;
 				}
+
+				.money-category {
+
+					option:before {
+						content: "\25CF\00A0";
+						font-size: 1.4em;
+						line-height: .5em;
+						color: transparent;
+					}
+
+					option.huishouden:before { color: hotpink; }
+					option.voedsel:before { color: mediumseagreen; }
+					option.vakantie:before { color: salmon; }
+					option.klussen:before { color: darkorange; }
+					option.rekening:before { color: red; }
+					option.entertainment:before { color: indigo; }
+					option.werk:before { color: blue; }
+				}
+					
 			}
 		}
 	}

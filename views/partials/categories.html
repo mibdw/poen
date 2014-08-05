@@ -1,1 +1,12 @@
 <h2>Categoriën</h2>
+
+<ul>
+	<li ng-repeat="category in categoryList" class="{{category.slug}}">{{category.name}}</li>
+</ul>
+
+<form ng-submit="saveCategory()">
+	<input type="text" ng-model="newCategory.name">
+	<button type="submit">Save</button>
+</form>
+
+

@@ -10,21 +10,22 @@ exports.moneyList = function(req, res, next) {
 
 	Money.find({})
 	.where('date').gt(prevMonth).lt(nextMonth)
-	.populate('user ', 'username')
+	.populate('user', 'username')
+	.populate('category', 'name slug')
 	.exec(function (err, moneyList) {
 		if (err) console.log(err);
 
 		return res.send(moneyList);
 	});
+
+
 };
 
 exports.moneyDetail = function(req, res, next) {
 
-	console.log(req.body);
 	Money.findById(req.body.moneyID).populate('user', 'username').exec(function (err, money) {
 		if (err) return console.log(err);
 	
-		console.log(money);
 		res.send(money);
 	});
 

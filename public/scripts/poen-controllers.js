@@ -1,7 +1,7 @@
 var ctrl = angular.module('poenControllers', []);
 
 ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http',
-function ($scope, $rootScope, $routeParams, $http) {
+	function ($scope, $rootScope, $routeParams, $http) {
 		$rootScope.currentSlug = "month";
 
 // WHAT MONTH TO DISPLAY?
@@ -108,13 +108,10 @@ function ($scope, $rootScope, $routeParams, $http) {
 
 			$http.post('/money/detail', moneyID).success( function (moneyDetail) {
 				$rootScope.editMoney = moneyDetail;
+				$rootScope.editMoney.amount = accounting.formatMoney($rootScope.editMoney.amount, '', '2', '', '.');
+				$rootScope.editMoney.date = moment($rootScope.editMoney.date).format("YYYY-MM-DD");
 			});
-		};
 
-// CONVERT ENTERED AMOUNT INTO VALID MONEY AMOUNT
-
-		$scope.newMoneyAmount = function (amount) {
-			$rootScope.newMoney.amount = accounting.formatMoney(amount, '', '2', '', '.');
 		};
 
 // LOAD MONEY OBJECTS
@@ -131,6 +128,7 @@ function ($scope, $rootScope, $routeParams, $http) {
 			for (i in moneyData) {
 
 				if (moment(displayDate).format('M') == moment(moneyData[i].date).format('M')) {
+					moneyData[i].displayAmount = accounting.formatMoney(moneyData[i].amount, '', '2', '', '.');
 					$scope.moneyList.push(moneyData[i]);	
 				}				
 			}
@@ -151,9 +149,9 @@ function ($scope, $rootScope, $routeParams, $http) {
 				$scope.moneyTotalDisplay = $scope.moneyTotal.toString().substring(1);
 			} else if ($scope.moneyTotal > 0) {
 				$scope.moneyTotalDisplay = $scope.moneyTotal;
-			} else if ($scope.moneyTotal == 0) {
-				$scope.moneyTotalDisplay == '';
 			}
+
+			$scope.moneyTotalDisplay = accounting.formatMoney($scope.moneyTotalDisplay, '', '2', '', '.');
 
 // CALENDAR RENDERING
 
@@ -187,6 +185,10 @@ function ($scope, $rootScope, $routeParams, $http) {
 				},
 				eventMouseout: function(calEvent, jsEvent, view) { 
 					$('tr.balance-money#'+ calEvent._id).removeClass('active');
+				},
+				eventRender: function(event, element) {
+					$(element).find('.fc-event-title').prepend('<span class="user-icon"><span>' + event.user.username.substring(0,1) + '</span></span>');
+					$(element).find('.fc-event-title').prepend('<span class="category-icon ' + event.category.slug + '" title="' + event.category.name +'"></span>');
 				}
 			});
 
@@ -198,18 +200,6 @@ function ($scope, $rootScope, $routeParams, $http) {
 		if ($rootScope.newMoney.date && $rootScope.currentSidebar.title == $rootScope.sidebars[1].title) { 
 			highlightSelectedDate($rootScope.newMoney.date); 
 		}
-
-// CONVERT AMOUNT TO ACCOUNTING
-
-		$(document).on('focusout', '.money-amount', function () {
-		
-			var sidebar = document.getElementsByClassName('sidebar');
-			var scope = angular.element(sidebar).scope();
-			var rootScope = scope.$root;
-			var amount = $(this).val();
-
-			scope.$apply (function() { scope.newMoneyAmount(amount); });
-		});
 	}
 ]);
 
@@ -220,10 +210,20 @@ ctrl.controller('poenProfile', ['$scope', '$rootScope',
 	}
 ]);
 
-ctrl.controller('poenCategories', ['$scope', '$rootScope',
-	function ($scope, $rootScope) {
+ctrl.controller('poenCategories', ['$scope', '$rootScope', '$http',
+	function ($scope, $rootScope, $http) {
 		$rootScope.currentSlug = "categories";
 		$rootScope.currentTitle = $rootScope.websiteTitle + " - Categories";
+
+		$http.get('/category/list').success( function (categoryData) {
+			$rootScope.categoryList = categoryData;
+		});
+
+		$scope.saveCategory = function () {
+			$http.post('/category/new', $scope.newCategory).success( function (data) {
+				window.location.reload();
+			});
+		};
 	}
 ]);
 
@@ -231,3 +231,11 @@ function highlightSelectedDate(date) {
 	var selectedDate = moment(date, 'DD-MM-YYYY').format('YYYY-MM-DD');
 	$('td[data-date="' + selectedDate + '"]').addClass('active');
 };
+
+// CONVERT AMOUNT TO ACCOUNTING
+
+$(document).on('focusout', '.money-amount', function () {
+
+	var newAmount = accounting.formatMoney($(this).val(), '', '2', '', '.');
+	$(this).val(newAmount);
+});

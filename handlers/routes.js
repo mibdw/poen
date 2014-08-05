@@ -52,19 +52,9 @@ module.exports = function (app, res, req) {
 
 	// CATEGORY
 
-	var Category = require(__dirname + '/../models/category');
-
-	var bill = new Category({ 'name': 'Rekening', 'slug': 'bill' });
-	var food = new Category({ 'name': 'Voedsel', 'slug': 'food' });
-	var entertainment = new Category({ 'name': 'Vermaak', 'slug': 'entertainment' });
-	var homeimprovement = new Category({ 'name': 'Klussen', 'slug': 'homeimprovement' });
-	var household = new Category({ 'name': 'Huishouden', 'slug': 'household' });
-
-	bill.save();
-	food.save();
-	entertainment.save();
-	homeimprovement.save();
-	household.save();
+	var category = require(__dirname + '/category');
+	app.get('/category/list', ensureAuthenticated, category.categoryList);
+	app.post('/category/new', ensureAuthenticated, category.categoryNew);
 
 }
 

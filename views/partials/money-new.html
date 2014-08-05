@@ -10,14 +10,10 @@
 	<input type="text" ng-model="newMoney.amount" placeholder="Bedrag" class="money-amount">
 	<input type="text" ng-model="newMoney.date"  placeholder="Datum" class="money-date">
 	
-	<textarea rows="8" ng-model="newMoney.note"  placeholder="Notitie"></textarea>
+	<textarea rows="8" ng-model="newMoney.note"  placeholder="Notitie" class="money-note"></textarea>
 
 	<select ng-model="newMoney.category" class="money-category">
-		<option value="bill">Rekening</option>
-		<option value="food">Voedsel</option>
-		<option value="entertainment">Vermaak</option>
-		<option value="homeimprovement">Klussen</option>
-		<option value="household">Huishouden</option>
+		<option ng-repeat="category in categoryList" value="{{category._id}}" class="{{category.slug}}">{{category.name}}</option>
 	</select>
 
 	<select ng-model="newMoney.recursion" class="money-recursion">

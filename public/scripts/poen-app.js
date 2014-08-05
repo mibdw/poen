@@ -1,7 +1,7 @@
 var app = angular.module('poenApp', ['ngRoute', 'poenControllers']);
 
-app.controller('poenGlobal', ['$scope', '$rootScope',
-	function ($scope, $rootScope) {
+app.controller('poenGlobal', ['$scope', '$rootScope', '$http',
+	function ($scope, $rootScope, $http) {
 		$rootScope.websiteTitle = "Poen";
 		$rootScope.currentTitle = $rootScope.websiteTitle + " - Geld moet rollen";
 
@@ -18,6 +18,10 @@ app.controller('poenGlobal', ['$scope', '$rootScope',
 		
 		$rootScope.newMoney = { balance: 'expense', recursion: 'once' };
 		$rootScope.editMoney = {};
+
+		$http.get('/category/list').success( function (categoryData) {
+			$rootScope.categoryList = categoryData;
+		});
 	}
 ]);
 
