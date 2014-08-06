@@ -25,7 +25,11 @@ exports.categoryNew = function(req, res, next) {
 	}); 
 
 	category.save(function (err) {
-		if (err) return res.send('error');
- 		res.send('success');
+		if (err) {
+			res.send('error');
+		} else {
+			res.send('success');
+		}
+ 		
 	});
 };

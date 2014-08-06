@@ -1,5 +1,7 @@
 var passport = require('passport');
 var mongoose = require('mongoose');
+var moment = require('moment');
+var dateFormat = "ddd MM-DD-YYYY HH:mm:ss";
 
 module.exports = function (app, res, req) {
 
@@ -24,13 +26,19 @@ module.exports = function (app, res, req) {
 				if (err) { return next(err); }
 
 				req.session.messages = "";
+
+				console.log(moment().format(dateFormat) + ' - Succesvolle login door ' + user.username );
 				return res.redirect('/');
+
 			});
 		})(req, res, next);
 	});
 
-	app.get('/logout', function(req, res){
+	app.get('/logout', ensureAuthenticated, function(req, res){
+
+		console.log(moment().format(dateFormat) + ' - Succesvolle logout door ' + req.user.username );
 		req.logout();
+
 		res.redirect('/');
 	});
 

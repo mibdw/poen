@@ -318,6 +318,10 @@ body {
 
 						td {
 							padding: .2em .1em;
+
+							&.balance-money-category, &.balance-money-user {
+								width: 1%;
+							}
 						}
 
 						&:hover td, &.active td {
@@ -373,7 +377,7 @@ body {
 					display: inline-block;
 					line-height: 1.6em;
 
-					&:hover, &:focus {
+					&:hover, &:focus, &:active {
 						color: @link;
 						text-decoration: underline;
 					} 

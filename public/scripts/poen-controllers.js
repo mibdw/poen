@@ -50,6 +50,7 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http',
 			
 			if (date) {
 				$rootScope.newMoney.date = date.format("YYYY-MM-DD");
+				$rootScope.newMoney.displayDate = date.format("D MMMM YYYY");
 			} else {
 				highlightSelectedDate($rootScope.newMoney.date);
 			}
@@ -89,9 +90,15 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http',
 				alert('Inkomst/uitgave invullen alstublieft');
 				$('.money-balance').focus();
 
+			} else if (moment($rootScope.newMoney.date).format('D') > 28 && $rootScope.newMoney.recursion == 'monthly') {
+
+				alert('Maandelijkse kosten alleen tussen 1-28 alstublieft');
+				$('.money-recursion').focus();
+
 			} else {
 
-				$rootScope.newMoney.amount = accounting.unformat($rootScope.newMoney.amount);
+				if ($rootScope.newMoney.amount.indexOf(',') > -1) { $rootScope.newMoney.amount = accounting.unformat($rootScope.newMoney.amount, ','); }		
+
 				$http.post('/money/new', $rootScope.newMoney).success( function (data) {
 					window.location.reload()			
 				});
@@ -110,7 +117,11 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http',
 			$http.post('/money/detail', moneyID).success( function (moneyDetail) {
 				$rootScope.editMoney = moneyDetail;
 				$rootScope.editMoney.amount = accounting.formatMoney($rootScope.editMoney.amount, '', '2', '', ',');
+
 				$rootScope.editMoney.date = moment($rootScope.editMoney.date).format("YYYY-MM-DD");
+				$rootScope.editMoney.displayDate = moment($rootScope.editMoney.date).format("D MMMM YYYY");
+
+				highlightSelectedDate($rootScope.editMoney.date);
 			});
 
 		};
@@ -149,13 +160,17 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http',
 				alert('Inkomst/uitgave invullen alstublieft');
 				$('.money-balance').focus();
 
+			} else if (moment($rootScope.editMoney.date).format('D') > 28 && $rootScope.editMoney.recursion == 'monthly') {
+
+				alert('Maandelijkse kosten alleen tussen 1-28 alstublieft');
+				$('.money-recursion').focus();
+
 			} else {
 
-				if (!$rootScope.editMoney.note) {
-					$rootScope.editMoney.note = "";
-				}
+				if (!$rootScope.editMoney.note) { $rootScope.editMoney.note = "";}
 
-				$rootScope.editMoney.amount = accounting.unformat($rootScope.editMoney.amount);
+				if ($rootScope.editMoney.amount.indexOf(',') > -1) { $rootScope.editMoney.amount = accounting.unformat($rootScope.editMoney.amount, ','); }
+
 				$http.post('/money/edit', $rootScope.editMoney).success( function (data) {
 					window.location.reload()			
 				});
@@ -223,7 +238,16 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http',
 					var scope = angular.element(sidebar).scope();
 					var rootScope = scope.$root;
 
-					scope.$apply (function() { scope.sidebarNew(date); });
+					scope.$apply (function() { 
+
+						if (rootScope.currentSidebar.title == 'Bewerken') {
+							rootScope.editMoney.date = date.format('YYYY-MM-DD');
+							rootScope.editMoney.displayDate = date.format('D MMMM YYYY');
+						} else {
+							scope.sidebarNew(date); 
+						}
+						
+					});
 
 					$('.fc-day, .fc-event').removeClass('active');
 					$(this).addClass('active');
@@ -296,7 +320,7 @@ ctrl.controller('poenCategories', ['$scope', '$rootScope', '$http',
 			} else {
 
 				$http.post('/category/new', $scope.newCategory).success( function (data) {
-					if (data = 'error') {
+					if (data == 'error') {
 						alert('Sorry, die kleur is al bezet');
 					} else {
 						window.location.reload();	
@@ -309,8 +333,10 @@ ctrl.controller('poenCategories', ['$scope', '$rootScope', '$http',
 	}
 ]);
 
+// HIGHLIGHT DATE ON SIDEBAR ACTIVATIONS
+
 function highlightSelectedDate(date) {
-	var selectedDate = moment(date, 'DD-MM-YYYY').format('YYYY-MM-DD');
+	var selectedDate = moment(date, 'YYYY-MM-DD').format('YYYY-MM-DD');
 	$('td[data-date="' + selectedDate + '"]').addClass('active');
 };
 
@@ -318,8 +344,22 @@ function highlightSelectedDate(date) {
 
 $(document).on('focusout', '.money-amount', function () {
 
-	var newAmount = accounting.formatMoney($(this).val(), '', '2', '', ',');
-	$(this).val(newAmount);
+	var newAmount= $(this).val();
+
+	if (newAmount.indexOf(',') > -1) {
+
+		newAmount = accounting.unformat(newAmount, ',');
+		newAmount = accounting.formatMoney(newAmount, '', '2', '', ',');
+		$(this).val(newAmount);
+
+	} else {
+		
+		newAmount = accounting.formatMoney(newAmount, '', '2', '', ',');
+		$(this).val(newAmount);
+	
+	}
+
+	
 });
 
 // HIGHLIGHT MONEY ACCROSS SECTION ON HOVER

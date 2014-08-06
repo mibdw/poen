@@ -9,7 +9,8 @@ var moneySchema = new Schema({
 	date: Date,
 	category: { type: String, ref: 'Category' },
 	recursion: String,
-	balance: String
+	balance: String,
+	originID: String
 });
 
 var User = require(__dirname + '/user');
