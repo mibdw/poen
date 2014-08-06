@@ -115,15 +115,27 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http',
 			var moneyID = { 'moneyID': id };
 
 			$http.post('/money/detail', moneyID).success( function (moneyDetail) {
-				$rootScope.editMoney = moneyDetail;
-				$rootScope.editMoney.amount = accounting.formatMoney($rootScope.editMoney.amount, '', '2', '', ',');
 
-				$rootScope.editMoney.date = moment($rootScope.editMoney.date).format("YYYY-MM-DD");
-				$rootScope.editMoney.displayDate = moment($rootScope.editMoney.date).format("D MMMM YYYY");
+				if (moneyDetail) {
+					$rootScope.editMoney = moneyDetail;
+					$rootScope.editMoney.amount = accounting.formatMoney($rootScope.editMoney.amount, '', '2', '', ',');
 
-				highlightSelectedDate($rootScope.editMoney.date);
+					$rootScope.editMoney.date = moment($rootScope.editMoney.date).format("YYYY-MM-DD");
+					$rootScope.editMoney.displayDate = moment($rootScope.editMoney.date).format("D MMMM YYYY");
+
+					highlightSelectedDate($rootScope.editMoney.date);
+				} else {
+					alert('Sorry, dit bestaat niet meer');
+				}
+				
 			});
 
+		};
+
+// EDIT SOURCE OF MONEY OBJECT
+
+		$scope.sourceEdit = function () {
+			$scope.sidebarEdit($rootScope.editMoney.originID);
 		};
 
 // UPDATE MONEY OBJECT
@@ -246,7 +258,6 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http',
 						} else {
 							scope.sidebarNew(date); 
 						}
-						
 					});
 
 					$('.fc-day, .fc-event').removeClass('active');
@@ -258,7 +269,10 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http',
 					var sidebar = document.getElementsByClassName('sidebar');
 					var scope = angular.element(sidebar).scope();
 
-					scope.$apply (function() { scope.sidebarEdit(calEvent._id); });
+					scope.$apply (function() { 
+
+						scope.sidebarEdit(calEvent._id);
+					});
 
 					$('.fc-event').removeClass('active');
 					$(this).addClass('active');			
@@ -325,9 +339,7 @@ ctrl.controller('poenCategories', ['$scope', '$rootScope', '$http',
 					} else {
 						window.location.reload();	
 					}
-					
 				});
-
 			}
 		};
 	}

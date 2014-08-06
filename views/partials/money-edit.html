@@ -16,13 +16,13 @@
 		<option ng-repeat="category in categoryList" value="{{category._id}}">{{category.name}}</option>
 	</select>
 
-	
-	<label for="once"><input type="radio" value="once" ng-model="newMoney.recursion" id="once"> Eenmalig</label>
-	<label for="monthly"><input type="radio" value="monthly" ng-model="newMoney.recursion" id="monthly"> Maandelijks</label><br />
-
 	<label><input type="radio" value="expense" ng-model="editMoney.balance" class="money-balance"> Uitgave</label>
-	<label><input type="radio" value="income" ng-model="editMoney.balance"> Inkomen</label> 
+	<label><input type="radio" value="income" ng-model="editMoney.balance"> Inkomen</label><br>
 
+	<label for="once"><input type="radio" value="once" ng-model="editMoney.recursion" id="once" ng-disabled="editMoney.originID != 'false'"> Eenmalig</label>
+	<label for="monthly"><input type="radio" value="monthly" ng-model="editMoney.recursion" id="monthly" ng-disabled="editMoney.originID != 'false'"> Maandelijks</label>
+
+	<span  class="money-source" ng-show="editMoney.originID != 'false'">(<span ng-click="sourceEdit()">Bron</span>)</span><br />
 	<hr>
 
 	<button type="submit">Bewaren</button>
