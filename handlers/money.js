@@ -7,8 +7,8 @@ var Money = require(__dirname + '/../models/money.js');
 exports.moneyList = function(req, res, next) {
 
 	var displayMonth = req.body.year + "-" + req.body.month;
-	var prevMonth = moment(displayMonth, "YYYY-MM").subtract('months', 3);
-	var nextMonth = moment(displayMonth, "YYYY-MM").add('months', 2);
+	var prevMonth = moment(displayMonth, "YYYY-MM").subtract('months', 1).date('20');
+	var nextMonth = moment(displayMonth, "YYYY-MM").add('months', 1).date('15');;
 
 	Money.find({})
 	.where('date').gt(prevMonth).lt(nextMonth)
@@ -16,6 +16,29 @@ exports.moneyList = function(req, res, next) {
 	.populate('category', 'name slug color')
 	.exec(function (err, moneyResults) {
 		if (err) console.log(err);
+
+		Money.find({})
+		.where('date').lt(nextMonth)
+		.where('recursion').equals('monthly')
+		.exec(function (err, moneyRecursions) {
+			if (err) console.log(err);
+					
+			for (x in moneyRecursions) {
+
+				var hitList = 0;
+
+				for (y in moneyResults) {
+
+					if (moneyResults[y].originID == moneyRecursions[x]._id && 
+						moment(moneyResults[y].date).format("MM") == req.body.month) {
+						hitList = hitList + 1;
+					}
+				}
+
+				console.log(moneyRecursions[x].title + " - " + hitList);
+			}
+		});
+
 		return res.send(moneyResults);
 	});
 };
@@ -82,11 +105,7 @@ exports.moneyNew = function(req, res, next) {
 
 			res.send('success');
 		}
-
-		
 	});
-
-
 };
 
 exports.moneyEdit = function(req, res, next) {
