@@ -11,7 +11,9 @@
 <body class="login">
 	
 	<% if (message) { %>
-		<p class="alert"><%= message %></p>
+		<p class="alert">
+			<%= message %>
+		</p>
 	<% } %>
 
 	<form action="/login" method="post">

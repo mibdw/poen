@@ -10,7 +10,8 @@ var moneySchema = new Schema({
 	category: { type: String, ref: 'Category' },
 	recursion: String,
 	balance: String,
-	originID: String
+	originID: String,
+	visible: { type: Boolean, default: true }
 });
 
 var User = require(__dirname + '/user');

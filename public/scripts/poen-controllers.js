@@ -194,6 +194,7 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http',
 			if (confirm("Weet je het zeker?") == true) {
 				
 				$http.post('/money/delete', $rootScope.editMoney).success( function (data) {
+
 					window.location.reload()			
 				});
 			} 
@@ -370,8 +371,6 @@ $(document).on('focusout', '.money-amount', function () {
 		$(this).val(newAmount);
 	
 	}
-
-	
 });
 
 // HIGHLIGHT MONEY ACCROSS SECTION ON HOVER

@@ -21,25 +21,76 @@ exports.moneyList = function(req, res, next) {
 		.where('date').lt(nextMonth)
 		.where('recursion').equals('monthly')
 		.exec(function (err, moneyRecursions) {
-			if (err) console.log(err);
 					
-			for (x in moneyRecursions) {
+			if (err) {
 
-				var hitList = 0;
+				return res.send('error');
+				console.log(err);
 
-				for (y in moneyResults) {
+			} else if (moneyRecursions) {
 
-					if (moneyResults[y].originID == moneyRecursions[x]._id && 
-						moment(moneyResults[y].date).format("MM") == req.body.month) {
-						hitList = hitList + 1;
+				var numRecursions = 0;
+				for (x in moneyRecursions) {
+
+					var hitList = 0;
+					var now = moment().add(1, 'M').startOf('month');
+
+					for (y in moneyResults) {
+
+						if (moneyResults[y].originID == moneyRecursions[x]._id && 
+							moment(moneyResults[y].date).format("MM") == req.body.month) {
+							hitList = hitList + 1;
+						}
+					}
+
+					if (moment(displayMonth, 'YYYY-MM').date(2).isBefore(now) &&
+						moment(displayMonth, 'YYYY-MM').endOf('month').isAfter(moneyRecursions[x].date) &&
+						moment(moneyRecursions[x].date).format('MM') != req.body.month &&
+						moneyRecursions[x].visible != false && 
+						hitList == 0) {
+						
+						var newDate = req.body.year + "-" + req.body.month + "-" + moment(moneyRecursions[x].date).format('DD');
+
+						var moneySave = new Money({
+							'title': moneyRecursions[x].title,
+							'amount': moneyRecursions[x].amount,
+							'note': moneyRecursions[x].note,
+							'user': moneyRecursions[x].user,
+							'date': newDate,
+							'category': moneyRecursions[x].category,
+							'recursion': 'once',
+							'balance': moneyRecursions[x].balance,
+							'originID': moneyRecursions[x]._id,
+							'visible': true
+						});
+
+						moneySave.save(function (err, moneySave) {
+							if (err) return console.log(err);
+						});
+					}
+
+					numRecursions = numRecursions + 1;
+					if (numRecursions == moneyRecursions.length) {
+
+						setTimeout(function () {
+							Money.find({})
+							.where('visible').equals(true)
+							.where('date').gt(prevMonth).lt(nextMonth)
+							.populate('user', 'username')
+							.populate('category', 'name slug color')
+							.exec(function (err, moneyStuff) {
+								if (err) console.log(err);
+								return res.send(moneyStuff);
+							});
+						}, 1);
 					}
 				}
 
-				console.log(moneyRecursions[x].title + " - " + hitList);
+			} else {
+
+				return res.send(sliceResults(moneyResults));
 			}
 		});
-
-		return res.send(moneyResults);
 	});
 };
 
@@ -68,17 +119,18 @@ exports.moneyNew = function(req, res, next) {
 		'category': req.body.category,
 		'recursion': req.body.recursion,
 		'balance': req.body.balance,
-		'originID': false
+		'originID': false,
+		'visible': true
 	}); 
 
 	money.save(function (err, money) {
 		if (err) return console.log(err);
 
-		console.log(moment().format(dateFormat) + ' - Nieuw Money object: \'' + req.body.title + '\' door ' + req.user.username );
+		console.log(moment().format(dateFormat) + ' - New Money object created: \'' + req.body.title + '\' by ' + req.user.username );
 
 		if (req.body.recursion == "monthly" && moment().isAfter(req.body.date)) {
 
-			var now = moment().add(1, 'M');
+			var now = moment().add(1, 'M').startOf('month');
 			
 			for (i = moment(req.body.date).add(1, 'M'); moment(i).isBefore(now); i = moment(i).add(1, 'M')) {
 
@@ -91,7 +143,8 @@ exports.moneyNew = function(req, res, next) {
 					'category': req.body.category,
 					'recursion': 'once',
 					'balance': req.body.balance,
-					'originID': money._id
+					'originID': money._id,
+					'visible': true
 				}); 
 
 				moneyRepeat.save(function (err, moneyRepeat) {
@@ -121,9 +174,10 @@ exports.moneyEdit = function(req, res, next) {
 		'balance': req.body.balance 
 
 	}}, function (err) {
+
 		if (err) return console.log(err);
 
-		console.log(moment().format(dateFormat) + ' - Bewerkt Money object: \'' + req.body.title + '\' door ' + req.user.username );
+		console.log(moment().format(dateFormat) + ' - Edited Money object: \'' + req.body.title + '\' by ' + req.user.username );
 		res.send('success');
 	});
 
@@ -131,11 +185,21 @@ exports.moneyEdit = function(req, res, next) {
 
 exports.moneyDelete = function(req, res, next) {
 
-	Money.findByIdAndRemove(req.body._id, function (err) {
+	Money.findByIdAndUpdate(req.body._id, { $set: { 'visible': false }}, function (err) {
 		if (err) return console.log(err);
 
-		console.log(moment().format(dateFormat) + ' - Verwijdert Money object: \'' + req.body.title + '\' door ' + req.user.username );
+		console.log(moment().format(dateFormat) + ' - Deleted Money object: \'' + req.body.title + '\' by ' + req.user.username );
 		res.send('success');
 	});
 };
 
+function sliceResults(moneyResults) {
+	for (var i = moneyResults.length - 1; i >= 0; i--) {
+
+		if (moneyResults[i].visible == false) {
+			var moneySlice = i + 1
+			moneyResults = moneyResults.slice(moneySlice);
+		}
+	}
+	return moneyResults;
+};
