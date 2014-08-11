@@ -2,10 +2,10 @@
 <html lang="en" ng-app="poenApp" ng-controller="poenGlobal">
 <head>
 	<meta charset="UTF-8">
-	<title>{{currentTitle}}</title>
+	<title ng-bind-template="{{currentTitle}}">Poen - Geld moet rollen</title>
 
 	<link rel="stylesheet" href="/styles/main.css" />
-	<link rel="icon" type="image/gif" href="/images/dagobert.ico" />
+	<link rel="icon" type="image/gif" href="/images/dagobert.gif" />
 
 </head>
 <body>
@@ -15,7 +15,7 @@
 		
 		<ul>
 			<li ng-repeat="option in options">
-				<a ng-class="{active: option.slug==currentSlug}" href="{{option.url}}">{{option.name}}</a>
+				<a ng-class="{active: option.slug==currentSlug}" href="{{option.url}}" title="{{option.name}}">{{option.name}}</a>
 			</li>
 			<li><a href="/logout">Logout</a></li>
 		</ul>

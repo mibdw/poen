@@ -1,7 +1,7 @@
 var ctrl = angular.module('poenControllers', []);
 
-ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http',
-	function ($scope, $rootScope, $routeParams, $http) {
+ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http', '$filter',
+	function ($scope, $rootScope, $routeParams, $http, $filter) {
 		$rootScope.currentSlug = "month";
 
 // WHAT MONTH TO DISPLAY?
@@ -29,7 +29,8 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http',
 		$rootScope.sidebars = [
 			{ title: 'Balans', url: '/partials/money-list' },
 			{ title: 'Nieuw', url: '/partials/money-new' },
-			{ title: 'Bewerken', url: '/partials/money-edit' }
+			{ title: 'Bewerken', url: '/partials/money-edit' },
+			{ title: 'Filter', url: '/partials/money-filter' }
 		];
 
 		if (!$rootScope.currentSidebar) {
@@ -41,6 +42,83 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http',
 		$scope.sidebarClose = function () { 
 			$rootScope.currentSidebar = $rootScope.sidebars[0]; 
 			$('.fc-day, .fc-event').removeClass('active');
+		};
+
+// SIDEBAR FILTER	
+
+		$scope.sidebarFilter = function () { 
+			if ($rootScope.currentSidebar.title == "Filter") {
+				$rootScope.currentSidebar = $rootScope.sidebars[0];
+			} else {
+				$rootScope.currentSidebar = $rootScope.sidebars[3];
+			}	
+			 
+			$('.fc-day, .fc-event').removeClass('active');
+		};
+
+// WATCH FILTERS
+
+		$rootScope.$watch('[filterCategories, filterUsers]', function () {
+			
+			var filters = [];
+			filters = $rootScope.filterUsers.concat($rootScope.filterCategories);
+
+			$('.fc-event').show();
+			if ($rootScope.filterCategories.length < 1) {
+
+				if ($rootScope.filterUsers.length > 0) {
+					$('.fc-event').hide();
+					for (i in $rootScope.filterUsers) { 
+						$('.fc-event.' + $rootScope.filterUsers[i]).show(); 
+					}
+				}
+
+			} else {
+
+				$('.fc-event').hide();
+				for (i in $rootScope.filterCategories) { 
+					$('.fc-event.' + $rootScope.filterCategories[i]).show(); 
+					for (i in $rootScope.filterUsers) { 
+						$('.fc-event.' + $rootScope.filterUsers[i]).show(); 
+					}
+				}
+			}
+		}, true);
+
+// TOGGLE FILTERS
+
+		$scope.toggleFilterCategory = function (slug) { 
+
+			if ($rootScope.filterCategories.indexOf(slug) < 0) {
+
+				$rootScope.filterCategories.push(slug);
+
+			} else {
+				var pos = $rootScope.filterCategories.indexOf(slug);
+				$rootScope.filterCategories.splice(pos, 1);
+			}
+		};
+
+		$scope.toggleFilterUsers = function (user) { 
+
+			if ($rootScope.filterUsers.indexOf(user) < 0) {
+
+				$rootScope.filterUsers.push(user);
+
+			} else {
+				var pos = $rootScope.filterUsers.indexOf(user);
+				$rootScope.filterUsers.splice(pos, 1);
+			}
+		};
+
+// REMOVE FILTERS
+
+		$scope.removeCatFilters = function () {
+			$rootScope.filterCategories =[];
+		};
+
+		$scope.removeUserFilters = function () {
+			$rootScope.filterUsers =[];
 		};
 
 // NEW MONEY OBJECT
@@ -218,28 +296,7 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http',
 					$scope.moneyList.push(moneyData[i]);	
 				}				
 			}
-
-// CALCULATE MONEY TOTAL
-
-			$scope.moneyTotal = 0;
-
-			for (i in $scope.moneyList) {
-				if ($scope.moneyList[i].balance == 'income') {
-					$scope.moneyTotal = $scope.moneyTotal + $scope.moneyList[i].amount;
-				} else if ($scope.moneyList[i].balance == 'expense') {
-					$scope.moneyTotal = $scope.moneyTotal - $scope.moneyList[i].amount;
-				}
-			}
-
-			if ($scope.moneyTotal < 0) {
-				$scope.moneyTotalDisplay = $scope.moneyTotal.toString().substring(1);
-			} else if ($scope.moneyTotal > 0) {
-				$scope.moneyTotalDisplay = $scope.moneyTotal;
-			}
-
-			$scope.moneyTotalDisplay = accounting.formatMoney($scope.moneyTotalDisplay, '', '2', '', ','); 
-
-
+			
 // CALENDAR RENDERING
 
 			$('.calendar').fullCalendar({
@@ -286,13 +343,31 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http',
 				},
 				eventRender: function(event, element) {
 					$(element).addClass(event._id);
+					$(element).addClass(event.category.slug);
+					$(element).addClass(event.user.username);
 					$(element).find('.fc-event-title').prepend('<span class="user-icon"><span>' + event.user.username.substring(0,1) + '</span></span>');
 					$(element).find('.fc-event-title').prepend('<span class="category-icon ' + event.category.slug + '" title="' + event.category.name +'" style="background-color: ' + event.category.color + ';"></span>');
 				}
 			});
 
 			$('.calendar').fullCalendar('gotoDate', displayDate);
+
+			if ($rootScope.filterCategories.length > 0) {
+				$('.fc-event').hide();
+				for (i in $rootScope.filterCategories) {
+					$('.fc-event.' + $rootScope.filterCategories[i]).show();
+				}
+			}
 		});
+
+		$scope.moneySum = function () {
+
+			var filteredList = $filter('moneyFiltering')($scope.moneyList);
+			$scope.moneyTotal = calculateTotal(filteredList);
+			var sum = totalDisplay($scope.moneyTotal);
+
+			return sum;
+		}
 
 // HIGHLIGHT DATE IF NEW MONEY SIDEBAR IS ACTIVE
 
@@ -305,14 +380,14 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http',
 ctrl.controller('poenProfile', ['$scope', '$rootScope',
 	function ($scope, $rootScope) {
 		$rootScope.currentSlug = "profile";
-		$rootScope.currentTitle = $rootScope.websiteTitle + " - Profile";
+		$rootScope.currentTitle = $rootScope.websiteTitle + " - Profiel";
 	}
 ]);
 
 ctrl.controller('poenCategories', ['$scope', '$rootScope', '$http',
 	function ($scope, $rootScope, $http) {
 		$rootScope.currentSlug = "categories";
-		$rootScope.currentTitle = $rootScope.websiteTitle + " - Categories";
+		$rootScope.currentTitle = $rootScope.websiteTitle + " - Categoriën";
 
 // GET ALL CATEGORIES
 
@@ -377,3 +452,29 @@ $(document).on('focusout', '.money-amount', function () {
 
 $(document).on('mouseenter', '.balance-money', function () { $('.' + $(this).attr('id')).addClass("hover"); });
 $(document).on('mouseleave', '.balance-money', function () { $('.' + $(this).attr('id')).removeClass("hover"); });
+
+// CALCULATE TOTAL
+
+function calculateTotal (items) {
+	var total = 0;
+
+	for (i in items) {
+		if (items[i].balance == 'income') {
+			total = total + items[i].amount;
+		} else if (items[i].balance == 'expense') {
+			total = total - items[i].amount;
+		}
+	}
+	return total;
+}
+
+function totalDisplay (amount) {
+
+	if (amount < 0) {
+		var displayAmount = amount.toString().substring(1);
+	} else if (amount > 0) {
+		displayAmount = amount;
+	}
+
+	return accounting.formatMoney(displayAmount, '', '2', '', ','); 
+}

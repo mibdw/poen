@@ -1,0 +1,34 @@
+<header>
+
+	<h2>{{currentSidebar.title}}</h2>
+	<span class="sidebar-option" ng-click="sidebarClose()">Sluiten</span>
+
+</header>
+
+<ul class="filters">
+	<li ng-repeat="category in categoryList">
+		<label for="{{category.slug}}">
+			<input type="checkbox" ng-checked="filterCategories.indexOf(category.slug) > -1" ng-click="toggleFilterCategory(category.slug)" id="{{category.slug}}">
+			<span class="category-icon" style="background-color: {{category.color}};"></span> 
+			{{category.name}}
+		</label>
+	</li>
+	<li ng-if="filterCategories.length > 0"><a ng-click="removeCatFilters()">Wis alles</a></li>
+</ul>
+
+<ul class="filters">
+	<li ng-repeat="user in userList">
+		<label for="{{user._id}}">
+			<input type="checkbox" ng-checked="filterUsers.indexOf(user.username) > -1" ng-click="toggleFilterUsers(user.username)" id="{{user._id}}">
+			<span class="user-icon">{{user.username.substring(0,1)}}</span> 
+			{{user.username}}
+		</label>
+	</li>
+	<li ng-if="filterUsers.length > 0"><a ng-click="removeUserFilters()">Wis alles</a></li>
+</ul>
+
+{{filterCategories}}
+<br>
+{{filterUsers}}
+<br>
+{{filters}}

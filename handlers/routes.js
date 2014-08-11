@@ -64,6 +64,19 @@ module.exports = function (app, res, req) {
 	app.get('/category/list', ensureAuthenticated, category.categoryList);
 	app.post('/category/new', ensureAuthenticated, category.categoryNew);
 
+	// USERS
+
+	var User = require(__dirname + '/../models/user');
+	app.get('/users/list', ensureAuthenticated, function(req, res){
+
+		User.find({})
+		.select('username')
+		.exec(function (err, users) {
+			if (err) console.log(err);
+			return res.send(users);
+		});
+	});
+
 }
 
 function ensureAuthenticated(req, res, next) {

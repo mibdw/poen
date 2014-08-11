@@ -21,13 +21,12 @@ exports.moneyList = function(req, res, next) {
 		.where('date').lt(nextMonth)
 		.where('recursion').equals('monthly')
 		.exec(function (err, moneyRecursions) {
-					
+	
 			if (err) {
 
-				return res.send('error');
-				console.log(err);
+				return console.log(err);
 
-			} else if (moneyRecursions) {
+			} else if (moneyRecursions.length > 0) {
 
 				var numRecursions = 0;
 				for (x in moneyRecursions) {
@@ -88,7 +87,15 @@ exports.moneyList = function(req, res, next) {
 
 			} else {
 
-				return res.send(sliceResults(moneyResults));
+				Money.find({})
+				.where('visible').equals(true)
+				.where('date').gt(prevMonth).lt(nextMonth)
+				.populate('user', 'username')
+				.populate('category', 'name slug color')
+				.exec(function (err, moneyStuff) {
+					if (err) console.log(err);
+					return res.send(moneyStuff);
+				});
 			}
 		});
 	});
@@ -191,15 +198,4 @@ exports.moneyDelete = function(req, res, next) {
 		console.log(moment().format(dateFormat) + ' - Deleted Money object: \'' + req.body.title + '\' by ' + req.user.username );
 		res.send('success');
 	});
-};
-
-function sliceResults(moneyResults) {
-	for (var i = moneyResults.length - 1; i >= 0; i--) {
-
-		if (moneyResults[i].visible == false) {
-			var moneySlice = i + 1
-			moneyResults = moneyResults.slice(moneySlice);
-		}
-	}
-	return moneyResults;
 };

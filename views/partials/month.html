@@ -2,6 +2,7 @@
 	<li ng-hide="checkMonth==nextMonth"><a href="/">Vandaag</a></li>
 	<li><a href="/#/{{prevMonth}}">&laquo; Vorige</a></li>
 	<li><a href="/#/{{nextMonth}}">Volgende &raquo;</a></li>
+	<li><a ng-click="sidebarFilter()" ng-class="{active: filterCategories.length > 0}">Filter</a></li>
 </ul>
 <div class="calendar"></div>
 <div class="sidebar" ng-include="currentSidebar.url"></div>

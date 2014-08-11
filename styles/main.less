@@ -115,32 +115,6 @@ body {
 			border-collapse: collapse;
 			border-spacing: 0;
 
-			&.fc-header {
-
-				.fc-header-left {
-
-					h2 {
-						text-transform: capitalize;
-					}					
-				}
-
-				.fc-header-right {
-					text-align: right;
-
-					.fc-button {
-						color: @link;
-						cursor: pointer;
-						margin-left: .8em;
-
-						&:hover { text-decoration: underline; }
-						&.fc-button-today { margin-right: 2em; }
-						&.fc-button-prev:after { content: "\00AB  Vorige"; }
-						&.fc-button-next:after { content: "Volgende \00BB"; }
-
-					}
-				}
-			}
-
 			&.fc-border-separate {
 				
 				th, td {
@@ -278,10 +252,15 @@ body {
 
 			li {
 				display: inline;
-				margin-left: .5em;
+				margin-left: .2em;
+				cursor: pointer;
 
-				&:first-child {
-					margin-right: 1em;
+				&:first-child {	margin-right: 1em; }
+				&:last-child {	margin-left: 1em; }
+
+				.active {
+					font-weight: bold;
+					text-decoration: underline;
 				}
 			}
 		}
@@ -415,7 +394,21 @@ body {
 
 						&:hover { text-decoration: underline; }
 					}
-				}				
+				}		
+			}
+
+			.filters {
+				margin: 0;
+				padding: 0;
+				list-style-type: none;
+				line-height: 1.4em;	
+				margin-bottom: 1em;
+				padding-bottom: .5em;
+				border-bottom: 1px solid @line;
+
+				li {
+					cursor: pointer;
+				}			
 			}
 		}
 	}
