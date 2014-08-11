@@ -58,32 +58,9 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http', '
 
 // WATCH FILTERS
 
-		$rootScope.$watch('[filterCategories, filterUsers]', function () {
-			
-			var filters = [];
-			filters = $rootScope.filterUsers.concat($rootScope.filterCategories);
+		$rootScope.$watch('filterCategories', function () { $scope.filteringCategories(); }, true);
 
-			$('.fc-event').show();
-			if ($rootScope.filterCategories.length < 1) {
-
-				if ($rootScope.filterUsers.length > 0) {
-					$('.fc-event').hide();
-					for (i in $rootScope.filterUsers) { 
-						$('.fc-event.' + $rootScope.filterUsers[i]).show(); 
-					}
-				}
-
-			} else {
-
-				$('.fc-event').hide();
-				for (i in $rootScope.filterCategories) { 
-					$('.fc-event.' + $rootScope.filterCategories[i]).show(); 
-					for (i in $rootScope.filterUsers) { 
-						$('.fc-event.' + $rootScope.filterUsers[i]).show(); 
-					}
-				}
-			}
-		}, true);
+		$rootScope.$watch('filterUsers', function () { $scope.filteringUsers(); }, true);
 
 // TOGGLE FILTERS
 
@@ -113,13 +90,9 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http', '
 
 // REMOVE FILTERS
 
-		$scope.removeCatFilters = function () {
-			$rootScope.filterCategories =[];
-		};
+		$scope.removeCatFilters = function () { $rootScope.filterCategories =[]; };
 
-		$scope.removeUserFilters = function () {
-			$rootScope.filterUsers =[];
-		};
+		$scope.removeUserFilters = function () { $rootScope.filterUsers =[]; };
 
 // NEW MONEY OBJECT
 
@@ -342,6 +315,7 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http', '
 					$('tr.balance-money#'+ calEvent._id).removeClass('active');
 				},
 				eventRender: function(event, element) {
+
 					$(element).addClass(event._id);
 					$(element).addClass(event.category.slug);
 					$(element).addClass(event.user.username);
@@ -352,12 +326,8 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http', '
 
 			$('.calendar').fullCalendar('gotoDate', displayDate);
 
-			if ($rootScope.filterCategories.length > 0) {
-				$('.fc-event').hide();
-				for (i in $rootScope.filterCategories) {
-					$('.fc-event.' + $rootScope.filterCategories[i]).show();
-				}
-			}
+			$scope.filteringCategories();
+			$scope.filteringUsers();
 		});
 
 		$scope.moneySum = function () {
@@ -373,6 +343,78 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http', '
 
 		if ($rootScope.newMoney.date && $rootScope.currentSidebar.title == $rootScope.sidebars[1].title) { 
 			highlightSelectedDate($rootScope.newMoney.date); 
+		}
+
+		$scope.filteringCategories = function () {
+
+			if ($rootScope.filterCategories.length > 0) {
+				$('.fc-event').show();
+
+				if ($rootScope.filterUsers.length == 0) {
+					
+					$('.fc-event').hide();
+					for (i in $rootScope.filterCategories) { 
+						$('.fc-event.' + $rootScope.filterCategories[i]).show(); 
+					}
+
+				} else if ($rootScope.filterUsers.length > 0) {
+					
+					$('.fc-event').hide();
+					for (i in $rootScope.filterCategories) { 
+						for (j in $rootScope.filterUsers) {
+							$('.fc-event.' + $rootScope.filterCategories[i] + "." + $rootScope.filterUsers[j]).show();
+						} 
+					}
+				}
+
+			} else {
+
+				$('.fc-event').show();
+
+				if ($rootScope.filterUsers.length > 0) {
+					
+					$('.fc-event').hide();
+					for (j in $rootScope.filterUsers) {
+						$('.fc-event.' + $rootScope.filterUsers[i]).show();
+					} 
+				} 
+			}
+		}
+
+		$scope.filteringUsers = function () {
+
+			if ($rootScope.filterUsers.length > 0) {
+				$('.fc-event').show();
+
+				if ($rootScope.filterCategories.length == 0) {
+					
+					$('.fc-event').hide();
+					for (i in $rootScope.filterUsers) { 
+						$('.fc-event.' + $rootScope.filterUsers[i]).show(); 
+					}
+
+				} else if ($rootScope.filterCategories.length > 0) {
+					
+					$('.fc-event').hide();
+					for (i in $rootScope.filterUsers) { 
+						for (j in $rootScope.filterCategories) {
+							$('.fc-event.' + $rootScope.filterUsers[i] + "." + $rootScope.filterCategories[j]).show();
+						} 
+					}
+				}
+
+			} else {
+
+				$('.fc-event').show();
+
+				if ($rootScope.filterCategories.length > 0) {
+					
+					$('.fc-event').hide();
+					for (j in $rootScope.filterCategories) {
+						$('.fc-event.' + $rootScope.filterCategories[i]).show();
+					} 
+				} 
+			}
 		}
 	}
 ]);

@@ -82,20 +82,64 @@ app.filter('moneyFiltering', function ($rootScope) {
 
 		return items.filter(function (item) {
 
-			if (!$rootScope.filterCategories || $rootScope.filterCategories.length == 0) {
+			if ($rootScope.filterCategories.length > 0) {
 
-				return item;
+				if ($rootScope.filterUsers.length > 0) {
 
-			} else if ($rootScope.filterCategories.length > 0) {
+					for (i in $rootScope.filterCategories) {
+						for (j in $rootScope.filterUsers) {
+							if (item.category.slug == $rootScope.filterCategories[i] && item.user.username == $rootScope.filterUsers[j]) {
+								return item;
+							}
+						}					
+					}
+				} else if (!$rootScope.filterUsers || $rootScope.filterUsers.length == 0) {
+					for (i in $rootScope.filterCategories) {
+						if (item.category.slug == $rootScope.filterCategories[i]) {
+							return item;
+						}					
+					}
+				} 
+			} else if (!$rootScope.filterCategories || $rootScope.filterCategories.length == 0) {
 
-				for (i in $rootScope.filterCategories) {
-				
-					if (item.category.slug == $rootScope.filterCategories[i]) {
+				if ($rootScope.filterUsers.length > 0) {
+					
+					for (i in $rootScope.filterUsers) {
+						if (item.user.username == $rootScope.filterUsers[i]) {
+							return item;
+						}					
+					}
+				} else if (!$rootScope.filterUsers || $rootScope.filterUsers.length == 0) { return item; }
+			} else if ($rootScope.filterUsers.length > 0) {
 
-						return item;
-					}					
-				}
-			}				
+				if ($rootScope.filterCategories.length > 0) {
+
+					for (i in $rootScope.filterUsers) {
+						for (j in $rootScope.filterCategories) {
+							if (item.user.username == $rootScope.filterUsers[i] && item.category.slug == $rootScope.filterCategories[j]) {
+								return item;
+							}
+						}					
+					}
+				} else if (!$rootScope.filterCategories || $rootScope.filterCategories.length == 0) {
+					for (i in $rootScope.filterUsers) {
+						if (item.user.username == $rootScope.filterUsers[i]) {
+							return item;
+						}					
+					}
+				} 
+			} else if (!$rootScope.filterUsers || $rootScope.filterUsers.length == 0) {
+
+				if ($rootScope.filterCategories.length > 0) {
+					
+					for (i in $rootScope.filterCategories) {
+						if (item.category.slug == $rootScope.filterCategories[i]) {
+							return item;
+						}					
+					}
+				} else if (!$rootScope.filterCategories || $rootScope.filterCategories.length == 0) { return item; }
+
+			}			
 		});
 	};
 });

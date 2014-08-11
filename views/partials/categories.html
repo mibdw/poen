@@ -1,29 +1,30 @@
 <h2>Categoriën</h2>
 
-<ul>
+<ul class="categories">
 	<li ng-repeat="category in categoryList" class="{{category.slug}}">
 		<span class="category-icon" style="background-color: {{category.color}};"></span> {{category.name}}
 	</li>
+
+	<form ng-submit="saveCategory()">
+		<input type="text" ng-model="newCategory.name"><br>
+		<select ng-model="newCategory.color">
+			<option value="deeppink">Dieproze</option>
+			<option value="mediumseagreen">Midzeegroen</option>
+			<option value="salmon">Zalm</option>
+			<option value="orange">Oranje</option>
+			<option value="red">Rood</option>
+			<option value="indigo">Indigo</option>
+			<option value="mediumpurple">Midpaars</option>
+			<option value="rosybrown">Roosbruin</option>
+			<option value="chocolate">Chocoladebruin</option>
+			<option value="saddlebrown">Zadelbruin</option>
+			<option value="cadetblue">Kadetblauw</option>
+			<option value="firebrick">Vuurvaste baksteen</option>
+			<option value="plum">Pruim</option>
+			<option value="olive">Olijfgroen</option>
+			<option value="darkkhaki">Donkerkaki</option>
+		</select><br>
+		<button type="submit">Save</button>
+	</form>
 </ul>
 
-<form ng-submit="saveCategory()">
-	<input type="text" ng-model="newCategory.name">
-	<select ng-model="newCategory.color">
-		<option value="deeppink">Dieproze</option>
-		<option value="mediumseagreen">Midzeegroen</option>
-		<option value="salmon">Zalm</option>
-		<option value="orange">Oranje</option>
-		<option value="red">Rood</option>
-		<option value="indigo">Indigo</option>
-		<option value="mediumpurple">Midpaars</option>
-		<option value="rosybrown">Roosbruin</option>
-		<option value="chocolate">Chocoladebruin</option>
-		<option value="saddlebrown">Zadelbruin</option>
-		<option value="cadetblue">Kadetblauw</option>
-		<option value="firebrick">Vuurvaste baksteen</option>
-		<option value="plum">Pruim</option>
-		<option value="olive">Olijfgroen</option>
-		<option value="darkkhaki">Donkerkaki</option>
-	</select>
-	<button type="submit">Save</button>
-</form>
