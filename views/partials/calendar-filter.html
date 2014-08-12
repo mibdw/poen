@@ -20,7 +20,9 @@
 	<li ng-repeat="user in userList">
 		<label for="{{user._id}}">
 			<input type="checkbox" ng-checked="filterUsers.indexOf(user.username) > -1" ng-click="toggleFilterUsers(user.username)" id="{{user._id}}">
-			<span class="user-icon">{{user.username.substring(0,1)}}</span> 
+			<span class="user-icon">
+				<span>{{user.username.substring(0,1)}}</span>
+			</span> 
 			{{user.username}}
 		</label>
 	</li>

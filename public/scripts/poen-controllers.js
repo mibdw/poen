@@ -1,8 +1,8 @@
 var ctrl = angular.module('poenControllers', []);
 
-ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http', '$filter',
+ctrl.controller('poenCalendar', ['$scope', '$rootScope', '$routeParams', '$http', '$filter',
 	function ($scope, $rootScope, $routeParams, $http, $filter) {
-		$rootScope.currentSlug = "month";
+		$rootScope.currentSlug = "calendar";
 
 // WHAT MONTH TO DISPLAY?
 
@@ -27,10 +27,10 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http', '
 // SIDEBAR INCLUDES
 
 		$rootScope.sidebars = [
-			{ title: 'Balans', url: '/partials/money-list' },
-			{ title: 'Nieuw', url: '/partials/money-new' },
-			{ title: 'Bewerken', url: '/partials/money-edit' },
-			{ title: 'Filter', url: '/partials/money-filter' }
+			{ title: 'Balans', url: '/partials/calendar-list' },
+			{ title: 'Nieuw', url: '/partials/calendar-new' },
+			{ title: 'Bewerken', url: '/partials/calendar-edit' },
+			{ title: 'Filter', url: '/partials/calendar-filter' }
 		];
 
 		if (!$rootScope.currentSidebar) {
@@ -61,38 +61,6 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http', '
 		$rootScope.$watch('filterCategories', function () { $scope.filteringCategories(); }, true);
 
 		$rootScope.$watch('filterUsers', function () { $scope.filteringUsers(); }, true);
-
-// TOGGLE FILTERS
-
-		$scope.toggleFilterCategory = function (slug) { 
-
-			if ($rootScope.filterCategories.indexOf(slug) < 0) {
-
-				$rootScope.filterCategories.push(slug);
-
-			} else {
-				var pos = $rootScope.filterCategories.indexOf(slug);
-				$rootScope.filterCategories.splice(pos, 1);
-			}
-		};
-
-		$scope.toggleFilterUsers = function (user) { 
-
-			if ($rootScope.filterUsers.indexOf(user) < 0) {
-
-				$rootScope.filterUsers.push(user);
-
-			} else {
-				var pos = $rootScope.filterUsers.indexOf(user);
-				$rootScope.filterUsers.splice(pos, 1);
-			}
-		};
-
-// REMOVE FILTERS
-
-		$scope.removeCatFilters = function () { $rootScope.filterCategories =[]; };
-
-		$scope.removeUserFilters = function () { $rootScope.filterUsers =[]; };
 
 // NEW MONEY OBJECT
 
@@ -272,7 +240,7 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http', '
 			
 // CALENDAR RENDERING
 
-			$('.calendar').fullCalendar({
+			$('.calendar-view').fullCalendar({
 				header: { left: 'title', center: '', right: '' },
 				events: moneyData,
 				dayClick: function(date, jsEvent, view) { 
@@ -324,7 +292,7 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http', '
 				}
 			});
 
-			$('.calendar').fullCalendar('gotoDate', displayDate);
+			$('.calendar-view').fullCalendar('gotoDate', displayDate);
 
 			$scope.filteringCategories();
 			$scope.filteringUsers();
@@ -416,26 +384,174 @@ ctrl.controller('poenMonth', ['$scope', '$rootScope', '$routeParams', '$http', '
 				} 
 			}
 		}
-	}
-]);
 
-ctrl.controller('poenProfile', ['$scope', '$rootScope',
-	function ($scope, $rootScope) {
-		$rootScope.currentSlug = "profile";
-		$rootScope.currentTitle = $rootScope.websiteTitle + " - Profiel";
-	}
-]);
+		// HIGHLIGHT DATE ON SIDEBAR ACTIVATIONS
 
-ctrl.controller('poenCategories', ['$scope', '$rootScope', '$http',
-	function ($scope, $rootScope, $http) {
-		$rootScope.currentSlug = "categories";
-		$rootScope.currentTitle = $rootScope.websiteTitle + " - Categoriën";
+		function highlightSelectedDate(date) {
+			var selectedDate = moment(date, 'YYYY-MM-DD').format('YYYY-MM-DD');
+			$('td[data-date="' + selectedDate + '"]').addClass('active');
+		};
 
-// GET ALL CATEGORIES
+		// CONVERT AMOUNT TO ACCOUNTING
 
-		$http.get('/category/list').success( function (categoryData) {
-			$rootScope.categoryList = categoryData;
+		$(document).on('focusout', '.money-amount', function () {
+
+			var newAmount= $(this).val();
+
+			if (newAmount.indexOf(',') > -1) {
+
+				newAmount = accounting.unformat(newAmount, ',');
+				newAmount = accounting.formatMoney(newAmount, '', '2', '', ',');
+				$(this).val(newAmount);
+
+			} else {
+				
+				newAmount = accounting.formatMoney(newAmount, '', '2', '', ',');
+				$(this).val(newAmount);
+			
+			}
 		});
+
+		// HIGHLIGHT MONEY ACCROSS SECTION ON HOVER
+
+		$(document).on('mouseenter', '.balance-money', function () { $('.' + $(this).attr('id')).addClass("hover"); });
+		$(document).on('mouseleave', '.balance-money', function () { $('.' + $(this).attr('id')).removeClass("hover"); });
+
+		// CALCULATE TOTAL
+
+		function calculateTotal (items) {
+			var total = 0;
+
+			for (i in items) {
+				if (items[i].balance == 'income') {
+					total = total + items[i].amount;
+				} else if (items[i].balance == 'expense') {
+					total = total - items[i].amount;
+				}
+			}
+			return total;
+		}
+
+		function totalDisplay (amount) {
+
+			if (amount < 0) {
+				var displayAmount = amount.toString().substring(1);
+			} else if (amount > 0) {
+				displayAmount = amount;
+			}
+
+			return accounting.formatMoney(displayAmount, '', '2', '', ','); 
+		}
+	}
+]);
+
+ctrl.controller('poenStats', ['$scope', '$rootScope',
+	function ($scope, $rootScope) {
+		$rootScope.currentSlug = "stats";
+		$rootScope.currentTitle = $rootScope.websiteTitle + " - Statistiek";
+		
+		Chart.defaults.global.animation = false;
+		Chart.defaults.global.showScale = true;
+		Chart.defaults.global.scaleLineColor = '#ddd';
+		Chart.defaults.global.scaleShowLabels = true;
+		Chart.defaults.global.scaleLabel = '<%=value%>';
+		Chart.defaults.global.scaleFontFamily = 'sans-serif';
+		Chart.defaults.global.scaleFontSize = 12;
+		Chart.defaults.global.scaleFontStyle = 'normal';
+		Chart.defaults.global.scaleFontColor = '#999';
+		Chart.defaults.global.responsive = true;
+		Chart.defaults.global.maintainAspectRatio = true;
+		Chart.defaults.global.showTooltips = true;
+		Chart.defaults.global.tooltipEvents = ['mousemove', 'touchstart', 'touchmove'];
+		Chart.defaults.global.tooltipFillColor = '#000';
+		Chart.defaults.global.tooltipFontFamily = 'sans-serif';
+		Chart.defaults.global.tooltipFontSize = 14;
+		Chart.defaults.global.tooltipFontStyle = 'normal';
+		Chart.defaults.global.tooltipFontColor = '#fff';
+		Chart.defaults.global.tooltipTitleFontFamily = 'sans-serif';
+		Chart.defaults.global.tooltipTitleFontSize = 14;
+		Chart.defaults.global.tooltipTitleFontStyle = 'bold';
+		Chart.defaults.global.tooltipTitleFontColor = '#fff';
+		Chart.defaults.global.tooltipYPadding = 10;
+		Chart.defaults.global.tooltipXPadding = 10;
+		Chart.defaults.global.tooltipCaretSize = 8;
+		Chart.defaults.global.tooltipCornerRadius = 0;
+		Chart.defaults.global.tooltipXOffset = 10;
+		Chart.defaults.global.multiTooltipTemplate = '<%= value %>';
+
+		var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
+
+		var expenseLineData = {
+			labels : ["January","February","March","April","May","June","July"],
+			datasets : [
+				{
+				strokeColor : "red",
+				pointColor : "red",
+				pointStrokeColor : "white",
+				fillColor : "transparent",
+				data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+				},
+				{
+				strokeColor : "mediumseagreen",
+				pointColor : "mediumseagreen",
+				pointStrokeColor : "white",
+				fillColor : "transparent",
+				data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+				}
+			]
+		};
+
+		var expenseLineContext = document.getElementById("expenseLine").getContext("2d");
+		var incomeLineContext = document.getElementById("incomeLine").getContext("2d");
+
+		window.expenseLine = new Chart(expenseLineContext).Line(expenseLineData, {});
+		window.incomeLine = new Chart(incomeLineContext).Line(expenseLineData, {});
+
+		var doughnutData = [
+			{
+				value: 300,
+				color:"#F7464A",
+				label: "Red"
+			},
+			{
+				value: 50,
+				color: "#46BFBD",
+				label: "Green"
+			},
+			{
+				value: 100,
+				color: "#FDB45C",
+				label: "Yellow"
+			},
+			{
+				value: 40,
+				color: "#949FB1",
+				label: "Grey"
+			},
+			{
+				value: 120,
+				color: "#4D5360",
+				label: "Dark Grey"
+			}
+		];
+
+		var expenseDonutContext = document.getElementById("expenseDonut").getContext("2d");
+		var expenseDonutContext2 = document.getElementById("expenseDonut2").getContext("2d");
+		var incomeDonutContext = document.getElementById("incomeDonut").getContext("2d");
+		var incomeDonutContext2 = document.getElementById("incomeDonut2").getContext("2d");
+
+		window.expenseDonut = new Chart(expenseDonutContext).Doughnut(doughnutData, {});
+		window.expenseDonut2 = new Chart(expenseDonutContext2).Doughnut(doughnutData, {});
+		window.incomeDonut = new Chart(incomeDonutContext).Doughnut(doughnutData, {});
+		window.incomeDonut2 = new Chart(incomeDonutContext2).Doughnut(doughnutData, {});
+
+	}
+]);
+
+ctrl.controller('poenSettings', ['$scope', '$rootScope', '$http',
+	function ($scope, $rootScope, $http) {
+		$rootScope.currentSlug = "settings";
+		$rootScope.currentTitle = $rootScope.websiteTitle + " - Instellingen";
 
 // SAVE NEW CATEGORY
 
@@ -462,61 +578,3 @@ ctrl.controller('poenCategories', ['$scope', '$rootScope', '$http',
 		};
 	}
 ]);
-
-// HIGHLIGHT DATE ON SIDEBAR ACTIVATIONS
-
-function highlightSelectedDate(date) {
-	var selectedDate = moment(date, 'YYYY-MM-DD').format('YYYY-MM-DD');
-	$('td[data-date="' + selectedDate + '"]').addClass('active');
-};
-
-// CONVERT AMOUNT TO ACCOUNTING
-
-$(document).on('focusout', '.money-amount', function () {
-
-	var newAmount= $(this).val();
-
-	if (newAmount.indexOf(',') > -1) {
-
-		newAmount = accounting.unformat(newAmount, ',');
-		newAmount = accounting.formatMoney(newAmount, '', '2', '', ',');
-		$(this).val(newAmount);
-
-	} else {
-		
-		newAmount = accounting.formatMoney(newAmount, '', '2', '', ',');
-		$(this).val(newAmount);
-	
-	}
-});
-
-// HIGHLIGHT MONEY ACCROSS SECTION ON HOVER
-
-$(document).on('mouseenter', '.balance-money', function () { $('.' + $(this).attr('id')).addClass("hover"); });
-$(document).on('mouseleave', '.balance-money', function () { $('.' + $(this).attr('id')).removeClass("hover"); });
-
-// CALCULATE TOTAL
-
-function calculateTotal (items) {
-	var total = 0;
-
-	for (i in items) {
-		if (items[i].balance == 'income') {
-			total = total + items[i].amount;
-		} else if (items[i].balance == 'expense') {
-			total = total - items[i].amount;
-		}
-	}
-	return total;
-}
-
-function totalDisplay (amount) {
-
-	if (amount < 0) {
-		var displayAmount = amount.toString().substring(1);
-	} else if (amount > 0) {
-		displayAmount = amount;
-	}
-
-	return accounting.formatMoney(displayAmount, '', '2', '', ','); 
-}

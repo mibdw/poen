@@ -6,20 +6,20 @@ app.config(['$routeProvider', function ($routeProvider) {
 	
 	$routeProvider.
 		when('/', {
-			templateUrl: 'partials/month',
-			controller: 'poenMonth'
+			templateUrl: 'partials/calendar',
+			controller: 'poenCalendar'
 		}).
-		when('/profile', {
-			templateUrl: 'partials/profile',
-			controller: 'poenProfile'
+		when('/stats', {
+			templateUrl: 'partials/stats',
+			controller: 'poenStats'
 		}).
-		when('/categories', {
-			templateUrl: 'partials/categories',
-			controller: 'poenCategories'
+		when('/settings', {
+			templateUrl: 'partials/settings',
+			controller: 'poenSettings'
 		}).
 		when('/:displayYear/:displayMonth', {
-			templateUrl: 'partials/month',
-			controller: 'poenMonth'
+			templateUrl: 'partials/calendar',
+			controller: 'poenCalendar'
 		}).
 		otherwise({
 			redirectTo: '/'
@@ -39,9 +39,9 @@ app.controller('poenGlobal', ['$scope', '$rootScope', '$http',
 // MENU OPTIONS
 
 		$rootScope.options = [
-			{ name: "Maand", slug: "month", url: "/" },
-			{ name: "Categoriën", slug: "categories", url: "/#/categories" },
-			{ name: "Profiel", slug: "profile", url: "/#/profile" }
+			{ name: "Kalender", slug: "calendar", url: "/" },
+			{ name: "Statistiek", slug: "stats", url: "/#/stats" },
+			{ name: "Instellingen", slug: "settings", url: "/#/settings" }
 		];
 
 // DATE FORMATS
@@ -71,6 +71,39 @@ app.controller('poenGlobal', ['$scope', '$rootScope', '$http',
 		});
 
 		$rootScope.filterUsers = [];
+
+// TOGGLE FILTERS
+
+		$rootScope.toggleFilterCategory = function (slug) { 
+
+			if ($rootScope.filterCategories.indexOf(slug) < 0) {
+
+				$rootScope.filterCategories.push(slug);
+
+			} else {
+				var pos = $rootScope.filterCategories.indexOf(slug);
+				$rootScope.filterCategories.splice(pos, 1);
+			}
+		};
+
+		$rootScope.toggleFilterUsers = function (user) { 
+
+			if ($rootScope.filterUsers.indexOf(user) < 0) {
+
+				$rootScope.filterUsers.push(user);
+
+			} else {
+				var pos = $rootScope.filterUsers.indexOf(user);
+				$rootScope.filterUsers.splice(pos, 1);
+			}
+		};
+
+// REMOVE FILTERS
+
+		$rootScope.removeCatFilters = function () { $rootScope.filterCategories =[]; };
+
+		$rootScope.removeUserFilters = function () { $rootScope.filterUsers =[]; };
+
 	}
 ]);
 
@@ -138,7 +171,6 @@ app.filter('moneyFiltering', function ($rootScope) {
 						}					
 					}
 				} else if (!$rootScope.filterCategories || $rootScope.filterCategories.length == 0) { return item; }
-
 			}			
 		});
 	};

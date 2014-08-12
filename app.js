@@ -71,7 +71,7 @@ app.listen(3000, function() {
 });
 
 /* SEED A USER 
-var user = new User({ username: 'ben', email: 'ben@meedoenisbelangrijkerdanwinnen.nl', password: 'secret' });
+var user = new User({ username: 'admin', email: 'admin@example.com', password: 'secret' });
 user.save(function(err) {
 	if(err) {
 		console.log(err);

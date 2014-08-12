@@ -234,11 +234,11 @@ body {
 		.clearfix;
 		margin-bottom: 100px;
 
-// MONTH
+// CALENDAR
 
-		&.month {
+		&.calendar {
 
-			.calendar {
+			.calendar-view {
 				float: left;
 				width: 70%;
 			}
@@ -304,6 +304,7 @@ body {
 
 							td {
 								padding: .2em .1em;
+								vertical-align: top;
 
 								&.balance-money-category, &.balance-money-user {
 									width: 1%;
@@ -319,10 +320,6 @@ body {
 						.balance-money-title {
 							
 							span {
-								display: block;
-								white-space: nowrap;
-								overflow: hidden;
-								text-overflow: ellipsis;
 							}
 
 						}
@@ -414,6 +411,11 @@ body {
 						padding: .1em 0;
 
 						&:hover { background-color: @today }
+
+						.user-icon {
+							position: relative;
+							top: 3px;
+						}
 					}
 
 					a { cursor: pointer; }
@@ -421,10 +423,57 @@ body {
 			}	
 		}
 
-// CATEGORIES
-	
-		&.categories {
+// STATISTICS
 
+		&.stats {
+
+			.options {
+				float: left;
+				width: 18%;
+				box-sizing: border-box;
+				padding-right: 15px;
+
+				.filters {
+					margin: 0 0 1em;
+					padding: 0 0 .6em;
+					list-style-type: none;
+					border-bottom: 1px solid @line;
+
+					label {
+						display: block;
+						cursor: pointer;
+						padding: .1em 0;
+
+						&:hover {
+							background-color: @today;
+						}
+					}
+
+					a { cursor: pointer; }
+				}					
+			}
+
+			.statistics {
+				float: left;
+				
+				.statistic {
+					float: left;
+					margin-bottom: 2em;
+				}
+
+			}
+
+		}
+
+// SETTINGS
+	
+		&.settings {
+
+			.categories {
+				margin: 0;
+				padding: 0;
+				list-style-type: none;
+			}
 		}
 	}
 }
