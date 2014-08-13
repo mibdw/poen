@@ -68,8 +68,11 @@ body {
 		}
 	}
 
-	h2 {
+	h2 { margin: 4px 0 10px; }
+
+	h3 {
 		margin: 4px 0 10px;
+		font-style: italic;
 	}
 
 	input[type="text"], input[type="password"], input[type="number"], input[type="date"], textarea, select {
@@ -431,7 +434,7 @@ body {
 				float: left;
 				width: 18%;
 				box-sizing: border-box;
-				padding-right: 15px;
+				padding-left: 30px;
 
 				.filters {
 					margin: 0 0 1em;
@@ -450,10 +453,15 @@ body {
 					}
 
 					a { cursor: pointer; }
+				}
+
+				select {
+					width: 100%;
 				}					
 			}
 
 			.statistics {
+				width: 82%;
 				float: left;
 				
 				.statistic {

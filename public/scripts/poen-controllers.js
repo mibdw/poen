@@ -450,34 +450,38 @@ ctrl.controller('poenStats', ['$scope', '$rootScope',
 		$rootScope.currentSlug = "stats";
 		$rootScope.currentTitle = $rootScope.websiteTitle + " - Statistiek";
 		
-		Chart.defaults.global.animation = false;
-		Chart.defaults.global.showScale = true;
-		Chart.defaults.global.scaleLineColor = '#ddd';
-		Chart.defaults.global.scaleShowLabels = true;
-		Chart.defaults.global.scaleLabel = '<%=value%>';
-		Chart.defaults.global.scaleFontFamily = 'sans-serif';
-		Chart.defaults.global.scaleFontSize = 12;
-		Chart.defaults.global.scaleFontStyle = 'normal';
-		Chart.defaults.global.scaleFontColor = '#999';
-		Chart.defaults.global.responsive = true;
-		Chart.defaults.global.maintainAspectRatio = true;
-		Chart.defaults.global.showTooltips = true;
-		Chart.defaults.global.tooltipEvents = ['mousemove', 'touchstart', 'touchmove'];
-		Chart.defaults.global.tooltipFillColor = '#000';
-		Chart.defaults.global.tooltipFontFamily = 'sans-serif';
-		Chart.defaults.global.tooltipFontSize = 14;
-		Chart.defaults.global.tooltipFontStyle = 'normal';
-		Chart.defaults.global.tooltipFontColor = '#fff';
-		Chart.defaults.global.tooltipTitleFontFamily = 'sans-serif';
-		Chart.defaults.global.tooltipTitleFontSize = 14;
-		Chart.defaults.global.tooltipTitleFontStyle = 'bold';
-		Chart.defaults.global.tooltipTitleFontColor = '#fff';
-		Chart.defaults.global.tooltipYPadding = 10;
-		Chart.defaults.global.tooltipXPadding = 10;
-		Chart.defaults.global.tooltipCaretSize = 8;
-		Chart.defaults.global.tooltipCornerRadius = 0;
-		Chart.defaults.global.tooltipXOffset = 10;
-		Chart.defaults.global.multiTooltipTemplate = '<%= value %>';
+		var chartOptions = {
+			animation: false,
+			showScale: true,
+			scaleLineColor: '#ddd',
+			scaleShowLabels: true,
+			scaleLabel: '<%=value%>',
+			scaleFontFamily: 'sans-serif',
+			scaleFontSize: 12,
+			scaleFontStyle: 'normal',
+			scaleFontColor: '#999',
+			responsive: true,
+			maintainAspectRatio: true,
+			showTooltips: true,
+			tooltipEvents: ['mousemove', 'touchstart', 'touchmove'],
+			tooltipFillColor: '#000',
+			tooltipFontFamily: 'sans-serif',
+			tooltipFontSize: 14,
+			tooltipFontStyle: 'normal',
+			tooltipFontColor: '#fff',
+			tooltipTitleFontFamily: 'sans-serif',
+			tooltipTitleFontSize: 14,
+			tooltipTitleFontStyle: 'bold',
+			tooltipTitleFontColor: '#fff',
+			tooltipYPadding: 10,
+			tooltipXPadding: 10,
+			tooltipCaretSize: 8,
+			tooltipCornerRadius: 0,
+			tooltipXOffset: 10,
+			multiTooltipTemplate: '<%= value %>'
+		}
+
+		$scope.statsView = 1;
 
 		var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
 
@@ -504,8 +508,8 @@ ctrl.controller('poenStats', ['$scope', '$rootScope',
 		var expenseLineContext = document.getElementById("expenseLine").getContext("2d");
 		var incomeLineContext = document.getElementById("incomeLine").getContext("2d");
 
-		window.expenseLine = new Chart(expenseLineContext).Line(expenseLineData, {});
-		window.incomeLine = new Chart(incomeLineContext).Line(expenseLineData, {});
+		window.expenseLine = new Chart(expenseLineContext).Line(expenseLineData, chartOptions);
+		window.incomeLine = new Chart(incomeLineContext).Line(expenseLineData, chartOptions);
 
 		var doughnutData = [
 			{
@@ -540,10 +544,10 @@ ctrl.controller('poenStats', ['$scope', '$rootScope',
 		var incomeDonutContext = document.getElementById("incomeDonut").getContext("2d");
 		var incomeDonutContext2 = document.getElementById("incomeDonut2").getContext("2d");
 
-		window.expenseDonut = new Chart(expenseDonutContext).Doughnut(doughnutData, {});
-		window.expenseDonut2 = new Chart(expenseDonutContext2).Doughnut(doughnutData, {});
-		window.incomeDonut = new Chart(incomeDonutContext).Doughnut(doughnutData, {});
-		window.incomeDonut2 = new Chart(incomeDonutContext2).Doughnut(doughnutData, {});
+		window.expenseDonut = new Chart(expenseDonutContext).Doughnut(doughnutData, chartOptions);
+		window.expenseDonut2 = new Chart(expenseDonutContext2).Doughnut(doughnutData, chartOptions);
+		window.incomeDonut = new Chart(incomeDonutContext).Doughnut(doughnutData, chartOptions);
+		window.incomeDonut2 = new Chart(incomeDonutContext2).Doughnut(doughnutData, chartOptions);
 
 	}
 ]);
