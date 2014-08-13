@@ -71,8 +71,11 @@ body {
 	h2 { margin: 4px 0 10px; }
 
 	h3 {
-		margin: 4px 0 10px;
+		margin: 4px 0;
 		font-style: italic;
+		font-weight: normal;
+		font-size: 1.1em;
+		text-align: center;
 	}
 
 	input[type="text"], input[type="password"], input[type="number"], input[type="date"], textarea, select {
@@ -463,6 +466,27 @@ body {
 			.statistics {
 				width: 82%;
 				float: left;
+
+				h2 {
+					float: left;
+					width: 50%;
+					border-bottom: 1px solid @line;
+				}
+
+				.navigation {
+					float: right;
+					list-style-type: none;
+					margin: 0;
+					padding: 0;
+					width: 50%;
+					text-align: right;
+					line-height: 32px;
+					border-bottom: 1px solid @line;
+
+					li {
+						display: inline-block;
+					}
+				}
 				
 				.statistic {
 					float: left;
