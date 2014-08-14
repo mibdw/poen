@@ -13,6 +13,10 @@ app.config(['$routeProvider', function ($routeProvider) {
 			templateUrl: 'partials/stats',
 			controller: 'poenStats'
 		}).
+		when('/stats/:displayYear/:displayMonth', {
+			templateUrl: 'partials/stats',
+			controller: 'poenStats'
+		}).
 		when('/settings', {
 			templateUrl: 'partials/settings',
 			controller: 'poenSettings'
@@ -50,6 +54,9 @@ app.controller('poenGlobal', ['$scope', '$rootScope', '$http',
 		$rootScope.currentDate = moment().format("ddd MM-DD-YYYY HH:mm:ss");
 		$rootScope.currentMonth = moment().format("M");
 		$rootScope.currentYear = moment().format("YYYY");
+
+		$rootScope.displayDate = moment();
+		$rootScope.gotoToday = function () { $rootScope.displayDate = moment(); };
 
 // MONEY OBJECT DEFAULT VALUES
 		

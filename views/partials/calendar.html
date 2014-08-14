@@ -1,5 +1,5 @@
 <ul class="calendar-controls">
-	<li ng-hide="checkMonth==nextMonth"><a href="/">Vandaag</a></li>
+	<li ng-hide="checkMonth==nextMonth"><a ng-click="gotoToday()" href="/">Vandaag</a></li>
 	<li><a href="/#/{{prevMonth}}">&laquo; Vorige</a></li>
 	<li><a href="/#/{{nextMonth}}">Volgende &raquo;</a></li>
 	<li><a ng-click="sidebarFilter()" ng-class="{active: filterCategories.length > 0 || filterUsers.length > 0}">Filter</a></li>

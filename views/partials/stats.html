@@ -1,8 +1,9 @@
 <div class="statistics" style="width: 82%;">
-	<h2>Augustus 2014</h2>
+	<h2>{{currentMonth}}</h2>
 	<ul class="navigation">
-		<li><a href="">&laquo; Vorige</a></li>
-		<li><a href="">Volgende &raquo;</a></li>
+		<li ng-hide="checkMonth==nextMonth"><a ng-click="gotoToday()" href="/#/stats/">Vandaag</a></li>
+		<li><a href="/#/stats/{{prevMonth}}">&laquo; Vorige</a></li>
+	<li><a href="/#/stats/{{nextMonth}}">Volgende &raquo;</a></li>
 	</ul>
 
 	<div class="statistic" style="width: 48%; margin-right: 4%;">
@@ -38,6 +39,7 @@
 	
 <div class="options">
 	<h2>Opties</h2>
+
 	<ul class="filters">
 		<li ng-repeat="category in categoryList">
 			<label for="{{category.slug}}">
@@ -48,6 +50,7 @@
 		</li>
 		<li ng-if="filterCategories.length > 0"><a ng-click="removeCatFilters()">Wis alles</a></li>
 	</ul>
+
 	<ul class="filters">
 		<li ng-repeat="user in userList">
 			<label for="{{user._id}}">
@@ -61,10 +64,17 @@
 		<li ng-if="filterUsers.length > 0"><a ng-click="removeUserFilters()">Wis alles</a></li>
 	</ul>
 
-	<select ng-model="statsView">
-		<option value="1">Per maand</option>
-		<option value="6">Laatste 6 maanden</option>
-		<option value="12">Laatste jaar</option>
-		<option value="0">Alles</option>
-	</select>
+	<ul class="filters">
+		<li><a href="">Deze maand</a></li>
+		<li><a href="">Vorige maand</a></li>
+		<li><a href="">Dit jaar</a></li>
+		<li><a href="">Vorig jaar</a></li>
+		<li class="daterange">
+			Datumbereik:<br>
+			<input type="text" id="from" placeholder="Van">
+			<input type="text" id="to" placeholder="Tot">
+			<button type="submit">Bevestig</button>
+		</li>
+
+	</ul>
 </div>

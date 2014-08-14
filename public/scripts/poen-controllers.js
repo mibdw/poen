@@ -6,23 +6,22 @@ ctrl.controller('poenCalendar', ['$scope', '$rootScope', '$routeParams', '$http'
 
 // WHAT MONTH TO DISPLAY?
 
-		var displayDate = moment();
 		$scope.checkMonth = moment().add('months', 1).format('YYYY/MM');
 
 		if ($routeParams.displayYear && $routeParams.displayMonth) {
 
 			var processDate = $routeParams.displayYear + "-" + $routeParams.displayMonth;
-			displayDate = moment(processDate, "YYYY-MM");
+			$rootScope.displayDate = moment(processDate, "YYYY-MM");
 		}
 
 // CALENDAR MONTH NAVIGATION
 
-		$scope.nextMonth = moment(displayDate).add('months', 1).format('YYYY/MM');
-		$scope.prevMonth = moment(displayDate).subtract('months', 1).format('YYYY/MM');
+		$scope.nextMonth = moment($rootScope.displayDate).add('months', 1).format('YYYY/MM');
+		$scope.prevMonth = moment($rootScope.displayDate).subtract('months', 1).format('YYYY/MM');
 
 // CALENDAR PAGE TITLE
 
-		$rootScope.currentTitle = $rootScope.websiteTitle + " - " + moment(displayDate).format('MMMM YYYY');
+		$rootScope.currentTitle = $rootScope.websiteTitle + " - " + moment($rootScope.displayDate).format('MMMM YYYY');
 
 // SIDEBAR INCLUDES
 
@@ -222,8 +221,8 @@ ctrl.controller('poenCalendar', ['$scope', '$rootScope', '$routeParams', '$http'
 // LOAD MONEY OBJECTS
 
 		var moneyCriteria = {
-			'month': moment(displayDate).format('MM'),
-			'year': moment(displayDate).format('YYYY')
+			'month': moment($rootScope.displayDate).format('MM'),
+			'year': moment($rootScope.displayDate).format('YYYY')
 		}
 
 		$http.post('/money/' + $routeParams.displayYear + '/' + $routeParams.displayMonth, moneyCriteria).success( function (moneyData) {
@@ -232,14 +231,14 @@ ctrl.controller('poenCalendar', ['$scope', '$rootScope', '$routeParams', '$http'
 
 			for (i in moneyData) {
 
-				if (moment(displayDate).format('M') == moment(moneyData[i].date).format('M')) {
+				if (moment($rootScope.displayDate).format('M') == moment(moneyData[i].date).format('M')) {
 					moneyData[i].displayAmount = accounting.formatMoney(moneyData[i].amount, '', '2', '', ',');
 					$scope.moneyList.push(moneyData[i]);	
 				}				
 			}
 			
 // CALENDAR RENDERING
-
+		
 			$('.calendar-view').fullCalendar({
 				header: { left: 'title', center: '', right: '' },
 				events: moneyData,
@@ -292,7 +291,7 @@ ctrl.controller('poenCalendar', ['$scope', '$rootScope', '$routeParams', '$http'
 				}
 			});
 
-			$('.calendar-view').fullCalendar('gotoDate', displayDate);
+			$('.calendar-view').fullCalendar('gotoDate', $rootScope.displayDate);
 
 			$scope.filteringCategories();
 			$scope.filteringUsers();
@@ -445,10 +444,27 @@ ctrl.controller('poenCalendar', ['$scope', '$rootScope', '$routeParams', '$http'
 	}
 ]);
 
-ctrl.controller('poenStats', ['$scope', '$rootScope',
-	function ($scope, $rootScope) {
+ctrl.controller('poenStats', ['$scope', '$rootScope', '$routeParams', '$http', '$filter',
+	function ($scope, $rootScope, $routeParams, $http, $filter) {
 		$rootScope.currentSlug = "stats";
-		$rootScope.currentTitle = $rootScope.websiteTitle + " - Statistiek";
+
+// WHAT MONTH TO DISPLAY?
+
+		$scope.checkMonth = moment().add('months', 1).format('YYYY/MM');
+
+		if ($routeParams.displayYear && $routeParams.displayMonth) {
+
+			var processDate = $routeParams.displayYear + "-" + $routeParams.displayMonth;
+			$rootScope.displayDate = moment(processDate, "YYYY-MM");
+		}
+
+// CALENDAR MONTH NAVIGATION
+
+		$scope.nextMonth = moment($rootScope.displayDate).add('months', 1).format('YYYY/MM');
+		$scope.prevMonth = moment($rootScope.displayDate).subtract('months', 1).format('YYYY/MM');
+		$scope.currentMonth = moment($rootScope.displayDate).format('MMMM YYYY');
+
+		$rootScope.currentTitle = $rootScope.websiteTitle + " - " + $scope.currentMonth + ", Statistiek";
 		
 		var chartOptions = {
 			animation: false,
