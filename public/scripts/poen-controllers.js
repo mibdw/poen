@@ -567,11 +567,11 @@ ctrl.controller('poenStats', ['$scope', '$rootScope', '$routeParams', '$http', '
 		window.incomeDonut = new Chart(incomeDonutContext).Doughnut(doughnutData, chartOptions);
 		window.incomeDonut2 = new Chart(incomeDonutContext2).Doughnut(doughnutData, chartOptions);
 
-		
+
 		$(function() {
 			$( "#from" ).datepicker({
 				changeMonth: true,
-				numberOfMonths: 2,
+				numberOfMonths: 1,
 				onClose: function( selectedDate ) {
 					$( "#to" ).datepicker( "option", "minDate", selectedDate );
 				}
@@ -579,7 +579,7 @@ ctrl.controller('poenStats', ['$scope', '$rootScope', '$routeParams', '$http', '
 
 			$( "#to" ).datepicker({
 				changeMonth: true,
-				numberOfMonths: 2,
+				numberOfMonths: 1,
 				onClose: function( selectedDate ) {
 					$( "#from" ).datepicker( "option", "maxDate", selectedDate );
 				}
