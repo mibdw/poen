@@ -198,6 +198,78 @@ body {
 		}			
 	}
 
+// DATEPICKER
+
+	.ui-datepicker {
+		background-color: @back;
+		border: 1px solid @text;
+		box-sizing: border-box;
+		margin: 5px 0 0 -15px;
+
+		.ui-datepicker-group {
+			float: left;
+			width: 50%;
+
+			.ui-datepicker-header {
+				padding: .5em;
+				line-height: 27px;
+				border-bottom: 1px solid @line;
+
+				&.ui-corner-right { border-left: 1px solid @text}
+
+				.ui-corner-all {
+					float: left;
+					padding: 0;
+					margin-right: 8px;
+				}
+
+				.ui-datepicker-title {
+
+					select {
+						padding: .1em;
+						margin: 0 .3em;
+					}
+				}
+			}
+
+			.ui-datepicker-calendar {
+				width: 100%;
+				border-collapse: collapse;
+
+				th {
+					border-right: 1px solid @line;
+					&:last-child { border-right-width: 0; }
+				}
+
+				td {
+					height: 2em;
+					border: 1px solid @line;
+					text-align: center;
+					line-height: 2em;
+					padding: 0;
+
+					&:last-child { border-right-width: 0; }
+					&:first-child { border-left-color: @text; }
+
+					a {
+						display: block;
+						height: 100%;
+
+						&:hover {
+							background-color: @hover;
+						}
+					} 
+
+					&.ui-state-disabled {
+						color: lighten(@text, 60%);
+					}
+				}
+
+				tr:last-child td { border-bottom-width: 0; }
+			}
+		}
+	}
+
 // HEADER
 
 	header {
@@ -488,6 +560,10 @@ body {
 					padding: 1px 0 10px;
 				}
 
+				h3 {
+					padding: 15px 0;
+				}
+
 				.navigation {
 					float: right;
 					list-style-type: none;
@@ -526,6 +602,70 @@ body {
 				margin: 0;
 				padding: 0;
 				list-style-type: none;
+				width: 17%;
+				float: left;
+
+				input { width: 100%; }
+
+				select {
+					width: 100%;
+
+					option[value="red"] { 
+						background-color: red; 
+						color: white;
+					}
+					option[value="maroon"] { 
+						background-color: maroon; 
+						color: white;
+					}
+					option[value="lime"] { 
+						background-color: lime; 
+					}
+					option[value="green"] { 
+						background-color: green; 
+						color: white;
+					}
+					option[value="olive"] { 
+						background-color: olive; 
+						color: white;
+					}
+					option[value="teal"] { 
+						background-color: teal; 
+						color: white;
+					}
+					option[value="blue"] { 
+						background-color: blue; 
+						color: white;
+					}
+					option[value="navy"] { 
+						background-color: navy; 
+						color: white;
+					}
+					option[value="fuchsia"] { 
+						background-color: fuchsia; 
+					}
+					option[value="purple"] { 
+						background-color: purple; 
+						color: white;
+					}
+					option[value="lightsalmon"] { 
+						background-color: lightsalmon; 
+					}
+					option[value="orange"] { 
+						background-color: orange; 
+					}
+					option[value="darkkhaki"] { 
+						background-color: darkkhaki; 
+					}
+					option[value="saddlebrown"] { 
+						background-color: saddlebrown; 
+						color: white;
+					}
+					option[value="gray"] { 
+						background-color: gray; 
+						color: white;
+					}
+				}
 			}
 		}
 	}

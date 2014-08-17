@@ -9,7 +9,7 @@ var moment = require('moment');
 var dateFormat = "ddd MM-DD-YYYY HH:mm:ss";
 var User = require(__dirname + '/models/user');
   
-mongoose.connect('mongodb://localhost/poen');
+mongoose.connect('mongodb://dagobert:g3ldm03tr0llen@localhost:23383/poen');
 mongoose.connection.on('error', console.error.bind(console, 'Connection error:'));
 mongoose.connection.once('open', function callback() {
 	console.log(moment().format(dateFormat) + ' - De database werkt. Wat een geluk');
@@ -66,7 +66,7 @@ app.use(express.static(__dirname + '/public'));
 
 var routes = require(__dirname + '/handlers/routes')(app);
 
-app.listen(3000, function() {
+app.listen(11074, function() {
 	console.log('\n\nPOEN POEN POEN\n\n' + moment().format(dateFormat) + ' - Geld moet rollen');
 });
 

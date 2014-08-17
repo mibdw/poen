@@ -458,6 +458,8 @@ ctrl.controller('poenStats', ['$scope', '$rootScope', '$routeParams', '$http', '
 			$rootScope.displayDate = moment(processDate, "YYYY-MM");
 		}
 
+// DATEPICKER
+
 // CALENDAR MONTH NAVIGATION
 
 		$scope.nextMonth = moment($rootScope.displayDate).add('months', 1).format('YYYY/MM');
@@ -565,6 +567,24 @@ ctrl.controller('poenStats', ['$scope', '$rootScope', '$routeParams', '$http', '
 		window.incomeDonut = new Chart(incomeDonutContext).Doughnut(doughnutData, chartOptions);
 		window.incomeDonut2 = new Chart(incomeDonutContext2).Doughnut(doughnutData, chartOptions);
 
+		
+		$(function() {
+			$( "#from" ).datepicker({
+				changeMonth: true,
+				numberOfMonths: 2,
+				onClose: function( selectedDate ) {
+					$( "#to" ).datepicker( "option", "minDate", selectedDate );
+				}
+			});
+
+			$( "#to" ).datepicker({
+				changeMonth: true,
+				numberOfMonths: 2,
+				onClose: function( selectedDate ) {
+					$( "#from" ).datepicker( "option", "maxDate", selectedDate );
+				}
+			});
+		});
 	}
 ]);
 

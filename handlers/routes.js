@@ -58,6 +58,9 @@ module.exports = function (app, res, req) {
 	app.post('/money/edit', ensureAuthenticated, money.moneyEdit);
 	app.post('/money/delete', ensureAuthenticated, money.moneyDelete);
 
+	// STATS
+	var stats = require(__dirname + '/stats');
+
 	// CATEGORY
 
 	var category = require(__dirname + '/category');
