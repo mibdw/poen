@@ -4,7 +4,7 @@ var dateFormat = "ddd MM-DD-YYYY HH:mm:ss";
 
 var Money = require(__dirname + '/../models/money.js');
 
-exports.moneyList = function(req, res, next) {
+exports.list = function(req, res, next) {
 
 	var displayMonth = req.body.year + "-" + req.body.month;
 	var prevMonth = moment(displayMonth, "YYYY-MM").subtract('months', 1).date('20');
@@ -101,7 +101,7 @@ exports.moneyList = function(req, res, next) {
 	});
 };
 
-exports.moneyDetail = function(req, res, next) {
+exports.detail = function(req, res, next) {
 
 	Money.findById(req.body.moneyID).populate('user', 'username').exec(function (err, money) {
 		if (err) {
@@ -115,7 +115,7 @@ exports.moneyDetail = function(req, res, next) {
 	});
 };
 
-exports.moneyNew = function(req, res, next) {
+exports.create = function(req, res, next) {
 
 	var money = new Money({
 		'title': req.body.title,
@@ -168,7 +168,7 @@ exports.moneyNew = function(req, res, next) {
 	});
 };
 
-exports.moneyEdit = function(req, res, next) {
+exports.edit = function(req, res, next) {
 
 	Money.findByIdAndUpdate(req.body._id, { $set: { 
 	
@@ -190,7 +190,7 @@ exports.moneyEdit = function(req, res, next) {
 
 };
 
-exports.moneyDelete = function(req, res, next) {
+exports.remove = function(req, res, next) {
 
 	Money.findByIdAndUpdate(req.body._id, { $set: { 'visible': false }}, function (err) {
 		if (err) return console.log(err);

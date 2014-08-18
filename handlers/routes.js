@@ -51,21 +51,28 @@ module.exports = function (app, res, req) {
 	// MONEY
 	
 	var money = require(__dirname + '/money');
-	app.post('/money/:year/:month', ensureAuthenticated, money.moneyList);
-	app.post('/money/detail', ensureAuthenticated, money.moneyDetail);
+	app.post('/money/:year/:month', ensureAuthenticated, money.list);
+	app.post('/money/detail', ensureAuthenticated, money.detail);
 
-	app.post('/money/new', ensureAuthenticated, money.moneyNew);
-	app.post('/money/edit', ensureAuthenticated, money.moneyEdit);
-	app.post('/money/delete', ensureAuthenticated, money.moneyDelete);
+	app.post('/money/create', ensureAuthenticated, money.create);
+	app.post('/money/edit', ensureAuthenticated, money.edit);
+	app.post('/money/remove', ensureAuthenticated, money.remove);
 
 	// STATS
 	var stats = require(__dirname + '/stats');
+	app.post('/stats/in/:year/:month', ensureAuthenticated, stats.incomeMonth);
+	app.post('/stats/ex/:year/:month', ensureAuthenticated, stats.expenseMonth);
+	app.post('/stats/in/range/:from/:to', ensureAuthenticated, stats.incomeRange);
+	app.post('/stats/ex/range/:from/:to', ensureAuthenticated, stats.expenseRange);
 
 	// CATEGORY
 
 	var category = require(__dirname + '/category');
-	app.get('/category/list', ensureAuthenticated, category.categoryList);
-	app.post('/category/new', ensureAuthenticated, category.categoryNew);
+	app.get('/category/list', ensureAuthenticated, category.list);
+
+	app.post('/category/create', ensureAuthenticated, category.create);
+	app.post('/category/edit', ensureAuthenticated, category.edit);
+	app.post('/category/remove', ensureAuthenticated, category.remove);
 
 	// USERS
 

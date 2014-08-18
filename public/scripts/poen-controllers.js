@@ -117,7 +117,7 @@ ctrl.controller('poenCalendar', ['$scope', '$rootScope', '$routeParams', '$http'
 
 				if ($rootScope.newMoney.amount.indexOf(',') > -1) { $rootScope.newMoney.amount = accounting.unformat($rootScope.newMoney.amount, ','); }		
 
-				$http.post('/money/new', $rootScope.newMoney).success( function (data) {
+				$http.post('/money/create', $rootScope.newMoney).success( function (data) {
 					window.location.reload()			
 				});
 			}
@@ -211,7 +211,7 @@ ctrl.controller('poenCalendar', ['$scope', '$rootScope', '$routeParams', '$http'
 
 			if (confirm("Weet je het zeker?") == true) {
 				
-				$http.post('/money/delete', $rootScope.editMoney).success( function (data) {
+				$http.post('/money/remove', $rootScope.editMoney).success( function (data) {
 
 					window.location.reload()			
 				});
@@ -607,7 +607,7 @@ ctrl.controller('poenSettings', ['$scope', '$rootScope', '$http',
 
 			} else {
 
-				$http.post('/category/new', $scope.newCategory).success( function (data) {
+				$http.post('/category/create', $scope.newCategory).success( function (data) {
 					if (data == 'error') {
 						alert('Sorry, die kleur is al bezet');
 					} else {
@@ -616,5 +616,49 @@ ctrl.controller('poenSettings', ['$scope', '$rootScope', '$http',
 				});
 			}
 		};
+
+		$scope.deleteCategory = function (index) {
+			$('.' + $rootScope.categoryList[index].slug + ' .move-category').toggleClass('active');
+		};
+
+		$scope.moveCategory = function (index) {
+
+			$http.post('/category/remove', $rootScope.categoryList[index]).success( function (data) {
+				
+				if (data == 'error') {
+					alert('Oh God, dit gaat helemaal mis');
+				} else {
+					window.location.reload();	
+				} 
+			});
+		};
+
+		$scope.updateCategory = function (index) {
+
+			if (!$rootScope.categoryList[index].name) {
+
+				alert('Naam invullen alstublieft');
+
+			} else if (!$rootScope.categoryList[index].color) {
+
+				alert('Kleur invullen alstublieft');
+
+			} else {
+
+				$http.post('/category/edit', $rootScope.categoryList[index]).success( function (data) {
+
+					if (data == 'error') {
+						alert('Dit gaat helemaal de verkeerde kant op!');
+					} else if (data == 'success') {
+						// DO NOTHING	
+					} else {
+
+						alert("Dat kan niet!");
+						$rootScope.categoryList[index].name = data.name;
+						$rootScope.categoryList[index].color = data.color;
+					}
+				});
+			}
+		}
 	}
 ]);

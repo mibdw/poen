@@ -270,6 +270,76 @@ body {
 		}
 	}
 
+// COLOR PICKER 
+
+	.color-picker {
+		position: relative;
+		margin-right: 40px;
+		width: 50px;
+		height: 32px;
+
+		.color-options {	
+			margin: 0;
+			list-style-type: none;
+			position: absolute;
+			top: 0;
+			left: 0;
+			padding: 2px 30px 2px 2px !important;
+			border: 1px solid @line;
+			width: 100%;
+			cursor: pointer;
+			background-color: @back;
+			min-height: 32px;
+
+			li {
+				margin: 0;
+				padding: 0;
+				height: 32px;
+				display: none;
+				border: 1px solid @back;
+
+				&.red { background-color: red; }
+				&.maroon { background-color: maroon; }
+				&.lime { background-color: lime; }
+				&.green { background-color: green; }
+				&.olive { background-color: olive; }
+				&.teal { background-color: teal; }
+				&.blue { background-color: blue; }
+				&.navy { background-color: navy; }
+				&.fuchsia { background-color: fuchsia; }
+				&.purple { background-color: purple; }
+				&.lightsalmon { background-color: lightsalmon; }
+				&.orange { background-color: orange; }
+				&.darkkhaki { background-color: darkkhaki; }
+				&.saddlebrown { background-color: saddlebrown; }
+				&.gray { background-color: gray; }
+
+				&.active { display: block; }
+			}
+
+			&:after {
+				content: "\25BC";
+				position: absolute;
+				top: 0;
+				right: 6px;
+				line-height: 2.4em;
+				color: @line;
+			}
+
+			&:hover {
+				border-color: @text;
+				z-index: 999;
+
+				li { 
+					display: block; 
+					&:hover { border-color: @text; }
+				}
+				&:after { color: @text; }
+			} 
+		}
+	}
+
+
 // HEADER
 
 	header {
@@ -599,79 +669,46 @@ body {
 		&.settings {
 
 			.categories {
-				width: 17%;
 				float: left;
 				
 				ul {
 					margin: 0 0 1em;
 					padding: 0;
 					list-style-type: none;
-				}	
 
-				form {
+					li {
+						margin: 0;
+						padding: 0;
+						.clearfix;						
 
-					input { width: 100%; }
+						.color-picker {
+							float: left;
 
-					select {
-						width: 100%;	
+							ul { margin: 0; }	
+						}
 
-						option[value="red"] { 
-							background-color: red; 
-							color: white;
+						input {
+							float: left;
 						}
-						option[value="maroon"] { 
-							background-color: maroon; 
-							color: white;
+						
+						a {
+							float: left;
+							line-height: 38px;
+							margin-left: 5px;
+							visibility: hidden;
 						}
-						option[value="lime"] { 
-							background-color: lime; 
-						}
-						option[value="green"] { 
-							background-color: green; 
-							color: white;
-						}
-						option[value="olive"] { 
-							background-color: olive; 
-							color: white;
-						}
-						option[value="teal"] { 
-							background-color: teal; 
-							color: white;
-						}
-						option[value="blue"] { 
-							background-color: blue; 
-							color: white;
-						}
-						option[value="navy"] { 
-							background-color: navy; 
-							color: white;
-						}
-						option[value="fuchsia"] { 
-							background-color: fuchsia; 
-						}
-						option[value="purple"] { 
-							background-color: purple; 
-							color: white;
-						}
-						option[value="lightsalmon"] { 
-							background-color: lightsalmon; 
-						}
-						option[value="orange"] { 
-							background-color: orange; 
-						}
-						option[value="darkkhaki"] { 
-							background-color: darkkhaki; 
-						}
-						option[value="saddlebrown"] { 
-							background-color: saddlebrown; 
-							color: white;
-						}
-						option[value="gray"] { 
-							background-color: gray; 
-							color: white;
+
+						&:hover a { visibility: visible; }
+
+						.move-category {
+							float: left;
+							clear: left;
+							display: none;
+
+							&.active { display: block; }
 						}
 					}
-				}
+				}	
 			}
 		}
 	}
