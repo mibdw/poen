@@ -46,7 +46,6 @@ app.engine('html', require('ejs').renderFile);
 app.set('views', __dirname + '/views');
 
 app.use(less(__dirname + '/', {
-	force: true,
 	dest: __dirname + '/public'
 }));
 
