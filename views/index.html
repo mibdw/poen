@@ -1,43 +1,46 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="poenApp" ng-controller="poenGlobal">
-<head>
-	<meta charset="UTF-8">
-	<title ng-bind-template="{{currentTitle}}">Poen - Geld moet rollen</title>
+	<head>
+		<meta charset="UTF-8">
+		<title ng-bind-template="{{moniker}}">Poen - Geld moet rollen</title>
 
-	<link rel="stylesheet" href="/styles/main.css" />
-	<link rel="icon" type="image/gif" href="/images/dagobert.gif" />
+		<link rel="stylesheet" href="/styles/main.css" />
+		<link rel="icon" type="image/gif" href="/images/dagobert.gif" />
+	</head>
+	<body>
+		<header>
+			<a href="/" class="brand"><img src="/images/dagobert.png" alt="{{heading}}"></a>
+			<h1>{{displayMonth}}</h1>
+			
+			<ul>
+				<li ng-show="displayMonth != actualMonth" class="today">
+					<a href="" ng-click="gotoMonth('today')">Vandaag</a>
+				</li>
+				<li class="prev">
+					<a href="" ng-click="gotoMonth('prev')">&laquo; Vorige</a>
+				</li>
+				<li class="next">
+					<a href="" ng-click="gotoMonth('next')">Volgende &raquo;</a>
+				</li>
+				<li class="add" ng-class="{active: sidebar == sidebars[1]}">
+					<a href="" ng-click="sidebarNew()">Toevoegen</a>
+				</li>
+				<li><a href="/logout">Logout</a></li>
+			</ul>
+		</header>
 
-</head>
-<body>
-	
-	<header>
-		<a href="/" class="brand"><img src="/images/dagobert.png" alt="{{websiteTitle}}"></a>
-		
-		<ul>
-			<li ng-repeat="option in options">
-				<a ng-class="{active: option.slug==currentSlug}" href="{{option.url}}" title="{{option.name}}">{{option.name}}</a>
-			</li>
-			<li><a href="/logout">Logout</a></li>
-		</ul>
-		
-	</header>
-
-	<div class="main" ng-view ng-class="currentSlug"></div>
-
-</body>
-
-<script src="/scripts/jquery-1.11.1.min.js"></script>
-<script src="/scripts/jquery-ui.custom.min.js"></script>
-<script src="/scripts/accounting.min.js"></script>
-<script src="/scripts/moment-with-langs.min.js"></script>
-<script src="/scripts/fullcalendar.min.js"></script>
-<script src="/scripts/fullcalendar-nl.js"></script>
-<script src="/scripts/chart.min.js"></script>
-
-<script src="/scripts/angular.min.js"></script>
-<script src="/scripts/angular-route.min.js"></script>
-
-<script src="/scripts/poen-app.js"></script>
-<script src="/scripts/poen-controllers.js"></script>
-
+		<div class="main">
+			<div class="calendar-view"></div>
+			<div class="sidebar" ng-include="sidebar.url"></div>
+		</div>
+	</body>
+	<script src="/scripts/jquery-1.11.1.min.js"></script>
+	<script src="/scripts/jquery-ui.custom.min.js"></script>
+	<script src="/scripts/accounting.min.js"></script>
+	<script src="/scripts/moment-with-langs.min.js"></script>
+	<script src="/scripts/fullcalendar.min.js"></script>
+	<script src="/scripts/fullcalendar-nl.js"></script>
+	<script src="/scripts/angular.min.js"></script>
+	<script src="/scripts/angular-route.min.js"></script>
+	<script src="/scripts/poen-app.js"></script>
 </html>

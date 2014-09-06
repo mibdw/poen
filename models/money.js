@@ -8,9 +8,7 @@ var moneySchema = new Schema({
 	user: { type: String, ref: 'User' },
 	date: Date,
 	category: { type: String, ref: 'Category' },
-	recursion: String,
 	balance: String,
-	originID: String,
 	visible: { type: Boolean, default: true }
 });
 

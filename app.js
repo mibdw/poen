@@ -49,12 +49,10 @@ app.use(less(__dirname + '/', {
 	dest: __dirname + '/public'
 }));
 
-
 app.use(express.json());
 
 app.use(express.cookieParser());
-app.use(express.bodyParser());
-app.use(express.methodOverride());
+app.use(express.urlencoded());
 app.use(express.session({ secret: 'Dagobert Duck' }));
 
 app.use(passport.initialize());

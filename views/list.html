@@ -1,0 +1,41 @@
+<header>
+	<h2>{{sidebar.title}}</h2>
+	<span class="calc-date">
+		Vanaf: {{calcStartDate}}ste
+		<a href="" ng-show="calcStartDate < 28" ng-click="calcStartChange('plus')">&plus;</a>
+		<a href="" ng-show="calcStartDate > 1" ng-click="calcStartChange('minus')">&minus;</a>
+	</span>
+</header>
+
+<table class="users" ng-show="userList.length > 1">
+	<tr ng-click="userToggle('all')">
+		<td class="check">
+			<input type="checkbox" ng-checked="filterUsers.length == 0">
+		</td>
+		<td class="user">Totaal</td>
+		<td class="amount">999</td>
+	</tr>
+	<tr ng-repeat="user in userList" ng-click="userToggle(user._id)">
+		<td class="check">
+			<input type="checkbox" ng-checked="filterUsers.indexOf(user._id) > -1">
+		</td>
+		<td class="user">{{user.username}}</td>
+		<td class="amount">999</td>
+	</tr>
+</table>
+
+<table class="categories">
+	<tr ng-repeat="category in categoryList" ng-click="categoryToggle(category._id)">
+		<td class="check">
+			<input type="checkbox" ng-checked="filterCategories.indexOf(category._id) > -1">
+		</td>
+		<td class="icon">
+			<span class="color" style="background-color: {{category.color}}"></span>
+		</td>
+		<td class="name">
+			{{category.name}}
+			<a href="" ng-click="" class="edit">Bewerk</a>
+		</td>
+		<td class="amount">999</td>
+	</tr>
+</table>

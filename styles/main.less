@@ -8,8 +8,6 @@
 @hover: lightcyan;
 @active: cyan;
 
-// MIXINS
-
 .clearfix() {
 	&:before, &:after {
 		content: " ";
@@ -20,39 +18,6 @@
 		clear: both;
 	}
 }
-
-// CATEGORIES
-
-.category-icon {
-	display: inline-block;
-	width: .9em;
-	height: .9em;
-	border-radius: .45em;
-	position: relative;
-	top: .1em;
-}
-
-.user-icon {
-	display: inline-block;
-	width: .9em;
-	height: .9em;
-	border-radius: .45em;
-	background-color: darkgray;
-	color: @back;
-	text-align: center;
-	position: relative;
-	top: .15em;
-	text-transform: uppercase;
-
-	span {
-		font-size: .6em;
-		position: relative;
-		top: -.5em;
-		font-weight: bold;
-	}
-}
-
-// TYPOGRAPHY
 
 body {
 	background-color: @back;
@@ -113,9 +78,9 @@ body {
 		box-sizing: border-box;
 	}
 
-// CALENDAR
+	.fc {
 
-	.calendar {
+		.fc-header { display: none }
 
 		table {
 			border-collapse: collapse;
@@ -164,200 +129,57 @@ body {
 
 			.fc-event {
 				font-size: .8em;
+				color: @back;
+				cursor: pointer;
+				padding: .1em .2em .1em .2em;
+				margin-bottom: 1px;
+				position: relative;
 
 				.fc-event-inner {
-					margin: 0 .3em;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+					overflow: hidden;
+					padding-right: 1.2em;
 
-					.fc-event-title {
-						display: block;
-						white-space: nowrap;
-						overflow: hidden;
-						text-overflow: ellipsis;
-						cursor: pointer;
-
-						&:hover {
-							color: @link;
-							text-decoration: underline;
-						}
-
-						.category-icon, .user-icon { margin-right: 3px;	}
-					}
-
-					.fc-event-time { display: none; }
+					.fc-event-time { display: none }
 				}
 
-				&.active {
-					text-decoration: underline;
-				}
-
+				&.active { text-decoration: underline }
 				&.hover {
 					color: @link;
 					text-decoration: underline;					
+				}
+
+				.user {
+					position: absolute;
+					top: .3em;
+					right: .3em;
+					background-color: @back;
+					color: lighten(@text, 50%);
+					width: 1.3em;
+					height: 1.3em;
+					border-radius: .6em;
+					font-size: .8em;
+					line-height: 1.3em;
+					text-align: center;
+					text-transform: uppercase;
 				}
 			}
 		}			
 	}
 
-// DATEPICKER
-
-	.ui-datepicker {
-		background-color: @back;
-		border: 1px solid @text;
-		box-sizing: border-box;
-		margin: 5px 0 0 -15px;
-
-		&:empty { border-width: 0; }
-
-		.ui-datepicker-group {
-			float: left;
-			width: 50%;
-
-			.ui-datepicker-header {
-				padding: .5em;
-				line-height: 27px;
-				border-bottom: 1px solid @line;
-
-				&.ui-corner-right { border-left: 1px solid @text}
-
-				.ui-corner-all {
-					float: left;
-					padding: 0;
-					margin-right: 8px;
-				}
-
-				.ui-datepicker-title {
-
-					select {
-						padding: .1em;
-						margin: 0 .3em;
-					}
-				}
-			}
-
-			.ui-datepicker-calendar {
-				width: 100%;
-				border-collapse: collapse;
-
-				th {
-					border-right: 1px solid @line;
-					&:last-child { border-right-width: 0; }
-				}
-
-				td {
-					height: 2em;
-					border: 1px solid @line;
-					text-align: center;
-					line-height: 2em;
-					padding: 0;
-
-					&:last-child { border-right-width: 0; }
-					&:first-child { border-left-color: @text; }
-
-					a {
-						display: block;
-						height: 100%;
-
-						&:hover {
-							background-color: @hover;
-						}
-					} 
-
-					&.ui-state-disabled {
-						color: lighten(@text, 60%);
-					}
-				}
-
-				tr:last-child td { border-bottom-width: 0; }
-			}
-		}
-	}
-
-// COLOR PICKER 
-
-	.color-picker {
-		position: relative;
-		margin-right: 40px;
-		width: 50px;
-		height: 32px;
-
-		.color-options {	
-			margin: 0;
-			list-style-type: none;
-			position: absolute;
-			top: 0;
-			left: 0;
-			padding: 2px 30px 2px 2px !important;
-			border: 1px solid @line;
-			width: 100%;
-			cursor: pointer;
-			background-color: @back;
-			min-height: 32px;
-
-			li {
-				margin: 0;
-				padding: 0;
-				height: 32px;
-				display: none;
-				border: 1px solid @back;
-
-				&.red { background-color: red; }
-				&.maroon { background-color: maroon; }
-				&.lime { background-color: lime; }
-				&.green { background-color: green; }
-				&.olive { background-color: olive; }
-				&.teal { background-color: teal; }
-				&.blue { background-color: blue; }
-				&.navy { background-color: navy; }
-				&.fuchsia { background-color: fuchsia; }
-				&.purple { background-color: purple; }
-				&.lightsalmon { background-color: lightsalmon; }
-				&.orange { background-color: orange; }
-				&.darkkhaki { background-color: darkkhaki; }
-				&.saddlebrown { background-color: saddlebrown; }
-				&.gray { background-color: gray; }
-
-				&.active { display: block; }
-			}
-
-			&:after {
-				content: "\25BC";
-				position: absolute;
-				top: 0;
-				right: 6px;
-				line-height: 2.4em;
-				color: @line;
-			}
-
-			&:hover {
-				border-color: @text;
-				z-index: 999;
-
-				li { 
-					display: block; 
-					&:hover { border-color: @text; }
-				}
-				&:after { color: @text; }
-			} 
-		}
-	}
-
-
-// HEADER
-
 	header {
 		.clearfix;
-		padding-bottom: 7px;
-		margin-bottom: 15px;
-		border-bottom: 1px solid @line;
+		padding: .3em 0 .7em;
+
+		.brand {
+			float: left;
+			margin-right: 1.5em;
+		}
 
 		h1 {
 			margin: 0;
 			float: left;
-			line-height: 0;
-
-			img {
-				display: inline;
-			}
 		}
 
 		ul {
@@ -368,349 +190,156 @@ body {
 
 			li {
 				display: inline-block;
-				margin-left: 1em;
+				margin-left: .2em;
 
-				.active {
-					color: @text;
-					text-decoration: underline;
-				}
+				&.today, &.next, &.add { margin-right: 1em }
+
+				&.active a { color: @text; text-decoration: underline; }
 			}
 		}
 	}
-
-// MAIN
 
 	.main {
 		.clearfix;
 		margin-bottom: 100px;
 
-// CALENDAR
-
-		&.calendar {
-
-			.calendar-view {
-				float: left;
-				width: 70%;
-			}
-
-			.calendar-controls {
-				position: absolute;
-				top: 0;
-				right: 0;
-				margin: 72px 30% 0;
-				padding: 0;
-				list-style-type: none;
-				line-height: 32px;
-
-				li {
-					display: inline;
-					margin-left: .2em;
-					cursor: pointer;
-
-					&:first-child {	margin-right: 1em; }
-					&:last-child {	margin-left: 1em; }
-
-					.active {
-						font-weight: bold;
-						text-decoration: underline;
-					}
-				}
-			}
-			
-			.sidebar {
-				float: right;
-				width: 30%;
-				box-sizing: border-box;
-				padding: 0 0 0 35px;
-
-				header {
-					border: 0;
-					padding: 0;
-					margin: 2px 0 0;
-					.clearfix;
-
-					h2 {
-						float: left;
-					}
-
-					.sidebar-option {
-						float: right;
-						color: @link;
-						cursor: pointer;
-						line-height: 32px;
-						margin-top: 4px;
-
-						&:hover { text-decoration: underline; }
-					}
-				}
-
-				.balance {
-					width: 100%;
-					border-collapse: collapse;
-
-					tbody {
-
-						.balance-money {
-
-							td {
-								padding: .2em .1em;
-								vertical-align: top;
-
-								&.balance-money-category, &.balance-money-user {
-									width: 1%;
-								}
-							}
-
-							&:hover td, &.active td {
-								background-color: @today;
-								cursor: pointer;
-							}
-						}
-
-						.balance-money-title {
-							
-							span {
-							}
-
-						}
-
-						.balance-money-amount {
-							text-align: right;
-							white-space: nowrap;
-							overflow: hidden;
-							text-overflow: ellipsis;
-						}
-
-						tr:first-child td { padding-top: .3em; }
-						tr:last-child td { padding-bottom: .5em; }
-					}
-
-					tfoot {
-
-						tr {
-
-							td {
-								text-align: right;
-								font-weight: bold;
-								border-top: 1px solid @line;
-								font-size: 1.3em;
-								padding-top: .5em;
-
-								color: red;
-
-								&.positive { color: limegreen; }
-							}
-						}
-					}
-				}
-
-				.money-form {
-
-					label { 
-						display: inline-block;
-						line-height: 1.6em;
-
-						&:hover, &:focus, &:active {
-							color: @link;
-							text-decoration: underline;
-						} 
-					}
-
-					input[type="text"], input[type="number"], textarea, select {
-						width: 100%;
-					}
-
-					button {
-						float: right;
-						margin-left: .3em;
-					}
-
-					.money-delete {
-						display: inline-block;
-						color: @link;
-						cursor: pointer;
-						margin-top: .3em;
-
-						&:hover { text-decoration: underline }
-					}	
-
-					.money-source {
-						line-height: 1.6em;
-
-						span {
-							color: @link;
-							cursor: pointer;
-
-							&:hover { text-decoration: underline; }
-						}
-					}		
-				}
-
-				.filters {
-					margin: 0;
-					padding: 0;
-					list-style-type: none;
-					line-height: 1.4em;	
-					margin-bottom: 1em;
-					padding-bottom: .5em;
-					border-bottom: 1px solid @line;
-
-					label { 
-						display: block;
-						cursor: pointer; 
-						padding: .1em 0;
-
-						&:hover { background-color: @today }
-
-						.user-icon {
-							position: relative;
-							top: 3px;
-						}
-					}
-
-					a { cursor: pointer; }
-				}
-			}	
+		.calendar-view {
+			float: left;
+			width: 70%;		
 		}
 
-// STATISTICS
+		.sidebar {
+			float: right;
+			width: 30%;
+			box-sizing: border-box;
+			padding: 0 0 0 1em;
 
-		&.stats {
-
-			.options {
-				float: left;
-				width: 18%;
-				box-sizing: border-box;
-				padding-left: 30px;
-
-				.filters {
-					margin: 0 0 1em;
-					padding: 0 0 .6em;
-					list-style-type: none;
-					border-bottom: 1px solid @line;
-
-					label {
-						display: block;
-						cursor: pointer;
-						padding: .1em 0;
-
-						&:hover {
-							background-color: @today;
-						}
-					}
-
-					a { 
-						cursor: pointer; 
-						display: inline-block;
-						padding: .1em 0;
-					}
-
-					.daterange {
-						margin: 1em 0 0;
-						padding: .6em 0 0;
-						border-top: 1px solid @line;
-
-						input {
-							width: 100%;
-						}
-					}
-				}
-
-				select {
-					width: 100%;
-				}					
-			}
-
-			.statistics {
-				width: 82%;
-				float: left;
+			header {
+				border: 0;
+				border-top: 1px solid @line;
+				padding: 0;
+				margin: 2px 0 0;
+				.clearfix;
 
 				h2 {
 					float: left;
-					width: 50%;
-					border-bottom: 1px solid @line;
-					padding: 1px 0 10px;
 				}
 
-				h3 {
-					padding: 15px 0;
-				}
-
-				.navigation {
+				.sidebar-option {
 					float: right;
-					list-style-type: none;
-					margin: 0;
-					padding: 1px 0 9px;
-					width: 50%;
-					text-align: right;
+					color: @link;
+					cursor: pointer;
 					line-height: 32px;
-					border-bottom: 1px solid @line;
-					box-sizing: border-box;
+					margin-top: 4px;
 
-					li {
-						display: inline-block;
-						margin: 0 0 0 .2em;
-
-						&:first-child {
-							margin-right: 1em;
-						}
-					}
-				}
-				
-				.statistic {
-					float: left;
-					margin-bottom: 2em;
+					&:hover { text-decoration: underline; }
 				}
 
+				.calc-date {
+					float: right;
+					line-height: 32px;
+					margin-top: 4px;
+				}
 			}
 
-		}
+			.money-form {
 
-// SETTINGS
-	
-		&.settings {
+				label { 
+					display: inline-block;
+					line-height: 1.6em;
 
-			.categories {
-				float: left;
-				
-				ul {
-					margin: 0 0 1em;
-					padding: 0;
-					list-style-type: none;
+					&:hover, &:focus, &:active {
+						color: @link;
+						text-decoration: underline;
+					} 
+				}
 
-					li {
-						margin: 0;
-						padding: 0;
-						.clearfix;						
+				input[type="text"], input[type="number"], textarea, select {
+					width: 100%;
+				}
 
-						.color-picker {
-							float: left;
+				button {
+					float: right;
+					margin-left: .3em;
+				}
 
-							ul { margin: 0; }	
-						}
+				.money-delete {
+					display: inline-block;
+					color: @link;
+					cursor: pointer;
+					margin-top: .3em;
 
-						input {
-							float: left;
-						}
-						
-						a {
-							float: left;
-							line-height: 38px;
-							margin-left: 5px;
-							visibility: hidden;
-						}
+					&:hover { text-decoration: underline }
+				}	
 
-						&:hover a { visibility: visible; }
+				.money-source {
+					line-height: 1.6em;
 
-						.move-category {
-							float: left;
-							clear: left;
+					span {
+						color: @link;
+						cursor: pointer;
+
+						&:hover { text-decoration: underline; }
+					}
+				}		
+			}
+
+			table {
+				margin-bottom: .6em;
+				width: 100%;
+				border-collapse: collapse;
+
+				td {
+					padding: .2em .1em;
+					border-bottom: 1px solid @line;
+					cursor: pointer;
+
+					&.icon, &.check { width: 1% }
+					&.name { 
+						padding-left: .2em;
+
+						.edit {
 							display: none;
-
-							&.active { display: block; }
+							float: right;
+							color: lighten(@text, 60%);
+							margin-right: .5em;
 						}
 					}
-				}	
+
+					&.amount {
+						text-align: right;
+						width: 1%;
+					}
+				}
+
+				tr:hover td {
+					background-color: @hover;
+					
+					&.user, &.name {
+						color: @link;
+						text-decoration: underline;
+
+						.edit { display: inline; }
+					}						
+				}
+
+				tr:last-child td { border-bottom-width: 0 }
+
+				&.users {
+					td {
+						text-transform: capitalize;
+					}
+				}
+
+				&.categories {
+					.color {
+						display: inline-block;
+						width: 1em;
+						height: 1em;
+						position: relative;
+						bottom: -2px;
+					}
+				}
 			}
 		}
 	}
