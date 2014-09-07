@@ -13,14 +13,14 @@
 			<input type="checkbox" ng-checked="filterUsers.length == 0">
 		</td>
 		<td class="user">Totaal</td>
-		<td class="amount">999</td>
+		<td class="amount">{{usersTotal}}</td>
 	</tr>
 	<tr ng-repeat="user in userList" ng-click="userToggle(user._id)">
 		<td class="check">
 			<input type="checkbox" ng-checked="filterUsers.indexOf(user._id) > -1">
 		</td>
 		<td class="user">{{user.username}}</td>
-		<td class="amount">999</td>
+		<td class="amount">{{user.total}}</td>
 	</tr>
 </table>
 
@@ -34,8 +34,14 @@
 		</td>
 		<td class="name">
 			{{category.name}}
-			<a href="" ng-click="" class="edit">Bewerk</a>
+			<a href="" class="edit">Bewerk</a>
 		</td>
-		<td class="amount">999</td>
+		<td class="amount">{{category.total}}</td>
+	</tr>
+	<tr>
+		<td colspan="99">
+			<a href="" ng-click="newCategory()">Nieuwe categorie</a>
+			<a href="" ng-show="filterCategories.length > 0" ng-click="removeCategoryFilters()" style="float: right">Wis filters</a>
+		</td>
 	</tr>
 </table>

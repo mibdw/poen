@@ -65,6 +65,8 @@ app.controller('poenGlobal', ['$scope', '$http',
 				$scope.sidebar = $scope.sidebars[0]; 
 				$scope.newMoney = {};
 				$('.calendar-view').fullCalendar('refetchEvents');
+				$scope.getUsers();
+				$scope.getCategories();
 			});
 		}
 
@@ -92,7 +94,9 @@ app.controller('poenGlobal', ['$scope', '$http',
 			$http.post('/money/edit', $scope.editMoney).success( function (data) {
 				$scope.sidebar = $scope.sidebars[0]; 
 				$scope.editMoney = {};
-				$('.calendar-view').fullCalendar('refetchEvents');		
+				$('.calendar-view').fullCalendar('refetchEvents');
+				$scope.getUsers();
+				$scope.getCategories();		
 			});
 		}
 
@@ -101,6 +105,8 @@ app.controller('poenGlobal', ['$scope', '$http',
 				$http.post('/money/remove', $scope.editMoney).success( function (data) {
 					$scope.sidebar = $scope.sidebars[0]; 
 					$('.calendar-view').fullCalendar('refetchEvents');
+					$scope.getUsers();
+					$scope.getCategories();
 				});
 			} 
 		}
@@ -201,8 +207,28 @@ app.controller('poenGlobal', ['$scope', '$http',
 
 		$scope.filterUsers = [];
 		$scope.getUsers = function () {
-			$http.post('/users/list', { filter: $scope.filterUsers }).success( function (userData) {
+			$http.post('/users/list').success( function (userData) {
 				$scope.userList = userData;
+				$scope.usersTotal = 0;
+				var count = 0;
+
+				angular.forEach($scope.userList, function (user) {
+					$http.post('/users/expense', {id: user._id}).then(function (expense){
+						user.expense = expense.data[0].total;
+
+						$http.post('/users/income', {id: user._id}).then(function (income){
+							user.income = income.data[0].total;
+							user.total = user.income - user.expense;
+							$scope.usersTotal = $scope.usersTotal + user.total;
+							user.total = accounting.formatMoney(user.total, '', '2', '', ',');
+
+							count = count + 1;
+							if (count == $scope.userList.length) {
+								$scope.usersTotal = accounting.formatMoney($scope.usersTotal, '', '2', '', ',');
+							}				
+						});
+					});
+				});
 			});
 		}
 		$scope.getUsers();
@@ -215,14 +241,39 @@ app.controller('poenGlobal', ['$scope', '$http',
 				$scope.filterUsers.splice(index, 1);
 			} else if ($scope.filterUsers.indexOf(arg) == -1) {
 				$scope.filterUsers.push(arg);
+				if ($scope.filterUsers.length == $scope.userList.length) {
+					$scope.filterUsers.length = 0;
+				}
 			}
 			$('.calendar-view').fullCalendar('refetchEvents');
+			$scope.getCategories();
 		}
 
 		$scope.filterCategories = [];
 		$scope.getCategories = function () {
 			$http.post('/category/list', { filter: $scope.filterCategories }).success( function (categoryData) {
 				$scope.categoryList = categoryData;
+
+				angular.forEach($scope.categoryList, function (category) {
+					$http.post('/category/expense', {id: category._id, users: $scope.filterUsers}).then(function (expense){
+						if (expense.data.length > 0) {
+							category.expense = expense.data[0].total;
+						} else {
+							category.expense = 0;
+						}
+
+						$http.post('/category/income', {id: category._id, users: $scope.filterUsers}).then(function (income){
+							if (income.data.length > 0) {
+								category.income = income.data[0].total;
+							} else {
+								category.income = 0;
+							}
+
+							category.total = category.income - category.expense;
+							category.total = accounting.formatMoney(category.total, '', '2', '', ',');				
+						});
+					});
+				});
 			});
 		}
 		$scope.getCategories();
@@ -234,6 +285,11 @@ app.controller('poenGlobal', ['$scope', '$http',
 			} else if ($scope.filterCategories.indexOf(arg) == -1) {
 				$scope.filterCategories.push(arg);
 			}
+			$('.calendar-view').fullCalendar('refetchEvents');
+		}
+
+		$scope.removeCategoryFilters = function () {
+			$scope.filterCategories.length = 0;
 			$('.calendar-view').fullCalendar('refetchEvents');
 		}
 

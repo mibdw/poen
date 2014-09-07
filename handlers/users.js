@@ -8,8 +8,26 @@ exports.list = function(req, res, next) {
 	.select('_id username email')
 	.exec(function (err, userList) {
 		if (err) console.log(err);
-
-		
 		return res.send(userList);
+	});
+};
+
+exports.expense = function(req, res, next) {
+	Money.aggregate(
+		{ $match: { visible: true, balance: 'expense', user: req.body.id }}, 
+		{ $group: { _id: '$user', total: { $sum: '$amount' }}}, 
+		function (err, expense) {
+		if (err) console.log(err);
+		return res.send(expense);
+	});
+};
+
+exports.income = function(req, res, next) {
+	Money.aggregate(
+		{ $match: { visible: true, balance: 'income', user: req.body.id }}, 
+		{ $group: { _id: '$user', total: { $sum: '$amount' }}}, 
+		function (err, income) {
+		if (err) console.log(err);
+		return res.send(income);
 	});
 };

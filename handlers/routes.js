@@ -50,9 +50,13 @@ module.exports = function (app, res, req) {
 	app.post('/category/create', ensureAuthenticated, category.create);
 	app.post('/category/edit', ensureAuthenticated, category.edit);
 	app.post('/category/remove', ensureAuthenticated, category.remove);
+	app.post('/category/expense', ensureAuthenticated, category.expense);
+	app.post('/category/income', ensureAuthenticated, category.income);
 
 	var users = require(__dirname + '/users');
 	app.post('/users/list', ensureAuthenticated, users.list);
+	app.post('/users/expense', ensureAuthenticated, users.expense);
+	app.post('/users/income', ensureAuthenticated, users.income);
 }
 
 function ensureAuthenticated(req, res, next) {

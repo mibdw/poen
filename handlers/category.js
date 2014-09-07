@@ -42,3 +42,43 @@ exports.remove = function(req, res, next) {
 		res.send('success');
 	});
 };
+
+exports.expense = function(req, res, next) {
+	if (req.body.users && req.body.users.length > 0) {
+		Money.aggregate(
+			{ $match: { visible: true, balance: 'expense', category: req.body.id, user: { $in: req.body.users }}}, 
+			{ $group: { _id: '$user', total: { $sum: '$amount' }}}, 
+			function (err, expense) {
+			if (err) console.log(err);
+			return res.send(expense);
+		});
+	} else {
+		Money.aggregate(
+			{ $match: { visible: true, balance: 'expense', category: req.body.id }}, 
+			{ $group: { _id: '$category', total: { $sum: '$amount' }}}, 
+			function (err, expense) {
+			if (err) console.log(err);
+			return res.send(expense);
+		});
+	}
+};
+
+exports.income = function(req, res, next) {
+	if (req.body.users && req.body.users.length > 0) {
+		Money.aggregate(
+			{ $match: { visible: true, balance: 'income', category: req.body.id, user: { $in: req.body.users }}}, 
+			{ $group: { _id: '$user', total: { $sum: '$amount' }}}, 
+			function (err, income) {
+			if (err) console.log(err);
+			return res.send(income);
+		});
+	} else {
+		Money.aggregate(
+			{ $match: { visible: true, balance: 'income', category: req.body.id }}, 
+			{ $group: { _id: '$category', total: { $sum: '$amount' }}}, 
+			function (err, income) {
+			if (err) console.log(err);
+			return res.send(income);
+		});
+	}
+};
