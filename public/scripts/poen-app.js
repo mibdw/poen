@@ -170,9 +170,12 @@ app.controller('poenGlobal', ['$scope', '$http',
 					$('.fc-day, .fc-event').removeClass('active');
 					$(this).addClass('active');			
 				},
-				eventMouseover: function(calEvent, jsEvent, view) { 
-					var hoverColor = morphColor(calEvent.category.color, -30);
-					$('.' + calEvent._id).css('background-color', hoverColor);
+				eventMouseover: function(calEvent, jsEvent, view) {
+					var scope = angular.element('html').scope(); 
+					scope.$apply (function () {	
+						var hoverColor = scope.morphColor(calEvent.category.color, -30);
+						$('.' + calEvent._id).css('background-color', hoverColor);
+					});
 				},
 				eventMouseout: function(calEvent, jsEvent, view) { 
 					$('.' + calEvent._id).css('background-color', calEvent.category.color);					
@@ -392,7 +395,7 @@ app.controller('poenGlobal', ['$scope', '$http',
 			});
 		}
 
-		function morphColor (col, amt) {
+		$scope.morphColor = function (col, amt) {
 			var usePound = false;
 			if (col[0] == "#") {
 				col = col.slice(1);
