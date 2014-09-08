@@ -2,7 +2,7 @@
 	"name": "Poen",
 	"description": "Geld moet rollen",
 	"author": "Ben van den Ende <ben@meedoenisbelangrijkerdanwinnen.nl>",
-	"version": "0.0.1",
+	"version": "0.2.0",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/mibdw/poen.git"

@@ -7,6 +7,8 @@
 @today: yellow;
 @hover: lightcyan;
 @active: cyan;
+@negative: red;
+@positive: limegreen;
 
 .clearfix() {
 	&:before, &:after {
@@ -239,6 +241,8 @@ body {
 					float: right;
 					line-height: 32px;
 					margin-top: 4px;
+					font-weight: bold;
+					color: lighten(@text, 70%)
 				}
 			}
 
@@ -300,16 +304,71 @@ body {
 
 						.edit {
 							display: none;
-							float: right;
 							color: lighten(@text, 60%);
-							margin-right: .5em;
+							margin-left: .2em;
 						}
 					}
 
 					&.amount {
 						text-align: right;
 						width: 1%;
+						font-weight: bold;
+						color: @line;
+						white-space: nowrap;
+
+						&.positive { color: @positive; }
+						&.negative { color: @negative; }
 					}
+
+					&.update, &.create { 
+						display: none;
+						padding: .5em;
+
+						.close, .delete { 
+							float: right;
+							font-size: .8em;
+							color: lighten(@text, 60%);
+
+							&:hover {
+								text-decoration: none;
+								color: @text;
+							}
+						}
+
+						input[type='color'] {
+							margin: 0;
+							padding: 0;
+							height: 39px;
+							width: 39px;
+							margin-right: 2px;
+							float: left;
+						} 
+
+						input[type='text'] {
+							float: left;
+							margin: 0 2px 0 0;
+							width: 50%;
+						}
+
+						button { 
+							float: left; 
+							margin-top: 3px;
+						}
+
+						.move {
+							display: none;
+							float: left;
+							width: 100%;
+
+							select {								width: 50%;
+								margin: 0 2px 0 42px;
+								padding: .4em .2em;	
+								float: left;
+							}
+						}
+					}
+
+					&.create { display: table-cell; }
 				}
 
 				tr:hover td {
@@ -319,7 +378,12 @@ body {
 						color: @link;
 						text-decoration: underline;
 
-						.edit { display: inline; }
+						.edit { 
+							display: inline-block;
+							text-decoration: none;
+
+							&:hover { color: @text; } 
+						}
 					}						
 				}
 

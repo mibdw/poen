@@ -34,6 +34,10 @@ app.controller('poenGlobal', ['$scope', '$http',
 			}
 			$('.calendar-view').fullCalendar('gotoDate', $scope.displayDate);
 			$scope.displayMonth = moment($scope.displayDate).format('MMMM YYYY');
+			
+			$scope.calcDate()
+			$scope.getUsers();
+			$scope.getCategories();
 		}
 
 		$scope.sidebars = [
@@ -67,6 +71,7 @@ app.controller('poenGlobal', ['$scope', '$http',
 				$('.calendar-view').fullCalendar('refetchEvents');
 				$scope.getUsers();
 				$scope.getCategories();
+				$('.fc-day, .fc-event').removeClass('active');
 			});
 		}
 
@@ -96,7 +101,8 @@ app.controller('poenGlobal', ['$scope', '$http',
 				$scope.editMoney = {};
 				$('.calendar-view').fullCalendar('refetchEvents');
 				$scope.getUsers();
-				$scope.getCategories();		
+				$scope.getCategories();	
+				$('.fc-day, .fc-event').removeClass('active');	
 			});
 		}
 
@@ -107,6 +113,7 @@ app.controller('poenGlobal', ['$scope', '$http',
 					$('.calendar-view').fullCalendar('refetchEvents');
 					$scope.getUsers();
 					$scope.getCategories();
+					$('.fc-day, .fc-event').removeClass('active');
 				});
 			} 
 		}
@@ -199,11 +206,21 @@ app.controller('poenGlobal', ['$scope', '$http',
 			$('.' + $(this).attr('id')).removeClass("hover"); 
 		});
 
-		$scope.calcStartDate = 25;
-		$scope.calcStartChange = function (arg) {
-			if (arg == 'plus') { $scope.calcStartDate = $scope.calcStartDate + 1 }
-			if (arg == 'minus') { $scope.calcStartDate = $scope.calcStartDate - 1 }
+		$scope.calcNum = 24;
+		$scope.calcChange = function (arg) {
+			if (arg == 'plus') { $scope.calcNum = $scope.calcNum + 1 }
+			if (arg == 'minus') { $scope.calcNum = $scope.calcNum - 1 }
+			$scope.calcDate();
+			$scope.getUsers();
+			$scope.getCategories();
 		}
+
+		$scope.calcDate = function () {
+			$scope.calcStart = moment($scope.displayDate).subtract('1', 'month').date($scope.calcNum);
+			$scope.calcEnd = moment($scope.calcStart).add('1', 'month');
+			$scope.dateRange = moment($scope.calcStart).add('1', 'day').format('DD/MM') + "\u2013" + moment($scope.calcEnd).format('DD/MM');
+		}
+		$scope.calcDate();		
 
 		$scope.filterUsers = [];
 		$scope.getUsers = function () {
@@ -213,18 +230,37 @@ app.controller('poenGlobal', ['$scope', '$http',
 				var count = 0;
 
 				angular.forEach($scope.userList, function (user) {
-					$http.post('/users/expense', {id: user._id}).then(function (expense){
-						user.expense = expense.data[0].total;
+					$http.post('/users/expense', {
+							id: user._id,
+							start: $scope.calcStart,
+							end: $scope.calcEnd 
+						}).then(function (expense){
+						if (expense.data.length > 0) {
+							user.expense = expense.data[0].total;
+						} else {
+							user.expense = 0;
+						}
 
-						$http.post('/users/income', {id: user._id}).then(function (income){
-							user.income = income.data[0].total;
+						$http.post('/users/income', {
+								id: user._id,
+								start: $scope.calcStart,
+								end: $scope.calcEnd 
+							}).then(function (income){
+							if (income.data.length > 0) {
+								user.income = income.data[0].total;
+							} else {
+								user.income = 0;
+							}
 							user.total = user.income - user.expense;
 							$scope.usersTotal = $scope.usersTotal + user.total;
-							user.total = accounting.formatMoney(user.total, '', '2', '', ',');
+							user.totalDisplay = accounting.formatMoney(user.total, '', '2', '', ',');
+							if (user.total < 0) {
+								user.totalDisplay = "\u2013 " + user.totalDisplay.substr(1);
+							}
 
 							count = count + 1;
 							if (count == $scope.userList.length) {
-								$scope.usersTotal = accounting.formatMoney($scope.usersTotal, '', '2', '', ',');
+								$scope.usersTotalDisplay = accounting.formatMoney($scope.usersTotal, '', '2', '', ',');
 							}				
 						});
 					});
@@ -255,14 +291,24 @@ app.controller('poenGlobal', ['$scope', '$http',
 				$scope.categoryList = categoryData;
 
 				angular.forEach($scope.categoryList, function (category) {
-					$http.post('/category/expense', {id: category._id, users: $scope.filterUsers}).then(function (expense){
+					$http.post('/category/expense', {
+						id: category._id, 
+						users: $scope.filterUsers,
+						start: $scope.calcStart,
+						end: $scope.calcEnd
+					}).then(function (expense){
 						if (expense.data.length > 0) {
 							category.expense = expense.data[0].total;
 						} else {
 							category.expense = 0;
 						}
 
-						$http.post('/category/income', {id: category._id, users: $scope.filterUsers}).then(function (income){
+						$http.post('/category/income', {
+							id: category._id, 
+							users: $scope.filterUsers,
+							start: $scope.calcStart,
+							end: $scope.calcEnd
+						}).then(function (income){
 							if (income.data.length > 0) {
 								category.income = income.data[0].total;
 							} else {
@@ -270,7 +316,10 @@ app.controller('poenGlobal', ['$scope', '$http',
 							}
 
 							category.total = category.income - category.expense;
-							category.total = accounting.formatMoney(category.total, '', '2', '', ',');				
+							category.totalDisplay = accounting.formatMoney(category.total, '', '2', '', ',');	
+							if (category.total < 0) {
+								category.totalDisplay = "\u2013 " + category.totalDisplay.substr(1);
+							}			
 						});
 					});
 				});
@@ -293,58 +342,53 @@ app.controller('poenGlobal', ['$scope', '$http',
 			$('.calendar-view').fullCalendar('refetchEvents');
 		}
 
-		$scope.saveCategory = function () {		
-			if (!$scope.newCategory.name) {;
-				alert('Naam invullen alstublieft');
-			} else if (!$scope.newCategory.color) {
-				alert('Kleur invullen alstublieft');
-			} else {
-				$http.post('/category/create', $scope.newCategory).success( function (data) {
-					if (data == 'error') {
-						alert('Sorry, die kleur is al bezet');
-					} else {
-						$http.get('/category/list').success( function (categoryData) {
-							$scope.categoryList = categoryData;
-						});	
-					}
-				});
-			}
-		};
+		$scope.moveInclude = "/sidebar/move";
+		$scope.editCategory = function (index) {
+			$('tr#' + index + ' .normal').hide();
+			$('tr#' + index + ' .update').show();
+			$scope.categoryToggle($scope.categoryList[index]._id);
+		}
 
-		$scope.deleteCategory = function (index) {
-			$('.' + $scope.categoryList[index].slug + ' .move-category').toggleClass('active');
-		};
+		$scope.cancelEditCategory = function (index) {
+			$('tr#' + index + ' .normal').show();
+			$('tr#' + index + ' .update').hide();
+		}
 
-		$scope.moveCategory = function (index) {
-			$http.post('/category/remove', $scope.categoryList[index]).success( function (data) {
-				if (data == 'error') {
-					alert('Oh God, dit gaat helemaal mis');
-				} else {
-					$http.get('/category/list').success( function (categoryData) {
-						$scope.categoryList = categoryData;
-					});	
-				} 
+		$scope.newCategory = {};
+		$scope.saveCategory = function () {					
+			$http.post('/category/create', $scope.newCategory).success( function (data) {
+				$scope.getCategories();
+				$scope.createCategory = false;
 			});
 		};
 
-		$scope.updateCategory = function (index) {
-			if (!$scope.categoryList[index].name) {
-				alert('Naam invullen alstublieft');
-			} else if (!$scope.categoryList[index].color) {
-				alert('Kleur invullen alstublieft');
+		$scope.deleteCategory = function (index) {
+			$('tr#' + index + ' .update .move').toggle();
+			$('tr#' + index + ' .update .save').toggle();
+		};
+
+		$scope.moveCategory = function (index) {
+			if (!$scope.categoryList[index].move) {
+				alert('Een vervangende categorie invullen astublieft!');
 			} else {
-				$http.post('/category/edit', $scope.categoryList[index]).success( function (data) {
-					if (data == 'error') {
-						alert('Dit gaat helemaal de verkeerde kant op!');
-					} else if (data == 'success') {
-						// DO NOTHING	
-					} else {
-						alert("Dat kan niet!");
-						$scope.categoryList[index].name = data.name;
-						$scope.categoryList[index].color = data.color;
-					}
+				$http.post('/category/remove', { '_id': $scope.categoryList[index]._id, 'move': $scope.categoryList[index].move }).success( function (data) {
+					$('.calendar-view').fullCalendar('refetchEvents');
+					$scope.getUsers();					
+					$scope.getCategories();
 				});
 			}
+		};
+
+		$scope.updateCategory = function (index) {
+			var updateCat = {
+				'_id': $scope.categoryList[index]._id,
+				'name': $scope.categoryList[index].name,
+				'color': $scope.categoryList[index].color
+			}
+			$http.post('/category/edit', updateCat).success( function (data) {
+				$('.calendar-view').fullCalendar('refetchEvents');
+				$scope.getCategories();
+			});
 		}
 
 		function morphColor (col, amt) {

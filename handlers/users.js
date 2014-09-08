@@ -14,7 +14,12 @@ exports.list = function(req, res, next) {
 
 exports.expense = function(req, res, next) {
 	Money.aggregate(
-		{ $match: { visible: true, balance: 'expense', user: req.body.id }}, 
+		{ $match: {
+			date: { $gt: new Date(req.body.start), $lt: new Date(req.body.end) }, 
+			visible: true, 
+			balance: 'expense', 
+			user: req.body.id 
+		}}, 
 		{ $group: { _id: '$user', total: { $sum: '$amount' }}}, 
 		function (err, expense) {
 		if (err) console.log(err);
@@ -24,7 +29,12 @@ exports.expense = function(req, res, next) {
 
 exports.income = function(req, res, next) {
 	Money.aggregate(
-		{ $match: { visible: true, balance: 'income', user: req.body.id }}, 
+		{ $match: {
+			date: { $gt: new Date(req.body.start), $lt: new Date(req.body.end) }, 
+			visible: true, 
+			balance: 'income', 
+			user: req.body.id 
+		}}, 
 		{ $group: { _id: '$user', total: { $sum: '$amount' }}}, 
 		function (err, income) {
 		if (err) console.log(err);

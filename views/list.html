@@ -1,9 +1,9 @@
 <header>
 	<h2>{{sidebar.title}}</h2>
 	<span class="calc-date">
-		Vanaf: {{calcStartDate}}ste
-		<a href="" ng-show="calcStartDate < 28" ng-click="calcStartChange('plus')">&plus;</a>
-		<a href="" ng-show="calcStartDate > 1" ng-click="calcStartChange('minus')">&minus;</a>
+		{{dateRange}}
+		<a href="" ng-show="calcNum < 28" ng-click="calcChange('plus')">&plus;</a>
+		<a href="" ng-show="calcNum > 1" ng-click="calcChange('minus')">&minus;</a>
 	</span>
 </header>
 
@@ -13,34 +13,45 @@
 			<input type="checkbox" ng-checked="filterUsers.length == 0">
 		</td>
 		<td class="user">Totaal</td>
-		<td class="amount">{{usersTotal}}</td>
+		<td class="amount" ng-class="{negative: usersTotal < 0, positive: usersTotal > 0}">{{usersTotalDisplay}}</td>
 	</tr>
 	<tr ng-repeat="user in userList" ng-click="userToggle(user._id)">
 		<td class="check">
 			<input type="checkbox" ng-checked="filterUsers.indexOf(user._id) > -1">
 		</td>
 		<td class="user">{{user.username}}</td>
-		<td class="amount">{{user.total}}</td>
+		<td class="amount" ng-class="{negative: user.total < 0, positive: user.total > 0}">{{user.totalDisplay}}</td>
 	</tr>
 </table>
 
 <table class="categories">
-	<tr ng-repeat="category in categoryList" ng-click="categoryToggle(category._id)">
-		<td class="check">
+	<tr ng-repeat="category in categoryList" id="{{$index}}">
+		<td ng-click="categoryToggle(category._id)" class="normal check">
 			<input type="checkbox" ng-checked="filterCategories.indexOf(category._id) > -1">
 		</td>
-		<td class="icon">
+		<td ng-click="categoryToggle(category._id)" class="normal icon">
 			<span class="color" style="background-color: {{category.color}}"></span>
 		</td>
-		<td class="name">
+		<td ng-click="categoryToggle(category._id)" class="normal name">
 			{{category.name}}
-			<a href="" class="edit">Bewerk</a>
+			<small class="edit" ng-click="editCategory($index)">Bewerk</small>
 		</td>
-		<td class="amount">{{category.total}}</td>
+		<td ng-click="categoryToggle(category._id)" class="normal amount" ng-class="{negative: category.total < 0, positive: category.total > 0}">{{category.totalDisplay}}</td>
+		
+		<td class="update" colspan="99" ng-include="moveInclude"></td>
+	</tr>
+	<tr ng-show="createCategory">
+		<td class="create" colspan="99">
+			<input type="color" ng-model="newCategory.color">
+			<input type="text" ng-model="newCategory.name">
+			<button class="save" ng-click="saveCategory(); createCategory = !createCategory">Bewaar</button>
+
+			<a href="" class="close" ng-click="createCategory = !createCategory">Annuleer</a>
+		</td>
 	</tr>
 	<tr>
 		<td colspan="99">
-			<a href="" ng-click="newCategory()">Nieuwe categorie</a>
+			<a href="" ng-hide="createCategory" ng-click="createCategory = !createCategory">Nieuwe categorie</a>
 			<a href="" ng-show="filterCategories.length > 0" ng-click="removeCategoryFilters()" style="float: right">Wis filters</a>
 		</td>
 	</tr>
