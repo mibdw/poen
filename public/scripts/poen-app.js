@@ -34,7 +34,8 @@ app.controller('poenGlobal', ['$scope', '$http',
 			}
 			$('.calendar-view').fullCalendar('gotoDate', $scope.displayDate);
 			$scope.displayMonth = moment($scope.displayDate).format('MMMM YYYY');
-			
+			$scope.moniker = $scope.heading + " - " + $scope.displayMonth;
+
 			$scope.calcDate()
 			$scope.getUsers();
 			$scope.getCategories();
@@ -170,15 +171,15 @@ app.controller('poenGlobal', ['$scope', '$http',
 					$(this).addClass('active');			
 				},
 				eventMouseover: function(calEvent, jsEvent, view) { 
-					var hoverColor = morphColor(calEvent.category.color, -20);
-					$('.' + calEvent._id).css('background-color', 'black');
+					var hoverColor = morphColor(calEvent.category.color, -30);
+					$('.' + calEvent._id).css('background-color', hoverColor);
 				},
 				eventMouseout: function(calEvent, jsEvent, view) { 
 					$('.' + calEvent._id).css('background-color', calEvent.category.color);					
 				},
 				eventRender: function(event, element) {
 					element.css('background-color', event.category.color);
-					element.attr('title', event.title + ' [' + event.category.name + ']')
+					element.attr('title', event.title + ' [' + event.category.name + '] =' + event.amount)
 					element.addClass(event._id);
 					element.append('<span class="user" style=>' + event.user.username.substr(0, 1) + '</span>');	
 				}
