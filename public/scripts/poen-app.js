@@ -52,9 +52,11 @@ app.controller('poenGlobal', ['$scope', '$http',
 		$scope.sidebarClose = function () { 
 			$scope.sidebar = $scope.sidebars[0]; 
 			$('.fc-day, .fc-event').removeClass('active');
+			$scope.mobileView = 'calendar';
 		}
 
 		$scope.sidebarNew = function (date) { 
+			$scope.mobileView = 'sidebar';
 			$scope.sidebar = $scope.sidebars[1]; 
 			if (date) {
 				$scope.newMoney.date = date.format("YYYY-MM-DD");
@@ -73,6 +75,7 @@ app.controller('poenGlobal', ['$scope', '$http',
 				$scope.getUsers();
 				$scope.getCategories();
 				$('.fc-day, .fc-event').removeClass('active');
+				$scope.mobileView = 'calendar';
 			});
 		}
 
@@ -86,6 +89,8 @@ app.controller('poenGlobal', ['$scope', '$http',
 					$scope.editMoney.amount = accounting.formatMoney($scope.editMoney.amount, '', '2', '', ',');
 					$scope.editMoney.date = moment($scope.editMoney.date).format("YYYY-MM-DD");
 					$scope.editMoney.displayDate = moment($scope.editMoney.date).format("D MMMM YYYY");
+
+					$scope.mobileView = 'sidebar';
 				} else {
 					alert('Sorry, dit bestaat niet meer');
 				}				
@@ -103,7 +108,8 @@ app.controller('poenGlobal', ['$scope', '$http',
 				$('.calendar-view').fullCalendar('refetchEvents');
 				$scope.getUsers();
 				$scope.getCategories();	
-				$('.fc-day, .fc-event').removeClass('active');	
+				$('.fc-day, .fc-event').removeClass('active');
+				$scope.mobileView = 'calendar';
 			});
 		}
 
@@ -115,6 +121,8 @@ app.controller('poenGlobal', ['$scope', '$http',
 					$scope.getUsers();
 					$scope.getCategories();
 					$('.fc-day, .fc-event').removeClass('active');
+
+					$scope.mobileView = 'calendar';
 				});
 			} 
 		}
@@ -390,5 +398,7 @@ app.controller('poenGlobal', ['$scope', '$http',
 				$scope.getCategories();
 			});
 		}
+
+		$scope.mobileView = 'calendar';
 	}
 ]);

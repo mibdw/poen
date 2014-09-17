@@ -2,6 +2,8 @@
 <html lang="en" ng-app="poenApp" ng-controller="poenGlobal">
 	<head>
 		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width">
+
 		<title ng-bind-template="{{moniker}}">Poen - Geld moet rollen</title>
 
 		<link rel="stylesheet" href="/styles/main.css" />
@@ -10,7 +12,7 @@
 	<body>
 		<header>
 			<span class="brand" title="{{moniker}}"><img src="/images/dagobert.png" alt="{{heading}}"></span>
-			<h1>{{displayMonth}}</h1>
+			<h1 ng-bind-template="{{displayMonth}}">Poen</h1>
 			
 			<ul>
 				<li ng-show="displayMonth != actualMonth" class="today">
@@ -25,13 +27,17 @@
 				<li class="add" ng-class="{active: sidebar == sidebars[1]}">
 					<a href="" ng-click="sidebarNew()">Toevoegen</a>
 				</li>
+				<li class="mobile-view">
+					<a href="" ng-click="mobileView = 'calendar'" ng-show="mobileView == 'sidebar'">Calendar</a>
+					<a href="" ng-click="mobileView = 'sidebar'" ng-show="mobileView == 'calendar'">Overview</a>
+				</li>
 				<li><a href="/logout">Logout</a></li>
 			</ul>
 		</header>
 
 		<div class="main">
-			<div class="calendar-view"></div>
-			<div class="sidebar" ng-include="sidebar.url"></div>
+			<div class="calendar-view" ng-class="{active: mobileView == 'calendar'}"></div>
+			<div class="sidebar" ng-class="{active: mobileView == 'sidebar'}" ng-include="sidebar.url"></div>
 		</div>
 	</body>
 	<script src="/scripts/jquery-1.11.1.min.js"></script>

@@ -197,6 +197,11 @@ body {
 				&.today, &.next, &.add { margin-right: 1em }
 
 				&.active a { color: @text; text-decoration: underline; }
+
+				&.mobile-view {
+					display: none;
+					margin-right: 1em;
+				}
 			}
 		}
 	}
@@ -432,6 +437,49 @@ body {
 
 		button {
 			float: right;
+		}
+	}
+}
+
+@media (max-width: 980px) {
+
+	body {
+
+		header {
+
+			ul li.mobile-view { display: inline-block; }
+		}
+
+		.main {
+
+			.calendar-view {
+				display: none;
+				width: 100%;
+
+				&.active { display: block; }
+			}
+
+			.sidebar {
+				display: none;
+				width: 100%;
+				padding: 0;
+
+				&.active { display: block; }
+			}
+		}
+	}
+
+	&.login {
+
+		form {
+			width: auto;
+			height: auto;
+			position: static;
+			top: auto;
+			left: auto;
+			margin: auto;
+			text-align: center;
+			padding: 1em;
 		}
 	}
 }

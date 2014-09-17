@@ -1,27 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Poen - Geld moet rollen</title>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width">
 
-	<link rel="stylesheet" href="/styles/main.css" />
-	<link rel="icon" type="image/gif" href="/images/dagobert.gif" />
+		<title>Poen - Geld moet rollen</title>
 
-</head>
-<body class="login">
-	
-	<% if (message) { %>
-		<p class="alert">
-			<%= message %>
-		</p>
-	<% } %>
+		<link rel="stylesheet" href="/styles/main.css" />
+		<link rel="icon" type="image/gif" href="/images/dagobert.gif" />
 
-	<form action="/login" method="post">
-		<a href="/" class="brand"><img src="/images/dagobert.png" alt="Poen"></a>
-		<input type="text" name="username" placeholder="Username" autofocus><br />
-		<input type="password" name="password" placeholder="Password"><br />
-		<button type="submit">Aanmelden</button>
-	</form>
+	</head>
+	<body class="login">
+		
+		<% if (message) { %>
+			<p class="alert">
+				<%= message %>
+			</p>
+		<% } %>
 
-</body>
+		<form action="/login" method="post">
+			<a href="/" class="brand"><img src="/images/dagobert.png" alt="Poen"></a>
+			<input type="text" name="username" placeholder="Username" autofocus><br />
+			<input type="password" name="password" placeholder="Password"><br />
+			<button type="submit">Aanmelden</button>
+		</form>
+	</body>
 </html>
