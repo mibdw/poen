@@ -444,10 +444,37 @@ body {
 @media (max-width: 980px) {
 
 	body {
+		font-size: 14px;
 
 		header {
 
-			ul li.mobile-view { display: inline-block; }
+			.brand {
+				margin-right: .2em;
+				margin-top: .2em;
+
+				img {
+					width: 16px;
+					height: 16px;
+				}
+			}
+
+			h1 {
+				font-size: 18px;
+				margin: 0;
+				padding: 0;
+				display: inline;
+			}
+			
+			ul {
+				margin: .2em 0 0;
+				padding: 0;
+
+				li {
+					margin-right: 0.3em !important;
+
+					&.mobile-view { display: inline-block; }
+				}
+			}
 		}
 
 		.main {
@@ -457,6 +484,10 @@ body {
 				width: 100%;
 
 				&.active { display: block; }
+
+				.fc-event {
+					margin-bottom: 1px !important;
+				}
 			}
 
 			.sidebar {
@@ -467,19 +498,89 @@ body {
 				&.active { display: block; }
 			}
 		}
+
+		&.login {
+			font-size: 16px;
+
+			form {
+				width: 300px;
+				height: auto;
+				position: static;
+				top: auto;
+				left: auto;
+				margin: auto;
+				text-align: center;
+				padding: 1em;
+			}
+		}
 	}
+}
 
-	&.login {
+@media (max-width: 480px) {
 
-		form {
-			width: auto;
-			height: auto;
-			position: static;
-			top: auto;
-			left: auto;
-			margin: auto;
+	body {
+
+		header {
+			font-size: 10px;
 			text-align: center;
-			padding: 1em;
+
+			.brand {
+				margin-right: .2em;
+				float: none;
+				
+				img {
+					width: 16px;
+					height: 16px;
+				}
+			}
+
+			h1 {
+				font-size: 16px;
+				display: inline;
+				text-align: center;
+				float: none;
+			}
+
+			ul {
+				width: 100%;
+				margin: 0;
+				padding: 0;
+				text-align: center;
+
+				li {
+					margin: 0 .25em !important;
+					padding: 0;
+					
+					&.next { margin-left: .1em !important; }	
+					&.prev { margin-right: 0 !important; }	
+				}
+
+			}
+		}
+		
+		.calendar-view {
+			font-size: 9px;
+		}
+
+		.sidebar {
+			h2 {
+				margin: .6em 0 0
+			}
+		}
+
+		&.login {
+			font-size: 16px;
+
+			form {
+				width: auto;
+				height: auto;
+				position: static;
+				top: auto;
+				left: auto;
+				margin: auto;
+				text-align: center;
+				padding: 1em;
+			}
 		}
 	}
 }
