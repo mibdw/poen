@@ -65,9 +65,8 @@ app.controller('poenGlobal', ['$scope', '$http',
 		}
 
 		$scope.saveMoney = function () {
-			if ($scope.newMoney.amount.indexOf(',') > -1) { 
-				$scope.newMoney.amount = accounting.unformat($scope.newMoney.amount, ',')
-			}		
+			if ($scope.newMoney.amount.indexOf(',') > -1) $scope.newMoney.amount = accounting.unformat($scope.newMoney.amount, ','); 
+			if (!$scope.newMoney.category) $scope.newMoney.category = $scope.categoryList[0]._id;	
 			$http.post('/money/create', $scope.newMoney).success( function (data) {
 				$scope.sidebar = $scope.sidebars[0]; 
 				$scope.newMoney = {};
@@ -100,8 +99,9 @@ app.controller('poenGlobal', ['$scope', '$http',
 		$scope.updateMoney = function () {
 			if (!$scope.editMoney.note) { $scope.editMoney.note = "" }
 			if ($scope.editMoney.amount.indexOf(',') > -1) { 
-				$scope.editMoney.amount = accounting.unformat($scope.editMoney.amount, ','); 
+				$scope.editMoney.amount = accounting.unformat($scope.editMoney.amount, ',')
 			}
+			if (!$scope.editMoney.category) $scope.editMoney.category = $scope.categoryList[0]._id;
 			$http.post('/money/edit', $scope.editMoney).success( function (data) {
 				$scope.sidebar = $scope.sidebars[0]; 
 				$scope.editMoney = {};
