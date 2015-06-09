@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+
+	<title>Poen</title>
+
+	<link rel="stylesheet" href="poen.min.css">
+	<link rel="icon" type="image/gif" href="dagobert.gif">
+
+</head>
+<body class="login">
+
+	{{#if message}}
+		<div class="alert">{{message}}</div>
+	{{/if}}		
+
+	<form action="/login" method="post">
+		
+		<a href="/" class="brand"><img src="dagobert.gif" alt="Poen"></a>
+		<input type="text" name="username" placeholder="Gebruikersnaam" autofocus><br>
+		<input type="password" name="password" placeholder="Wachtwoord"><br>
+
+		<button type="submit">Login</button>
+	</form>
+
+</body>
+</html>

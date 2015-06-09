@@ -1,0 +1,663 @@
+@import './fullcalendar.min.css';
+
+@positive: limegreen;
+@negative: red;
+@hover: #ff9;
+@highlight: #ffc;
+@active: #6ff;
+@gray: #aaa;
+@vague: #ddd;
+@line: #eee;
+
+
+// GENERAL
+ 
+* { 
+	margin: 0; 
+	padding: 0; 
+	box-sizing: border-box; 
+	font-family: sans-serif;
+
+}
+
+body {
+	font-size: 16px;
+}
+
+a {
+	color: blue;
+	text-decoration: none;
+
+	&:hover { text-decoration: underline; }
+}
+
+input[type="text"], input[type="number"], input[type="password"], textarea, select {
+	width: 100%;
+	font-size: 1em;
+	line-height: 2.2em;
+	padding: 0 .5em;
+	margin-bottom: .3em;
+
+	&.invalid {
+		border-color: red;
+	}
+}
+
+textarea {
+	padding: .5em;
+	line-height: 1.3em;
+}
+
+button {
+	line-height: 2em;
+	padding: 0 .5em;
+}
+
+i {
+	display: inline-block;
+	height: 1em;
+	width: 1em;
+	position: relative;
+	top: .1em;
+	border-radius: 100%;
+}
+
+.hide { display: none }
+
+.poen-wrapper {
+	display: flex;
+	flex-direction: column;
+	margin: 1em;
+}
+
+// HEADER
+
+.poen-header {
+	margin-bottom: 1em;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	align-items: flex-end;
+
+	.poen-title {
+		display: inline-block;
+		flex: 1;
+		
+		img {
+			height: 1em;
+			position: relative;
+			top: 2px;
+		}
+	}
+	
+	.poen-loading {
+		display: none;
+
+		img {	margin-left: .5em }
+		&.active { display: inline; }
+	}
+	
+	.poen-nav {
+		flex: 1;
+		text-align: right;
+
+		li {
+			display: inline;
+			margin-left: 1.4em;
+
+			&.next { margin-left: .3em; }
+			&.hide { display: none; }
+
+			.active {
+				font-weight: bold;
+				text-decoration: underline;
+			}
+
+			&.toggle { display: none; }
+		}
+	}
+}
+
+// MAIN
+
+.poen-body {
+	display: flex;
+	flex: 1;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	
+	.poen-calendar {
+		flex: 1;
+		flex-grow: 1.8;
+
+		.fc-day {
+			&:hover {
+				background-color: @hover;
+				cursor: pointer;
+			}
+
+			&.active {
+				background-color: @active;
+				cursor: pointer;
+			}
+		}
+
+		.fc-day.fc-state-highlight {
+			background-color: @highlight;
+
+			&.active { background-color: @active; }
+		}
+
+		.fc-day-number {
+			font-size: .7em;
+		}
+
+		.fc-scroller {
+			height: auto !important;
+		}
+
+		.fc-event {
+			border-width: 0;
+			padding: .2em .4em;
+			font-size: .75em;
+			border-radius: 0;
+			position: relative;
+			pointer-events: auto;
+			opacity: .25;
+
+			&:hover {
+				background-color: #000 !important;
+				cursor: pointer;
+
+				.fc-user {
+					color: #000 !important;
+				}
+			}
+
+			&.insider {
+				opacity: 1;
+			}
+
+			.fc-title {
+				display: block;
+				padding-right: 2em;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+
+			}
+
+			.fc-time {
+				display: none;
+			}
+
+			.fc-user {
+				position: absolute;
+				top: 4px;
+				right: .4em;
+				font-size: .75em;
+				line-height: 1.4em;
+				width: 1.4em;
+				height: 1.4em;
+				text-transform: uppercase;
+				background-color: rgba(255, 255, 255, .6);
+				border-radius: .6em;
+				text-align: center;
+			}
+		}
+
+		.fc-content-skeleton {
+			pointer-events: none;
+		}
+	}
+
+	.poen-sidebar {
+		flex: 1;
+		flex-grow: 1;
+		margin-left: 1em;
+		border-top: 1px solid @vague;
+		padding-top: .5em;
+
+		h3 {
+			margin-bottom: .5em;
+			
+			& > a {
+				float: right;
+				font-weight: normal;
+				font-size: .9em;
+				margin-top: .4em;
+			}
+
+			& > small {
+				font-size: .7em;
+				color: @gray;
+				font-weight: normal;
+			}
+		}
+
+		.poen-options {
+			text-align: right;
+			margin-top: .2em;
+		}
+
+		.more {
+			color: @gray;
+			padding: .2em 0;
+			text-align: right;
+
+			&.top {
+				border-bottom: 1px solid @vague;
+			}
+		}
+	}
+}
+
+// FORMS
+
+.poen-form {
+
+	textarea { height: 8em; 	}
+	
+	select { 
+		padding: .3em .5em; 
+		text-transform: capitalize;
+		
+		option { 
+			padding: .2em .3em; 
+			text-transform: capitalize;
+		}
+	}
+
+	button { float: right; }
+
+	label { line-height: 2em; }
+
+	.poen-price {
+		width: 100%;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+	}
+
+	.poen-amount {
+		flex: 1;
+		flex-grow: 5;
+	}
+
+	.poen-balance {
+		flex: 1;
+		flex-grow: 4;
+		margin-left: .25em;
+	}
+
+	.poen-date {
+		width: 100%;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+	}
+
+	.poen-day { 
+		flex: 1;
+		flex-grow: 1;
+		margin-right: .25em;
+	}
+	.poen-month { 
+		flex: 1;
+		flex-grow: 3;
+		margin-right: .25em;
+	}
+	.poen-year { 
+		flex: 1;
+		flex-grow: 2;
+	}
+
+	.poen-link {
+		float: left;
+		margin-top: .5em;
+	}
+
+	.poen-color {
+		width: 100%;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+
+		input[type="color"] {
+			flex: 1;
+			flex-grow: 1;
+			height: 2.8em;
+			margin-right: .25em;
+		}
+
+		input[type="text"] {
+			flex: 1;
+			flex-grow: 8;
+		}
+	}
+}
+
+// DEFLIST
+
+.poen-deflist {
+	border-bottom: 1px solid @vague;
+	padding-bottom: .5em;
+
+	.hide { display: none; }
+
+	dt {
+		width: 25%;
+		float: left;
+		color: @gray;
+	}
+
+	dd {
+		margin: 0 0 .2em 25%;
+
+		small { color: @gray; }
+	} 
+
+	.poen-amount {
+		font-weight: bold;
+
+		&.positive { color: @positive; }
+		&.negative { color: @negative; }
+	}
+
+	.poen-user {
+		text-transform: capitalize;
+	}
+}
+
+// TABLE
+
+.poen-table {
+	width: 100%;
+	margin-bottom: .5em;
+	border-collapse: collapse;
+
+	tr {
+
+		td {
+			border-bottom: 1px solid @line;
+
+			h3 { margin-bottom: .1em !important; }
+		}
+
+		&:last-child td { border-bottom: 1px solid @vague; }
+		&.active td { background-color: @highlight; }
+		&:hover td, &.active:hover td { background-color: @hover; }
+		&.clickable td { cursor: pointer; }
+		&:hover td .small { display: inline }
+	}
+
+	label { 
+		display: block; 
+		cursor: pointer;
+		padding: .2em .1em;
+	}
+
+	.radio, .checkbox, .icon, .user {
+		width: 0px;
+		padding-right: .3em;
+	}
+
+	.username, .category {
+		text-transform: capitalize;
+
+		.small {
+			font-size: .8em;
+			margin-left: .5em;
+			color: @gray;
+			display: none;
+		}
+	}
+
+	.other { padding: .2em 0; }
+	
+	.date { 
+		color: @gray;
+		width: 0px;
+		padding: 0 .5em 0 .2em;
+		white-space: nowrap;
+		text-align: right;
+	}
+
+	.sum {
+		text-align: right;
+		font-weight: bold;
+
+		&.negative { color: @negative; }
+		&.positive { color: @positive; }
+	}
+
+	.user-badge {	
+		display: inline-block;
+		font-size: .75em;
+		line-height: 1.5em;
+		width: 1.5em;
+		height: 1.5em;
+		text-transform: uppercase;
+		background-color: #ccc;
+		color: #fff;
+		border-radius: 100%;
+		text-align: center;	
+		position: relative;
+		top: -.1em;
+	}
+}
+
+.poen-table-clear {
+	
+	&.hide { visibility: hidden }
+}
+
+.poen-table-newcat {
+	float: right;
+}
+
+
+// DONUTS
+
+.poen-donuts {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	padding-top: 2em;
+
+	.poen-donut { 
+		flex: 1;
+		flex-grow: 1;
+		position: relative;
+
+		&:first-child {	margin-right: 1em;}
+		
+		path:hover { 
+			opacity: .5;
+		}
+
+		.poen-donut-info {
+			text-transform: capitalize;
+			position: absolute;
+			top: 50%;
+			margin-top: -1.5em;
+			width: 100%;
+			text-align: center;
+			font-weight: bold;
+			
+			.negative { color: @negative; }
+			.positive { color: @positive; }
+			
+			.poen-donut-info-title {
+				width: 50%;
+				margin-left: 25%;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+		}
+	}
+}
+
+// CHART
+
+.poen-chart {
+	padding-top: 1em;
+
+	rect:hover, rect.active {
+		opacity: .5;
+		cursor: pointer;
+	}
+}
+
+// LOGIN
+
+.login {
+	
+	.alert {
+		background-color: red;
+		color: #fff;
+		text-align: center;
+		padding: .5em 0;
+	}
+
+	form {
+		width: 200px;
+		height: 200px;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		margin: -100px 0 0 -100px;
+		text-align: center;
+
+
+		.brand {
+			margin: 0 0 3px;
+		}
+
+		input {
+			width: 100%;
+		}
+
+		button {
+			float: right;
+		}
+	}
+}
+
+@media (max-width: 980px) {
+
+	body { font-size: 15px; }
+
+	.poen-header {		
+		.poen-nav {
+
+			li.toggle { display: inline; }
+			.next, .prev, .today { display: none; }
+
+			&.none {
+				.next, .prev, .today { display: inline; }
+			}
+		}
+	}
+
+	.poen-body {
+		.poen-calendar { display: none; }	
+	
+		.poen-sidebar { 
+			display: block; 
+			margin: 0; 
+			width: 100%;
+		}
+
+		&.none {
+			.poen-calendar { display: block; }	
+			.poen-sidebar { display: none; }
+		}	
+
+		&.detail .poen-sidebar { margin-right: 1em; }
+	}
+
+	.login {
+		font-size: 16px;
+
+		form {
+			width: 300px;
+			height: auto;
+			position: static;
+			top: auto;
+			left: auto;
+			margin: auto;
+			text-align: center;
+			padding: 1em;
+		}
+	}
+}
+
+@media (max-width: 480px) {
+
+	body { font-size: 10px }
+
+	.poen-header {
+		margin-bottom: 1em;
+		display: block;
+
+		.poen-title-wrapper {
+			display: block;
+			text-align: center;
+
+			.poen-title {
+				display: inline;
+				
+				img {
+					height: 1em;
+					position: relative;
+					top: 2px;
+				}
+			}
+		}
+		
+		.poen-loading {
+			display: none;
+
+			img {	margin-left: .5em }
+			&.active { display: inline; }
+		}
+		
+		.poen-nav {
+			display: block;
+			text-align: center;
+			margin-top: .4em;
+
+			li {
+				display: inline;
+				margin: 0 .3em;
+
+				&.toggle { display: inline; }
+				&.next, &.prev, &.today { display: none; }
+			}
+
+
+			&.none {
+				.next, .prev, .today { display: inline; }
+				.today.hide { display: none; }
+			}
+		}
+	}
+
+	.login {
+		font-size: 16px;
+
+		form {
+			width: auto;
+			height: auto;
+			position: static;
+			top: auto;
+			left: auto;
+			margin: auto;
+			text-align: center;
+			padding: 1em;
+		}
+	}
+}
