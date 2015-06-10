@@ -49,7 +49,7 @@ app.set('view engine', 'handlebars');
 app.use(express.static(__dirname + '/public'));
 
 
-mongoose.connect('mongodb://dagobert:JCpFzKU2DnNJkCIQQMHoHW53@localhost:23383/poen', function (err) {
+mongoose.connect('mongodb://localhost/poen', function (err) {
         if (err) console.log('Could not connect to mongodb on localhost');
 });
 
@@ -58,6 +58,6 @@ app.use('/events', require(__dirname + '/handlers/events'));
 app.use('/categories', require(__dirname + '/handlers/categories'));
 app.use('/users', require(__dirname + '/handlers/users'));
 
-http.listen(11074, function () {
-        console.log('Server started at http://localhost:11074');
+http.listen(8181, function () {
+        console.log('Server started at http://localhost:8181');
 });
