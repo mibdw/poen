@@ -65,7 +65,9 @@ i {
 .hide { display: none }
 
 .poen-wrapper {
+	display: -webkit-flex;
 	display: flex;
+	-webkit-flex-direction: column;
 	flex-direction: column;
 	margin: 1em;
 }
@@ -73,14 +75,19 @@ i {
 // HEADER
 
 .poen-header {
-	margin-bottom: 1em;
+	margin-bottom:
+	display: -webkit-flex; 1em;
 	display: flex;
+	-webkit-flex-direction: row;
 	flex-direction: row;
+	-webkit-flex-wrap: nowrap;
 	flex-wrap: nowrap;
 	align-items: flex-end;
+	align-items: -webkit-flex-end;
 
 	.poen-title {
 		display: inline-block;
+		-webkit-flex: 1;
 		flex: 1;
 		
 		img {
@@ -98,6 +105,7 @@ i {
 	}
 	
 	.poen-nav {
+		-webkit-flex: 1;
 		flex: 1;
 		text-align: right;
 
@@ -121,13 +129,19 @@ i {
 // MAIN
 
 .poen-body {
+	display: -webkit-flex;
 	display: flex;
+	-webkit-flex: 1;
 	flex: 1;
+	-webkit-flex-direction: row;
 	flex-direction: row;
+	-webkit-flex-wrap: nowrap;
 	flex-wrap: nowrap;
 	
 	.poen-calendar {
+		-webkit-flex: 1;
 		flex: 1;
+		-webkit-flex-grow: 1.8;
 		flex-grow: 1.8;
 
 		.fc-day {
@@ -212,7 +226,9 @@ i {
 	}
 
 	.poen-sidebar {
+		-webkit-flex: 1;
 		flex: 1;
+		-webkit-flex-grow: 1;
 		flex-grow: 1;
 		margin-left: 1em;
 		border-top: 1px solid @vague;
@@ -274,41 +290,57 @@ i {
 
 	.poen-price {
 		width: 100%;
+		display: -webkit-flex;
 		display: flex;
+		-webkit-flex-direction: row;
 		flex-direction: row;
+		-webkit-flex-wrap: nowrap;
 		flex-wrap: nowrap;
 	}
 
 	.poen-amount {
+		-webkit-flex: 1;
 		flex: 1;
+		-webkit-flex-grow: 5;
 		flex-grow: 5;
 	}
 
 	.poen-balance {
+		-webkit-flex: 1;
 		flex: 1;
+		-webkit-flex-grow: 4;
 		flex-grow: 4;
 		margin-left: .25em;
 	}
 
 	.poen-date {
 		width: 100%;
+	display: -webkit-flex;
 		display: flex;
+		-webkit-flex-direction: row;
 		flex-direction: row;
+		-webkit-flex-wrap: nowrap;
 		flex-wrap: nowrap;
 	}
 
 	.poen-day { 
+		-webkit-flex: 1;
 		flex: 1;
+		-webkit-flex-grow: 1;
 		flex-grow: 1;
 		margin-right: .25em;
 	}
 	.poen-month { 
+		-webkit-flex: 1;
 		flex: 1;
+		-webkit-flex-grow: 3;
 		flex-grow: 3;
 		margin-right: .25em;
 	}
 	.poen-year { 
+		-webkit-flex: 1;
 		flex: 1;
+		-webkit-flex-grow: 2;
 		flex-grow: 2;
 	}
 
@@ -319,19 +351,26 @@ i {
 
 	.poen-color {
 		width: 100%;
+	display: -webkit-flex;
 		display: flex;
+		-webkit-flex-direction: row;
 		flex-direction: row;
+		-webkit-flex-wrap: nowrap;
 		flex-wrap: nowrap;
 
 		input[type="color"] {
+			-webkit-flex: 1;
 			flex: 1;
+			-webkit-flex-grow: 1;
 			flex-grow: 1;
 			height: 2.8em;
 			margin-right: .25em;
 		}
 
 		input[type="text"] {
+			-webkit-flex: 1;
 			flex: 1;
+			-webkit-flex-grow: 8;
 			flex-grow: 8;
 		}
 	}
@@ -461,13 +500,18 @@ i {
 
 .poen-donuts {
 	width: 100%;
+	display: -webkit-flex;
 	display: flex;
+	-webkit-flex-direction: row;
 	flex-direction: row;
+	-webkit-flex-wrap: nowrap;
 	flex-wrap: nowrap;
 	padding-top: 2em;
 
 	.poen-donut { 
+		-webkit-flex: 1;
 		flex: 1;
+		-webkit-flex-grow: 1;
 		flex-grow: 1;
 		position: relative;
 
