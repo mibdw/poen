@@ -57,7 +57,7 @@ module.exports = React.createClass({
 			data: { start: start.format(), end: end.format() },
 			dataType: 'json',
 			success: function (results) {	
-				self.setState({ events: results, filteredCat: results, filteredAll: results }, function () { 
+				self.setState({ events: results, filteredCat: results, filteredAll: results, sidebar: 'none' }, function () { 
 					self.filterEvents(function () {	
 						$('.poen-calendar').fullCalendar('removeEvents');
 						callback();
@@ -95,7 +95,7 @@ module.exports = React.createClass({
 		var self = this;
 		var newEvents = self.state.events;
 		newEvents.push(ev);
-		this.setState({events: newEvents}, function () {
+		self.setState({events: newEvents }, function () {
 			self.filterEvents(function () {});
 		});
 	},

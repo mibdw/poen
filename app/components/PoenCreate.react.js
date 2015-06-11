@@ -75,10 +75,10 @@ module.exports = React.createClass({
 			url: '/events/create', 
 			data: payload,
 			success: function (data) {
+				self.props.sidebarChange('none');
 				$('.poen-calendar').fullCalendar('renderEvent', data);
 				$('.fc-day').removeClass('active');
 				self.props.createEvent(data);
-				self.props.sidebarChange('overview');
 			}
 		});
 	},

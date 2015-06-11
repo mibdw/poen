@@ -68,7 +68,7 @@ module.exports = React.createClass({displayName: "exports",
 			data: { start: start.format(), end: end.format() },
 			dataType: 'json',
 			success: function (results) {	
-				self.setState({ events: results, filteredCat: results, filteredAll: results }, function () { 
+				self.setState({ events: results, filteredCat: results, filteredAll: results, sidebar: 'none' }, function () { 
 					self.filterEvents(function () {	
 						$('.poen-calendar').fullCalendar('removeEvents');
 						callback();
@@ -106,7 +106,7 @@ module.exports = React.createClass({displayName: "exports",
 		var self = this;
 		var newEvents = self.state.events;
 		newEvents.push(ev);
-		this.setState({events: newEvents}, function () {
+		self.setState({events: newEvents }, function () {
 			self.filterEvents(function () {});
 		});
 	},
@@ -544,10 +544,10 @@ module.exports = React.createClass({displayName: "exports",
 			url: '/events/create', 
 			data: payload,
 			success: function (data) {
+				self.props.sidebarChange('none');
 				$('.poen-calendar').fullCalendar('renderEvent', data);
 				$('.fc-day').removeClass('active');
 				self.props.createEvent(data);
-				self.props.sidebarChange('overview');
 			}
 		});
 	},
