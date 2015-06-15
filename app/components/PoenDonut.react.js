@@ -72,6 +72,10 @@ module.exports = React.createClass({
 		path.on('mouseout', function (d) {
 			self.setState({ title: self.props.title, total: self.state.initTotal });
 		});
+
+		path.on('click', function (d) {
+			$('input[type="checkbox"]#' + d.data._id).click()
+		});
 	},
 	render: function () {		
 		return (
